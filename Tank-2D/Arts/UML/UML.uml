@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ir.ac.kntu.LOGIC.Player</OriginalElement>
+  <nodes>
+    <node x="118.0" y="870.0">ir.ac.kntu.GUI.WinPage</node>
+    <node x="149.0" y="540.0">ir.ac.kntu.LOGIC.WaterPositions</node>
+    <node x="504.0" y="870.0">ir.ac.kntu.GUI.Brick</node>
+    <node x="867.0" y="540.0">ir.ac.kntu.LOGIC.PlayerSaving</node>
+    <node x="491.0" y="1032.0">ir.ac.kntu.GUI.Metal</node>
+    <node x="-90.0" y="-14.0">ir.ac.kntu.GUI.Game</node>
+    <node x="323.0" y="870.0">ir.ac.kntu.LOGIC.Map</node>
+    <node x="-90.0" y="1136.0">ir.ac.kntu.LOGIC.Direction</node>
+    <node x="559.0" y="153.0">ir.ac.kntu.LOGIC.CommonTank</node>
+    <node x="1021.0" y="1032.0">ir.ac.kntu.GUI.Star</node>
+    <node x="670.0" y="1032.0">ir.ac.kntu.GUI.Tanki</node>
+    <node x="365.5" y="-14.0">ir.ac.kntu.LOGIC.Tank</node>
+    <node x="355.0" y="153.0">ir.ac.kntu.LOGIC.ArmoredTank</node>
+    <node x="220.0" y="1136.0">ir.ac.kntu.Main</node>
+    <node x="-90.0" y="540.0">ir.ac.kntu.GUI.StartMenu</node>
+    <node x="129.0" y="1032.0">ir.ac.kntu.GUI.Clock</node>
+    <node x="916.0" y="870.0">ir.ac.kntu.LOGIC.EventHandlerSet</node>
+    <node x="310.0" y="1032.0">ir.ac.kntu.GUI.Water</node>
+    <node x="-90.0" y="870.0">ir.ac.kntu.GUI.Bullet</node>
+    <node x="791.0" y="-14.0">ir.ac.kntu.LOGIC.Player</node>
+    <node x="417.0" y="540.0">ir.ac.kntu.GUI.SelectPlayer</node>
+    <node x="-90.0" y="1032.0">ir.ac.kntu.LOGIC.TankControlling</node>
+    <node x="849.0" y="1032.0">ir.ac.kntu.GUI.Flag</node>
+    <node x="77.0" y="1136.0">ir.ac.kntu.GUI.Block</node>
+    <node x="681.0" y="870.0">ir.ac.kntu.GUI.TankBattleCity</node>
+    <node x="645.0" y="540.0">ir.ac.kntu.GUI.SelectLevel</node>
+    <node x="167.0" y="237.0">ir.ac.kntu.LOGIC.PlayerTank</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ir.ac.kntu.LOGIC.PlayerTank" target="ir.ac.kntu.LOGIC.Tank" relationship="GENERALIZATION">
+      <point x="0.0" y="-86.5" />
+      <point x="251.0" y="128.0" />
+      <point x="447.0" y="128.0" />
+      <point x="0.0" y="58.5" />
+    </edge>
+    <edge source="ir.ac.kntu.LOGIC.CommonTank" target="ir.ac.kntu.LOGIC.Tank" relationship="GENERALIZATION">
+      <point x="0.0" y="-170.5" />
+      <point x="652.5" y="128.0" />
+      <point x="447.0" y="128.0" />
+      <point x="0.0" y="58.5" />
+    </edge>
+    <edge source="ir.ac.kntu.LOGIC.ArmoredTank" target="ir.ac.kntu.LOGIC.Tank" relationship="GENERALIZATION">
+      <point x="0.0" y="-170.5" />
+      <point x="0.0" y="58.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.540453074433657" showDependencies="false" x="819.245508982036" y="601.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
