@@ -15,6 +15,7 @@ public:
     explicit Register(QWidget *parent = nullptr);
     void loadBackground();
     void loadIcon();
+    void setMenuUI();
     ~Register();
 
 private slots:
