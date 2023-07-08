@@ -2,11 +2,15 @@
 #define GAMEOBJECT_H
 #include <QString>
 
+enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, YELLOW_TANK, STAR, TANKI, CLOCK, FLAG
+          , WATER, STONE , BRICK};
+enum Direction {LEFT , RIGHT, UP, DOWN};
+
 class GameObject
 {
 public:
     GameObject();
-    GameObject(const QString& spritePath, const int& x, const int& y, const int& health, const int& damage);
+    GameObject(const Type& type, const QString& spritePath, const int& x, const int& y, const int& health, const int& damage, const Direction& direction = UP);
 
     const QString &getSpritePath() const;
     void setSpritePath(const QString &newSpritePath);
@@ -27,6 +31,9 @@ public:
 
     int getWIDTH() const;
 
+    Type getType() const;
+    void setType(Type newType);
+
 private:
     int WIDTH;
     int HEIGHT;
@@ -36,6 +43,8 @@ private:
     int y;
     QString spritePath;
     QString defaultPath;
+    Type type;
+    Direction direction;
 };
 
 #endif // GAMEOBJECT_H

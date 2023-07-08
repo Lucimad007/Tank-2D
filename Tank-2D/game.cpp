@@ -21,11 +21,11 @@ Game::Game(QWidget *parent) :
     ui->backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-//    GameObject tank1("armored-tank-up.png", 0, 0, 1, 1);
-//    GameObject tank2("armored-random-tank-down.png", 200, 50, 1, 1);
-//    objects.push_back(tank1);
-//    objects.push_back(tank2);
-//    render();
+    GameObject tank1(ARMORED_TANK, "armored-tank-up.png", 0, 0, 1, 1);
+    GameObject tank2(ARMORED_RANDOM_TANK, "armored-random-tank-down.png", 200, 50, 1, 1);
+    objects.push_back(tank1);
+    objects.push_back(tank2);
+    render();
 }
 
 void Game::loadIcon(){
