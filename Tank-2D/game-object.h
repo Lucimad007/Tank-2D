@@ -23,9 +23,6 @@ public:
     int getHealth() const;
     void setHealth(int newHealth);
 
-signals:
-    void xChanged();
-
 private:
     const int WIDTH = 32;
     const int HEIGHT = 32;
@@ -35,7 +32,6 @@ private:
     int y;
     QString spritePath;
     QString defaultPath;
-    Q_PROPERTY(int x READ getX WRITE setX NOTIFY xChanged)
 };
 
 #endif // GAMEOBJECT_H
