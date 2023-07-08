@@ -1,5 +1,8 @@
 #include "menu_event.h"
+#include "register.h"
 #include <QMouseEvent>
+
+extern Register* registerMenu;
 
 MenuEvent::MenuEvent()
 {
@@ -16,7 +19,7 @@ bool MenuEvent::eventFilter(QObject* obj, QEvent* event){
         {
             if(view->objectName() == "player1View")
             {
-                qDebug() << "1 player";
+                registerMenu->setSelectLevelUI();
             } else if(view->objectName() == "player2View")
             {
                 qDebug() << "2 players";

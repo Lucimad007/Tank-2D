@@ -16,6 +16,7 @@ public:
     void loadBackground();
     void loadIcon();
     void setMenuUI();
+    void setSelectLevelUI();
     ~Register();
 
 private slots:
@@ -23,6 +24,16 @@ private slots:
 
     void on_registerButton_clicked();
 
+    void on_level1Button_clicked();
+    void on_level2Button_clicked();
+    void on_level3Button_clicked();
+    void on_level4Button_clicked();
+    void on_level5Button_clicked();
+    void on_level6Button_clicked();
+    void on_level7Button_clicked();
+    void on_level8Button_clicked();
+    void on_level9Button_clicked();
+    void on_level10Button_clicked();
 private:
     Ui::Register *ui;
 };

@@ -22,7 +22,8 @@ HEADERS += \
 FORMS += \
     mainwindow.ui \
     menu.ui \
-    register.ui
+    register.ui \
+    select-level.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

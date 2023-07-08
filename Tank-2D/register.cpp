@@ -14,7 +14,8 @@ Register::Register(QWidget *parent) :
     ui(new Ui::Register)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Sign Up");
+    this->setWindowTitle("Tank Battle City");
+    this->setFixedSize(this->width(), this->height());
     loadBackground();
     loadIcon();
 }
@@ -64,10 +65,11 @@ void Register::setMenuUI(){
     {
         QWidget* widget = loader.load(&file);
         ui->setupUi(this);      //it heavily prevents our code from bugs
-        this->setWindowTitle("Menu");
+        this->setWindowTitle("Tank Battle City");
         QVBoxLayout* layout = new QVBoxLayout();
         layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fill the whole background
         layout->addWidget(widget);
+        delete this->layout();      //clearing previous layout
         this->setLayout(layout);
 
         //loading graphic views
@@ -131,6 +133,72 @@ void Register::setMenuUI(){
         qDebug() << "Failed to open file.";
     }
 
+}
+
+void Register::setSelectLevelUI(){
+    //loading ui file
+    QWidget* widget;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D";
+    QUiLoader loader;
+    QFile file(path + "/select-level.ui");
+    if(file.open(QIODevice::OpenModeFlag::ReadOnly))
+    {
+        widget = loader.load(&file);
+        ui->setupUi(this);      //it heavily prevents our code from bugs
+        this->setWindowTitle("Tank Battle City");
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fill the whole background
+        layout->addWidget(widget);
+        delete this->layout();      //clearing previous layout
+        this->setLayout(layout);
+
+    } else
+    {
+        qDebug() << "Failed to open file.";
+    }
+
+    //loading background
+    path = info.dir().path();
+    path += "/Tank-2D/Arts/selectLevelBack.png";
+    QIcon background(path);
+    if(!background.isNull())
+    {
+        QGraphicsView* backgroundView = widget->findChild<QGraphicsView*>("backgroundView",Qt::FindChildrenRecursively);
+        QPixmap pixMap = background.pixmap(backgroundView->width()*3/2, backgroundView->height()*3/2);
+        QGraphicsPixmapItem* pixMapItem = new QGraphicsPixmapItem(pixMap);
+        QGraphicsScene* scene = new QGraphicsScene();
+        scene->addItem(pixMapItem);
+        backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        backgroundView->setScene(scene);
+    } else
+    {
+        qDebug() << "Background image not found.";
+    }
+
+    //connecting slots for each button
+    QPushButton* level1Button = widget->findChild<QPushButton*>("level1Button", Qt::FindChildrenRecursively);
+    QPushButton* level2Button = widget->findChild<QPushButton*>("level2Button", Qt::FindChildrenRecursively);
+    QPushButton* level3Button = widget->findChild<QPushButton*>("level3Button", Qt::FindChildrenRecursively);
+    QPushButton* level4Button = widget->findChild<QPushButton*>("level4Button", Qt::FindChildrenRecursively);
+    QPushButton* level5Button = widget->findChild<QPushButton*>("level5Button", Qt::FindChildrenRecursively);
+    QPushButton* level6Button = widget->findChild<QPushButton*>("level6Button", Qt::FindChildrenRecursively);
+    QPushButton* level7Button = widget->findChild<QPushButton*>("level7Button", Qt::FindChildrenRecursively);
+    QPushButton* level8Button = widget->findChild<QPushButton*>("level8Button", Qt::FindChildrenRecursively);
+    QPushButton* level9Button = widget->findChild<QPushButton*>("level9Button", Qt::FindChildrenRecursively);
+    QPushButton* level10Button = widget->findChild<QPushButton*>("level10Button", Qt::FindChildrenRecursively);
+    connect(level1Button, &QPushButton::clicked, this, &Register::on_level1Button_clicked);
+    connect(level2Button, &QPushButton::clicked, this, &Register::on_level2Button_clicked);
+    connect(level3Button, &QPushButton::clicked, this, &Register::on_level3Button_clicked);
+    connect(level4Button, &QPushButton::clicked, this, &Register::on_level4Button_clicked);
+    connect(level5Button, &QPushButton::clicked, this, &Register::on_level5Button_clicked);
+    connect(level6Button, &QPushButton::clicked, this, &Register::on_level6Button_clicked);
+    connect(level7Button, &QPushButton::clicked, this, &Register::on_level7Button_clicked);
+    connect(level8Button, &QPushButton::clicked, this, &Register::on_level8Button_clicked);
+    connect(level9Button, &QPushButton::clicked, this, &Register::on_level9Button_clicked);
+    connect(level10Button, &QPushButton::clicked, this, &Register::on_level10Button_clicked);
 }
 
 Register::~Register()
@@ -238,3 +306,42 @@ void Register::on_registerButton_clicked()
     }
 }
 
+void Register::on_level1Button_clicked(){
+    //qDebug() << "level 1";
+}
+
+void Register::on_level2Button_clicked(){
+    //qDebug() << "level 2";
+}
+
+void Register::on_level3Button_clicked(){
+    //qDebug() << "level 3";
+}
+
+void Register::on_level4Button_clicked(){
+    //qDebug() << "level 4";
+}
+
+void Register::on_level5Button_clicked(){
+    //qDebug() << "level 5";
+}
+
+void Register::on_level6Button_clicked(){
+    //qDebug() << "level 6";
+}
+
+void Register::on_level7Button_clicked(){
+    //qDebug() << "level 7";
+}
+
+void Register::on_level8Button_clicked(){
+    //qDebug() << "level 8";
+}
+
+void Register::on_level9Button_clicked(){
+    //qDebug() << "level 9";
+}
+
+void Register::on_level10Button_clicked(){
+    //qDebug() << "level 10";
+}

@@ -2,14 +2,14 @@
 #include "register.h"
 #include <QApplication>
 #include <QDir>
-
+Register* registerMenu;
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 //    MainWindow mainWindow;
 //    mainWindow.show();
-    Register registerMenu;
-    registerMenu.show();
+    registerMenu = new Register();
+    registerMenu->show();
 
-    return a.exec();
+    return app.exec();
 }
