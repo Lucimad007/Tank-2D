@@ -11,10 +11,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    menu_event.cpp \
     register.cpp
 
 HEADERS += \
     mainwindow.h \
+    menu_event.h \
     register.h
 
 FORMS += \

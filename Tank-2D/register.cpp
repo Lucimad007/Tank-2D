@@ -7,6 +7,7 @@
 #include <QtUiTools/QUiLoader>
 #include "register.h"
 #include "ui_register.h"
+#include "menu_event.h"
 
 Register::Register(QWidget *parent) :
     QWidget(parent),
@@ -63,6 +64,7 @@ void Register::setMenuUI(){
     {
         QWidget* widget = loader.load(&file);
         ui->setupUi(this);      //it heavily prevents our code from bugs
+        this->setWindowTitle("Menu");
         QVBoxLayout* layout = new QVBoxLayout();
         layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fill the whole background
         layout->addWidget(widget);
@@ -78,6 +80,12 @@ void Register::setMenuUI(){
             qDebug() << "Failed to find children widget.";
             return;
         }
+        //installing events to make our menu responsive
+        MenuEvent* menuEvent = new MenuEvent();
+        logoView->installEventFilter(menuEvent);
+        player1View->installEventFilter(menuEvent);
+        player2View->installEventFilter(menuEvent);
+        constructionView->installEventFilter(menuEvent);
 
         //disabling scrolls
         logoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
