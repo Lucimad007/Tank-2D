@@ -13,7 +13,9 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(const QString& spritePath, const int& x, const int& y, const int& health, const int& damage){
-    this->spritePath = spritePath;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    defaultPath = info.dir().path() + "/Tank-2D/Arts/";
+    this->spritePath = defaultPath + spritePath;
     this->x = x;
     this->y = y;
     this->health = health;
@@ -27,9 +29,9 @@ const QString &GameObject::getSpritePath() const
 
 void GameObject::setSpritePath(const QString &newSpritePath)
 {
-    spritePath = newSpritePath;
+    spritePath = defaultPath;
+    spritePath += newSpritePath;
 }
-
 
 int GameObject::getY() const
 {
@@ -69,4 +71,14 @@ int GameObject::getHealth() const
 void GameObject::setHealth(int newHealth)
 {
     health = newHealth;
+}
+
+int GameObject::getHEIGHT() const
+{
+    return HEIGHT;
+}
+
+int GameObject::getWIDTH() const
+{
+    return WIDTH;
 }

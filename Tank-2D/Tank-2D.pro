@@ -10,19 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     game-object.cpp \
+    game.cpp \
     main.cpp \
-    mainwindow.cpp \
     menu_event.cpp \
     register.cpp
 
 HEADERS += \
     game-object.h \
-    mainwindow.h \
+    game.h \
     menu_event.h \
     register.h
 
 FORMS += \
-    mainwindow.ui \
+    game.ui \
     menu.ui \
     register.ui \
     select-level.ui

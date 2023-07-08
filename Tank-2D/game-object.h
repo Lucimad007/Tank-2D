@@ -23,9 +23,13 @@ public:
     int getHealth() const;
     void setHealth(int newHealth);
 
+    int getHEIGHT() const;
+
+    int getWIDTH() const;
+
 private:
-    const int WIDTH = 32;
-    const int HEIGHT = 32;
+    int WIDTH;
+    int HEIGHT;
     int health;
     int damage;
     int x;
