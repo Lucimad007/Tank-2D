@@ -20,6 +20,8 @@ public:
     void updateLogic();
     void limitObjects();
     void render();
+    void updateHitBoxes();
+    bool haveCollision(QRect before, QRect after);
     ~Game();
 
     int getFPS() const;
@@ -37,6 +39,7 @@ private:
     QVector<GameObject> walls;
     QVector<GameObject> bonus;
     QVector<GameObject> missiles;
+    QVector<QRect> hitBoxes;
 };
 
 #endif // GAME_H

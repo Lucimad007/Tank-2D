@@ -24,7 +24,7 @@ Game::Game(QWidget *parent) :
 
     GameObject tank1(PLAYER, "yellow-tank-up.png", 0, 0, 1, 1);
     GameObject tank2(ARMORED_RANDOM_TANK, "armored-random-tank-down.png", 200, 50, 1, 1);
-    GameObject tank3(ARMORED_TANK, "common-tank-up.png", 200, 50, 1, 1);
+    GameObject tank3(ARMORED_TANK, "common-tank-up.png", 350, 50, 1, 1);
     tanks.push_front(tank2);
     tanks.push_back(tank3);
     player = tank1;
@@ -52,28 +52,40 @@ void Game::clear(){
 
 void Game::updateLogic(){
     //random movements of tanks
+    QRect before, after;
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
+        before = QRect(it->getX(), it->getY(), it->getWIDTH(), it->getHEIGHT());
+
         it->counter++;
         if(it->counter % it->steps == 0)
             it->randomNumber = rand();
 
         if(it->randomNumber % 4 == 0)
         {
-            it->setX(it->getX() + 4);
+            after = QRect(it->getX() + 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
             it->setDirection(RIGHT);
+            if(!haveCollision(before, after))
+                it->setX(it->getX() + 4);
         } else if(it->randomNumber % 4 == 1)
         {
-            it->setX(it->getX() - 4);
+            after = QRect(it->getX() - 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
             it->setDirection(LEFT);
+            if(!haveCollision(before, after))
+                it->setX(it->getX() - 4);
         } else if(it->randomNumber % 4 == 2)
         {
-            it->setY(it->getY() + 4);
+            after = QRect(it->getX(), it->getY() + 4, it->getWIDTH(), it->getHEIGHT());
             it->setDirection(DOWN);
+            if(!haveCollision(before, after))
+                it->setY(it->getY() + 4);
+
         } else if(it->randomNumber % 4 == 3)
         {
-            it->setY(it->getY() - 4);
+            after = QRect(it->getX(), it->getY() - 4, it->getWIDTH(), it->getHEIGHT());
             it->setDirection(UP);
+            if(!haveCollision(before, after))
+                it->setY(it->getY() - 4);
         }
     }
 
@@ -122,6 +134,8 @@ void Game::updateLogic(){
                 it->setSpritePath("armored-random-tank-right.png");
         }
     }
+
+    updateHitBoxes();
 
     limitObjects();     //we should ensure that none of the game objects are out of the scene
 }
@@ -183,6 +197,26 @@ void Game::render(){
 
 
     scene->update();
+}
+
+void Game::updateHitBoxes(){
+    hitBoxes.clear();
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+    }
+}
+
+bool Game::haveCollision(QRect before, QRect after){
+    for(auto it = hitBoxes.begin(); it!= hitBoxes.end(); ++it)
+    {
+        if(before == *it)   //we should not compare the object to itself
+            continue;
+        if(it->intersects(after))
+            return true;
+    }
+
+    return false;
 }
 
 void Game::keyPressEvent(QKeyEvent* event){
