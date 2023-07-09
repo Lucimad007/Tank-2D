@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include "game-object.h"
+#include "sprite-loader.h"
 
 namespace Ui {
 class Game;
@@ -32,6 +33,7 @@ protected:
 
 private:
     Ui::Game *ui;
+    SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
     QGraphicsScene* scene = nullptr;
     GameObject player;

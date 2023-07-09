@@ -1,5 +1,6 @@
 #include "game.h"
 #include "ui_game.h"
+#include "sprite-loader.h"
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <QDir>
@@ -9,6 +10,7 @@ Game::Game(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
+    spriteLoader = new SpriteLoader();
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");
     loadIcon();
@@ -22,9 +24,9 @@ Game::Game(QWidget *parent) :
     ui->backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    GameObject tank1(PLAYER, "yellow-tank-up.png", 0, 0, 1, 1);
-    GameObject tank2(ARMORED_RANDOM_TANK, "armored-random-tank-down.png", 200, 50, 1, 1);
-    GameObject tank3(ARMORED_TANK, "common-tank-up.png", 350, 50, 1, 1);
+    GameObject tank1(PLAYER, spriteLoader->getYellow_tank_up(), 0, 0, 1, 1);
+    GameObject tank2(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_up(), 200, 50, 1, 1);
+    GameObject tank3(ARMORED_TANK, spriteLoader->getCommon_tank_up(), 350, 50, 1, 1);
     tanks.push_front(tank2);
     tanks.push_back(tank3);
     player = tank1;
@@ -36,8 +38,7 @@ void Game::loadLevel(){
     for(int i = 0; i < 25; i++)
         for(int j = 7; j < 10; j++)
             {
-                GameObject brick(BRICK, "brick.png", i * 32 , j * 32, 1 , 1);
-                brick.setChanged(true);
+                GameObject brick(BRICK, spriteLoader->getBrick(), i * 32 , j * 32, 1 , 1);
                 walls.push_back(brick);
                 hitBoxes.push_back(QRect(i * 32, j * 32 , 32, 32));
             }
@@ -107,43 +108,43 @@ void Game::updateLogic(){
         if(it->getType() == COMMON_TANK)
         {
             if(it->getDirection() == UP)
-                it->setSpritePath("common-tank-up.png");
+                it->setSprite(spriteLoader->getCommon_tank_up());
             else if(it->getDirection() == DOWN)
-                it->setSpritePath("common-tank-down.png");
+                it->setSprite(spriteLoader->getCommon_tank_down());
             else if(it->getDirection() == LEFT)
-                it->setSpritePath("common-tank-left.png");
+                it->setSprite(spriteLoader->getCommon_tank_left());
             else if(it->getDirection() == RIGHT)
-                it->setSpritePath("common-tank-right.png");
+                it->setSprite(spriteLoader->getCommon_tank_right());
         } else if(it->getType() == ARMORED_TANK)
         {
             if(it->getDirection() == UP)
-                it->setSpritePath("armored-tank-up.png");
+                it->setSprite(spriteLoader->getArmored_tank_up());
             else if(it->getDirection() == DOWN)
-                it->setSpritePath("armored-tank-down.png");
+                it->setSprite(spriteLoader->getArmored_tank_down());
             else if(it->getDirection() == LEFT)
-                it->setSpritePath("armored-tank-left.png");
+                it->setSprite(spriteLoader->getArmored_tank_left());
             else if(it->getDirection() == RIGHT)
-                it->setSpritePath("armored-tank-right.png");
+                it->setSprite(spriteLoader->getArmored_tank_right());
         } else if(it->getType() == RANDOM_TANK)
         {
             if(it->getDirection() == UP)
-                it->setSpritePath("random-tank-up.png");
+                it->setSprite(spriteLoader->getRandom_tank_up());
             else if(it->getDirection() == DOWN)
-                it->setSpritePath("random-tank-down.png");
+                it->setSprite(spriteLoader->getRandom_tank_down());
             else if(it->getDirection() == LEFT)
-                it->setSpritePath("random-tank-left.png");
+                it->setSprite(spriteLoader->getRandom_tank_left());
             else if(it->getDirection() == RIGHT)
-                it->setSpritePath("random-tank-right.png");
+                it->setSprite(spriteLoader->getRandom_tank_right());
         } else if(it->getType() == ARMORED_RANDOM_TANK)
         {
             if(it->getDirection() == UP)
-                it->setSpritePath("armored-random-tank-up.png");
+                it->setSprite(spriteLoader->getArmored_random_tank_up());
             else if(it->getDirection() == DOWN)
-                it->setSpritePath("armored-random-tank-down.png");
+                it->setSprite(spriteLoader->getArmored_random_tank_down());
             else if(it->getDirection() == LEFT)
-                it->setSpritePath("armored-random-tank-left.png");
+                it->setSprite(spriteLoader->getArmored_random_tank_left());
             else if(it->getDirection() == RIGHT)
-                it->setSpritePath("armored-random-tank-right.png");
+                it->setSprite(spriteLoader->getArmored_random_tank_right());
         }
     }
 
@@ -187,20 +188,15 @@ void Game::limitObjects(){
 
 void Game::render(){
     //rendering player
-    QImage sprite(player.getSpritePath());
-    QPixmap pixmap = QPixmap::fromImage(sprite);
-    pixmap = pixmap.scaled(QSize(player.getWIDTH(), player.getHEIGHT()));
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
 
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(player.getSprite());
     item->setPos(player.getX(), player.getY());
     scene->addItem(item);
 
     //rendering tanks
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
-        QImage sprite(it->getSpritePath());
-        qDebug() << it->getSpritePath();
-        QPixmap pixmap =  QPixmap::fromImage(sprite);
+        QPixmap pixmap(it->getSprite());
         pixmap = pixmap.scaled(QSize(player.getWIDTH(), player.getHEIGHT()));
         QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
         item->setPos(it->getX(), it->getY());
@@ -210,17 +206,8 @@ void Game::render(){
     //rendering walls
     for(auto it = walls.begin(); it != walls.end(); ++it)
     {
-        if(!it->getChanged())
-        {
-            it->setChanged(false);
-            continue;
-        }
-
-        QImage sprite(it->getSpritePath());
-        qDebug() << it->getSpritePath();
-        QPixmap pixmap =  QPixmap::fromImage(sprite);
-        pixmap = pixmap.scaled(QSize(player.getWIDTH(), player.getHEIGHT()));
-        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+        QPixmap sprite(it->getSprite());
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(sprite);
         item->setPos(it->getX(), it->getY());
         scene->addItem(item);
     }
@@ -257,19 +244,19 @@ void Game::keyPressEvent(QKeyEvent* event){
     if (event->key() == Qt::Key_A)
     {
         player.setX(player.getX() - 2);
-        player.setSpritePath("yellow-tank-left.png");
+        player.setSprite(spriteLoader->getYellow_tank_left());
     } else if (event->key() == Qt::Key_D)
     {
         player.setX(player.getX() + 2);
-        player.setSpritePath("yellow-tank-right.png");
+        player.setSprite(spriteLoader->getYellow_tank_right());
     } else if (event->key() == Qt::Key_W)
     {
         player.setY(player.getY() - 2);
-        player.setSpritePath("yellow-tank-up.png");
+        player.setSprite(spriteLoader->getYellow_tank_up());
     } else if (event->key() == Qt::Key_S)
     {
         player.setY(player.getY() + 2);
-        player.setSpritePath("yellow-tank-down.png");
+        player.setSprite(spriteLoader->getYellow_tank_down());
     }
 
 

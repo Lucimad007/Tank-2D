@@ -1,6 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include <QString>
+#include <QGraphicsPixmapItem>
 
 enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, YELLOW_TANK, STAR, TANKI, CLOCK, FLAG
           , WATER, STONE , BRICK};
@@ -10,10 +11,7 @@ class GameObject
 {
 public:
     GameObject();
-    GameObject(const Type& type, const QString& spritePath, const int& x, const int& y, const int& health, const int& damage, const Direction& direction = UP);
-
-    const QString &getSpritePath() const;
-    void setSpritePath(const QString &newSpritePath);
+    GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const int& health, const int& damage, const Direction& direction = UP);
 
     int getY() const;
     void setY(int newY);
@@ -41,8 +39,7 @@ private:
     int damage;
     int x;
     int y;
-    QString spritePath;
-    QString defaultPath;
+    QPixmap sprite;
     Type type;
     Direction direction;
 public:
@@ -51,9 +48,8 @@ public:
     int steps = WIDTH / 4;
     Direction getDirection() const;
     void setDirection(Direction newDirection);
-    bool changed = false;   //I use it as a flag for rendering every frame, so performance would be much better
-    bool getChanged() const;
-    void setChanged(bool newChanged);
+    QPixmap getSprite() const;
+    void setSprite(QPixmap newSprite);
 };
 
 #endif // GAMEOBJECT_H

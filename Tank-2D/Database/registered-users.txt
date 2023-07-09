@@ -2,5 +2,6 @@
     "agw": "gaw",
     "ali": "12",
     "ali2": "22",
+    "fa": "fwa",
     "test": "te"
 }

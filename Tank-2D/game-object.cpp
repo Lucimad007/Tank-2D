@@ -6,36 +6,20 @@ int GameObject::HEIGHT = 32;
 
 GameObject::GameObject()
 {
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    defaultPath = info.dir().path() + "/Tank-2D/Arts/";
-    spritePath = defaultPath;
     x = 0;
     y = 0;
     health = 0;
     damage = 0;
 }
 
-GameObject::GameObject(const Type& type, const QString& spritePath, const int& x, const int& y, const int& health, const int& damage, const Direction& direction){
+GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const int& health, const int& damage, const Direction& direction){
     this->type = type;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    defaultPath = info.dir().path() + "/Tank-2D/Arts/";
-    this->spritePath = defaultPath + spritePath;
+    this->sprite = sprite;
     this->x = x;
     this->y = y;
     this->health = health;
     this->damage = damage;
     this->direction = direction;
-}
-
-const QString &GameObject::getSpritePath() const
-{
-    return spritePath;
-}
-
-void GameObject::setSpritePath(const QString &newSpritePath)
-{
-    spritePath = defaultPath;
-    spritePath += newSpritePath;
 }
 
 int GameObject::getY() const
@@ -98,6 +82,16 @@ void GameObject::setType(Type newType)
     type = newType;
 }
 
+QPixmap GameObject::getSprite() const
+{
+    return sprite;
+}
+
+void GameObject::setSprite(QPixmap newSprite)
+{
+    sprite = newSprite;
+}
+
 Direction GameObject::getDirection() const
 {
     return direction;
@@ -106,14 +100,4 @@ Direction GameObject::getDirection() const
 void GameObject::setDirection(Direction newDirection)
 {
     direction = newDirection;
-}
-
-bool GameObject::getChanged() const
-{
-    return changed;
-}
-
-void GameObject::setChanged(bool newChanged)
-{
-    changed = newChanged;
 }
