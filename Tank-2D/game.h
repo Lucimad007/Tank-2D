@@ -18,6 +18,7 @@ public:
     void loadIcon();
     void clear();
     void updateLogic();
+    void limitObjects();
     void render();
     ~Game();
 

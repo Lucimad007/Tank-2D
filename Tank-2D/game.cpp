@@ -5,6 +5,9 @@
 #include <QDir>
 #include <QKeyEvent>
 
+int count = 0;
+int num = 0;
+
 Game::Game(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
@@ -49,7 +52,56 @@ void Game::clear(){
 }
 
 void Game::updateLogic(){
+    //random movements of tanks
+    count++;
+    if(count % 8 == 0)
+        num = rand();
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        if(num % 4 == 0)
+            it->setX(it->getX() + 4);
+        else if(num % 4 == 1)
+            it->setX(it->getX() - 4);
+        else if(num % 4 == 2)
+            it->setY(it->getY() + 4);
+        else if(num % 4 == 3)
+            it->setY(it->getY() - 4);
+    }
 
+    limitObjects();     //we should ensure that none of the game objects are out of the scene
+}
+
+void Game::limitObjects(){
+    //restricting tanks
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        //left
+        if(it->getX() < 0)
+            it->setX(0);
+        //right
+        if(this->width() - it->getWIDTH() < it->getX())
+            it->setX(this->width() - it->getWIDTH());
+        //up
+        if(it->getY() < 0)
+            it->setY(0);
+        //down
+        if(this->height() - it->getHEIGHT() < it->getY())
+            it->setY(this->height() - it->getHEIGHT());
+    }
+
+    //restricting player
+    //left
+    if(player.getX() < 0)
+        player.setX(0);
+    //right
+    if(this->width() - player.getWIDTH() < player.getX())
+        player.setX(this->width() - player.getWIDTH());
+    //up
+    if(player.getY() < 0)
+        player.setY(0);
+    //down
+    if(this->height() - player.getHEIGHT() < player.getY())
+        player.setY(this->height() - player.getHEIGHT());
 }
 
 void Game::render(){
