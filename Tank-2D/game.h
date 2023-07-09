@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-#include <QList>
+#include <QVector>
 #include <QWidget>
 #include <QGraphicsScene>
 #include "game-object.h"
@@ -17,13 +17,25 @@ public:
     explicit Game(QWidget *parent = nullptr);
     void loadIcon();
     void clear();
+    void updateLogic();
     void render();
     ~Game();
 
+    int getFPS() const;
+
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+
 private:
     Ui::Game *ui;
+    int FPS = 60;
     QGraphicsScene* scene = nullptr;
-    QList<GameObject> objects;
+    GameObject player;
+    GameObject flag;
+    QVector<GameObject> tanks;
+    QVector<GameObject> walls;
+    QVector<GameObject> bonus;
+    QVector<GameObject> missiles;
 };
 
 #endif // GAME_H

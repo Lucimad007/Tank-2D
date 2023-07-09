@@ -35,8 +35,8 @@ public:
     void setType(Type newType);
 
 private:
-    int WIDTH;
-    int HEIGHT;
+    int WIDTH = 32;
+    int HEIGHT = 32;
     int health;
     int damage;
     int x;
