@@ -29,6 +29,18 @@ Game::Game(QWidget *parent) :
     tanks.push_back(tank3);
     player = tank1;
     render();
+    loadLevel();
+}
+
+void Game::loadLevel(){
+    for(int i = 0; i < 25; i++)
+        for(int j = 7; j < 10; j++)
+            {
+                GameObject brick(BRICK, "brick.png", i * 32 , j * 32, 1 , 1);
+                brick.setChanged(true);
+                walls.push_back(brick);
+                hitBoxes.push_back(QRect(i * 32, j * 32 , 32, 32));
+            }
 }
 
 void Game::loadIcon(){
@@ -195,6 +207,24 @@ void Game::render(){
         scene->addItem(item);
     }
 
+    //rendering walls
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        if(!it->getChanged())
+        {
+            it->setChanged(false);
+            continue;
+        }
+
+        QImage sprite(it->getSpritePath());
+        qDebug() << it->getSpritePath();
+        QPixmap pixmap =  QPixmap::fromImage(sprite);
+        pixmap = pixmap.scaled(QSize(player.getWIDTH(), player.getHEIGHT()));
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+        item->setPos(it->getX(), it->getY());
+        scene->addItem(item);
+    }
+
 
     scene->update();
 }
@@ -202,6 +232,10 @@ void Game::render(){
 void Game::updateHitBoxes(){
     hitBoxes.clear();
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+    }
+    for(auto it = walls.begin(); it != walls.end(); ++it)
     {
         hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
     }

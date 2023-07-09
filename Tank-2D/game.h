@@ -15,6 +15,7 @@ class Game : public QWidget
 
 public:
     explicit Game(QWidget *parent = nullptr);
+    void loadLevel();
     void loadIcon();
     void clear();
     void updateLogic();

@@ -51,6 +51,9 @@ public:
     int steps = WIDTH / 4;
     Direction getDirection() const;
     void setDirection(Direction newDirection);
+    bool changed = false;   //I use it as a flag for rendering every frame, so performance would be much better
+    bool getChanged() const;
+    void setChanged(bool newChanged);
 };
 
 #endif // GAMEOBJECT_H

@@ -107,3 +107,13 @@ void GameObject::setDirection(Direction newDirection)
 {
     direction = newDirection;
 }
+
+bool GameObject::getChanged() const
+{
+    return changed;
+}
+
+void GameObject::setChanged(bool newChanged)
+{
+    changed = newChanged;
+}
