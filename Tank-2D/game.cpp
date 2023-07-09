@@ -5,9 +5,6 @@
 #include <QDir>
 #include <QKeyEvent>
 
-int count = 0;
-int num = 0;
-
 Game::Game(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
@@ -25,9 +22,11 @@ Game::Game(QWidget *parent) :
     ui->backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    GameObject tank1(ARMORED_TANK, "yellow-tank-up.png", 0, 0, 1, 1);
+    GameObject tank1(PLAYER, "yellow-tank-up.png", 0, 0, 1, 1);
     GameObject tank2(ARMORED_RANDOM_TANK, "armored-random-tank-down.png", 200, 50, 1, 1);
-    tanks.push_back(tank2);
+    GameObject tank3(ARMORED_TANK, "common-tank-up.png", 200, 50, 1, 1);
+    tanks.push_front(tank2);
+    tanks.push_back(tank3);
     player = tank1;
     render();
 }
@@ -53,19 +52,75 @@ void Game::clear(){
 
 void Game::updateLogic(){
     //random movements of tanks
-    count++;
-    if(count % 8 == 0)
-        num = rand();
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
-        if(num % 4 == 0)
+        it->counter++;
+        if(it->counter % it->steps == 0)
+            it->randomNumber = rand();
+
+        if(it->randomNumber % 4 == 0)
+        {
             it->setX(it->getX() + 4);
-        else if(num % 4 == 1)
+            it->setDirection(RIGHT);
+        } else if(it->randomNumber % 4 == 1)
+        {
             it->setX(it->getX() - 4);
-        else if(num % 4 == 2)
+            it->setDirection(LEFT);
+        } else if(it->randomNumber % 4 == 2)
+        {
             it->setY(it->getY() + 4);
-        else if(num % 4 == 3)
+            it->setDirection(DOWN);
+        } else if(it->randomNumber % 4 == 3)
+        {
             it->setY(it->getY() - 4);
+            it->setDirection(UP);
+        }
+    }
+
+    //updating sprite paths
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        if(it->getType() == COMMON_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSpritePath("common-tank-up.png");
+            else if(it->getDirection() == DOWN)
+                it->setSpritePath("common-tank-down.png");
+            else if(it->getDirection() == LEFT)
+                it->setSpritePath("common-tank-left.png");
+            else if(it->getDirection() == RIGHT)
+                it->setSpritePath("common-tank-right.png");
+        } else if(it->getType() == ARMORED_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSpritePath("armored-tank-up.png");
+            else if(it->getDirection() == DOWN)
+                it->setSpritePath("armored-tank-down.png");
+            else if(it->getDirection() == LEFT)
+                it->setSpritePath("armored-tank-left.png");
+            else if(it->getDirection() == RIGHT)
+                it->setSpritePath("armored-tank-right.png");
+        } else if(it->getType() == RANDOM_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSpritePath("random-tank-up.png");
+            else if(it->getDirection() == DOWN)
+                it->setSpritePath("random-tank-down.png");
+            else if(it->getDirection() == LEFT)
+                it->setSpritePath("random-tank-left.png");
+            else if(it->getDirection() == RIGHT)
+                it->setSpritePath("random-tank-right.png");
+        } else if(it->getType() == ARMORED_RANDOM_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSpritePath("armored-random-tank-up.png");
+            else if(it->getDirection() == DOWN)
+                it->setSpritePath("armored-random-tank-down.png");
+            else if(it->getDirection() == LEFT)
+                it->setSpritePath("armored-random-tank-left.png");
+            else if(it->getDirection() == RIGHT)
+                it->setSpritePath("armored-random-tank-right.png");
+        }
     }
 
     limitObjects();     //we should ensure that none of the game objects are out of the scene

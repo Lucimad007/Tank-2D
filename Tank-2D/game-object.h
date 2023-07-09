@@ -27,16 +27,16 @@ public:
     int getHealth() const;
     void setHealth(int newHealth);
 
-    int getHEIGHT() const;
+    static int getHEIGHT();
 
-    int getWIDTH() const;
+    static int getWIDTH();
 
     Type getType() const;
     void setType(Type newType);
 
 private:
-    int WIDTH = 32;
-    int HEIGHT = 32;
+    static int WIDTH;
+    static int HEIGHT;
     int health;
     int damage;
     int x;
@@ -45,6 +45,12 @@ private:
     QString defaultPath;
     Type type;
     Direction direction;
+public:
+    int counter = 0;
+    int randomNumber = 0;
+    int steps = WIDTH / 4;
+    Direction getDirection() const;
+    void setDirection(Direction newDirection);
 };
 
 #endif // GAMEOBJECT_H

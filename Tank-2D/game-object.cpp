@@ -1,6 +1,9 @@
 #include "game-object.h"
 #include <QDir>
 
+int GameObject::WIDTH = 32;
+int GameObject::HEIGHT = 32;
+
 GameObject::GameObject()
 {
     QFileInfo info = QFileInfo(QDir::currentPath());
@@ -75,12 +78,12 @@ void GameObject::setHealth(int newHealth)
     health = newHealth;
 }
 
-int GameObject::getHEIGHT() const
+int GameObject::getHEIGHT()
 {
     return HEIGHT;
 }
 
-int GameObject::getWIDTH() const
+int GameObject::getWIDTH()
 {
     return WIDTH;
 }
@@ -93,4 +96,14 @@ Type GameObject::getType() const
 void GameObject::setType(Type newType)
 {
     type = newType;
+}
+
+Direction GameObject::getDirection() const
+{
+    return direction;
+}
+
+void GameObject::setDirection(Direction newDirection)
+{
+    direction = newDirection;
 }
