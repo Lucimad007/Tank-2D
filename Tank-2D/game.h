@@ -23,7 +23,7 @@ public:
     void limitObjects();
     void render();
     void updateHitBoxes();
-    bool haveCollision(QRect before, QRect after);
+    bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
     ~Game();
 
     int getFPS() const;
@@ -43,6 +43,7 @@ private:
     QVector<GameObject> bonus;
     QVector<GameObject> missiles;
     QVector<QRect> hitBoxes;
+    QVector<QRect> missileHitBoxes;     //missiles should be seperate because their collision between other things would be destructive
 };
 
 #endif // GAME_H

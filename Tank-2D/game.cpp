@@ -242,14 +242,23 @@ void Game::render(){
 
 void Game::updateHitBoxes(){
     hitBoxes.clear();
+    //hitboxes of tanks
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
         hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
     }
+
+    //hitboxes of walls
+
     for(auto it = walls.begin(); it != walls.end(); ++it)
     {
         hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
     }
+
+    //hitbox of the player
+    hitBoxes.push_back(QRect(player.getX() , player.getY() , player.getWIDTH(), player.getHEIGHT()));
+
+    //hitboxes of the missiles
 }
 
 bool Game::haveCollision(QRect before, QRect after){
@@ -265,29 +274,46 @@ bool Game::haveCollision(QRect before, QRect after){
 }
 
 void Game::keyPressEvent(QKeyEvent* event){
-    if(player.counter)
+    if(player.counter)          //for restricting number of missiles being shot
         player.counter--;
+
 
     if (event->key() == Qt::Key_A)
     {
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX() - 4, player.getY(), player.getWIDTH(), player.getHEIGHT());
         player.setDirection(LEFT);
-        player.setX(player.getX() - 2);
         player.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player.setX(player.getX() - 4);
     } else if (event->key() == Qt::Key_D)
     {
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX() + 4, player.getY(), player.getWIDTH(), player.getHEIGHT());
         player.setDirection(RIGHT);
-        player.setX(player.getX() + 2);
         player.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player.setX(player.getX() + 4);
     } else if (event->key() == Qt::Key_W)
     {
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX(), player.getY() - 4, player.getWIDTH(), player.getHEIGHT());
         player.setDirection(UP);
-        player.setY(player.getY() - 2);
         player.setSprite(spriteLoader->getYellow_tank_up());
+        if(!haveCollision(before, after))
+            player.setY(player.getY() - 4);
     } else if (event->key() == Qt::Key_S)
     {
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX(), player.getY() + 4, player.getWIDTH(), player.getHEIGHT());
         player.setDirection(DOWN);
-        player.setY(player.getY() + 2);
         player.setSprite(spriteLoader->getYellow_tank_down());
+        if(!haveCollision(before, after))
+            player.setY(player.getY() + 4);
     } else if ((event->key() == Qt::Key_T) && (player.counter == 0))
     {
         player.counter += 5;    //for restricting number of missiles being shot
