@@ -21,6 +21,7 @@ public:
     void clear();
     void updateLogic();
     void limitObjects();
+    void deleteJunkMissiles();
     void render();
     void updateHitBoxes();
     bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
@@ -41,7 +42,7 @@ private:
     QVector<GameObject> tanks;
     QVector<GameObject> walls;
     QVector<GameObject> bonus;
-    QVector<GameObject> missiles;
+    std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
     QVector<QRect> hitBoxes;
     QVector<QRect> missileHitBoxes;     //missiles should be seperate because their collision between other things would be destructive
 };

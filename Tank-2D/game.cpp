@@ -161,9 +161,12 @@ void Game::updateLogic(){
             it->setX(it->getX() - 4);
     }
 
+    deleteJunkMissiles();
+
     updateHitBoxes();
 
     limitObjects();     //we should ensure that none of the game objects are out of the scene
+
 }
 
 void Game::limitObjects(){
@@ -199,9 +202,22 @@ void Game::limitObjects(){
         player.setY(this->height() - player.getHEIGHT());
 }
 
+void Game::deleteJunkMissiles(){
+    for(auto it = missiles.begin(); it != missiles.end(); it++)
+    {
+        if(it->getX() > this->width())
+            missiles.erase(it);
+        else if(it->getX() + it->getSMALL_WIDTH() < 0)
+            missiles.erase(it);
+        else if(it->getY() + it->getSMALL_HEIGHT() < 0)
+            missiles.erase(it);
+        else if(it->getY() > this->height())
+            missiles.erase(it);
+    }
+}
+
 void Game::render(){
     //rendering player
-
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(player.getSprite());
     item->setPos(player.getX(), player.getY());
     scene->addItem(item);
