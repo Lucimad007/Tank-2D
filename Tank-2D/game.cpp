@@ -212,6 +212,17 @@ void Game::render(){
         scene->addItem(item);
     }
 
+    //rendering missiles
+    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        QPixmap sprite(it->getSprite());
+        sprite = sprite.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());    //making missiles small
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(sprite);
+        item->setPos(it->getX(), it->getY());
+        scene->addItem(item);
+    }
+
+
 
     scene->update();
 }
@@ -243,20 +254,43 @@ bool Game::haveCollision(QRect before, QRect after){
 void Game::keyPressEvent(QKeyEvent* event){
     if (event->key() == Qt::Key_A)
     {
+        player.setDirection(LEFT);
         player.setX(player.getX() - 2);
         player.setSprite(spriteLoader->getYellow_tank_left());
     } else if (event->key() == Qt::Key_D)
     {
+        player.setDirection(RIGHT);
         player.setX(player.getX() + 2);
         player.setSprite(spriteLoader->getYellow_tank_right());
     } else if (event->key() == Qt::Key_W)
     {
+        player.setDirection(UP);
         player.setY(player.getY() - 2);
         player.setSprite(spriteLoader->getYellow_tank_up());
     } else if (event->key() == Qt::Key_S)
     {
+        player.setDirection(DOWN);
         player.setY(player.getY() + 2);
         player.setSprite(spriteLoader->getYellow_tank_down());
+    } else if (event->key() == Qt::Key_T)
+    {
+        if(player.getDirection() == UP)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_up(), player.getX() + GameObject::getSMALL_WIDTH()/2 ,player.getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
+            missiles.push_back(missile);
+        } else if(player.getDirection() == DOWN)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_down(), player.getX() + GameObject::getSMALL_WIDTH()/2, player.getY() + GameObject::getHEIGHT(), 0, 0, DOWN);
+            missiles.push_back(missile);
+        } else if(player.getDirection() == RIGHT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_right(), player.getX() + GameObject::getWIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2, 0, 0, RIGHT);
+            missiles.push_back(missile);
+        } else if(player.getDirection() == LEFT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_left(), player.getX() - GameObject::getSMALL_WIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2 , 0, 0, LEFT);
+            missiles.push_back(missile);
+        }
     }
 
 

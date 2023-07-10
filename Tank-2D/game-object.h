@@ -4,7 +4,7 @@
 #include <QGraphicsPixmapItem>
 
 enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, YELLOW_TANK, STAR, TANKI, CLOCK, FLAG
-          , WATER, STONE , BRICK};
+          , WATER, STONE , BRICK, MISSILE};
 enum Direction {LEFT , RIGHT, UP, DOWN};
 
 class GameObject
@@ -35,6 +35,8 @@ public:
 private:
     static int WIDTH;
     static int HEIGHT;
+    static int SMALL_WIDTH;
+    static int SMALL_HEIGHT;
     int health;
     int damage;
     int x;
@@ -50,6 +52,8 @@ public:
     void setDirection(Direction newDirection);
     QPixmap getSprite() const;
     void setSprite(QPixmap newSprite);
+    static int getSMALL_HEIGHT();
+    static int getSMALL_WIDTH();
 };
 
 #endif // GAMEOBJECT_H

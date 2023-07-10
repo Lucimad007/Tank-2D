@@ -3,6 +3,8 @@
 
 int GameObject::WIDTH = 32;
 int GameObject::HEIGHT = 32;
+int GameObject::SMALL_WIDTH = 16;
+int GameObject::SMALL_HEIGHT = 16;
 
 GameObject::GameObject()
 {
@@ -80,6 +82,16 @@ Type GameObject::getType() const
 void GameObject::setType(Type newType)
 {
     type = newType;
+}
+
+int GameObject::getSMALL_WIDTH()
+{
+    return SMALL_WIDTH;
+}
+
+int GameObject::getSMALL_HEIGHT()
+{
+    return SMALL_HEIGHT;
 }
 
 QPixmap GameObject::getSprite() const
