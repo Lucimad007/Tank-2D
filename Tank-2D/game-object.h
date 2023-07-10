@@ -45,7 +45,7 @@ private:
     Type type;
     Direction direction;
 public:
-    int counter = 0;
+    int counter = 0;    //we can use it for different purposes
     int randomNumber = 0;
     int steps = WIDTH / 4;
     Direction getDirection() const;
