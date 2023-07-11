@@ -4,7 +4,7 @@
 #include <QRect>
 #include <QGraphicsPixmapItem>
 
-enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, YELLOW_TANK, STAR, TANKI, CLOCK, FLAG
+enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, STAR, TANKI, CLOCK, FLAG
           , WATER, STONE , BRICK, MISSILE};
 enum Direction {LEFT , RIGHT, UP, DOWN};
 
@@ -12,7 +12,7 @@ class GameObject
 {
 public:
     GameObject();
-    GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const int& health, const int& damage, const Direction& direction = UP);
+    GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const Direction& direction = UP);
 
     int getY() const;
     void setY(int newY);

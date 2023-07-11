@@ -70,39 +70,39 @@ void Game::loadLevel(int level){
         {
             if(positions[j][i] == 'B')
             {
-                GameObject brick(BRICK, spriteLoader->getBrick(), j * cellSize, i * cellSize, 1, 0);
+                GameObject brick(BRICK, spriteLoader->getBrick(), j * cellSize, i * cellSize);
                 walls.push_back(brick);
             } else if(positions[j][i] == 'W')
             {
-                GameObject water(WATER, spriteLoader->getWater(), j * cellSize, i * cellSize, 1, 0);
+                GameObject water(WATER, spriteLoader->getWater(), j * cellSize, i * cellSize);
                 walls.push_back(water);
             } else if(positions[j][i] == 'M')
             {
-                GameObject stone(STONE, spriteLoader->getStone(), j * cellSize, i * cellSize, 1, 0);
+                GameObject stone(STONE, spriteLoader->getStone(), j * cellSize, i * cellSize);
                 walls.push_back(stone);
             } else if(positions[j][i] == 'F')
             {
-                GameObject flag(FLAG, spriteLoader->getFlag(), j * cellSize, i * cellSize, 1, 0);
+                GameObject flag(FLAG, spriteLoader->getFlag(), j * cellSize, i * cellSize);
                 this->flag = flag;
             } else if(positions[j][i] == 'C')
             {
-                GameObject tank(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                GameObject tank(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
             } else if(positions[j][i] == 'c')
             {
-                GameObject tank(RANDOM_TANK, spriteLoader->getRandom_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                GameObject tank(RANDOM_TANK, spriteLoader->getRandom_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
             } else if(positions[j][i] == 'A')
             {
-                GameObject tank(ARMORED_TANK, spriteLoader->getArmored_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                GameObject tank(ARMORED_TANK, spriteLoader->getArmored_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
             } else if(positions[j][i] == 'O')
             {
-                GameObject tank(COMMON_TANK, spriteLoader->getCommon_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                GameObject tank(COMMON_TANK, spriteLoader->getCommon_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
             } else if(positions[j][i] == 'P')
             {
-                GameObject player(PLAYER, spriteLoader->getYellow_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                GameObject player(PLAYER, spriteLoader->getYellow_tank_down(), j * cellSize, i * cellSize, DOWN);
                 this->player = player;
             }
         }
@@ -524,19 +524,19 @@ void Game::tanksShooting(){
         {
             if(it->getDirection() == UP)
             {
-                GameObject missile(MISSILE, spriteLoader->getMissile_up(), it->getX() + GameObject::getSMALL_WIDTH()/2 ,it->getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
+                GameObject missile(MISSILE, spriteLoader->getMissile_up(), it->getX() + GameObject::getSMALL_WIDTH()/2 ,it->getY() - GameObject::getSMALL_HEIGHT(), UP);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == DOWN)
             {
-                GameObject missile(MISSILE, spriteLoader->getMissile_down(), it->getX() + GameObject::getSMALL_WIDTH()/2, it->getY() + GameObject::getHEIGHT(), 0, 0, DOWN);
+                GameObject missile(MISSILE, spriteLoader->getMissile_down(), it->getX() + GameObject::getSMALL_WIDTH()/2, it->getY() + GameObject::getHEIGHT(), DOWN);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == RIGHT)
             {
-                GameObject missile(MISSILE, spriteLoader->getMissile_right(), it->getX() + GameObject::getWIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2, 0, 0, RIGHT);
+                GameObject missile(MISSILE, spriteLoader->getMissile_right(), it->getX() + GameObject::getWIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2, RIGHT);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == LEFT)
             {
-                GameObject missile(MISSILE, spriteLoader->getMissile_left(), it->getX() - GameObject::getSMALL_WIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2 , 0, 0, LEFT);
+                GameObject missile(MISSILE, spriteLoader->getMissile_left(), it->getX() - GameObject::getSMALL_WIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2 , LEFT);
                 enemyMissiles.push_back(missile);
             }
         }
@@ -613,19 +613,19 @@ void Game::keyPressEvent(QKeyEvent* event){
         player.counter += 10;    //for restricting number of missiles being shot
         if(player.getDirection() == UP)
         {
-            GameObject missile(MISSILE, spriteLoader->getMissile_up(), player.getX() + GameObject::getSMALL_WIDTH()/2 ,player.getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
+            GameObject missile(MISSILE, spriteLoader->getMissile_up(), player.getX() + GameObject::getSMALL_WIDTH()/2 ,player.getY() - GameObject::getSMALL_HEIGHT(), UP);
             missiles.push_back(missile);
         } else if(player.getDirection() == DOWN)
         {
-            GameObject missile(MISSILE, spriteLoader->getMissile_down(), player.getX() + GameObject::getSMALL_WIDTH()/2, player.getY() + GameObject::getHEIGHT(), 0, 0, DOWN);
+            GameObject missile(MISSILE, spriteLoader->getMissile_down(), player.getX() + GameObject::getSMALL_WIDTH()/2, player.getY() + GameObject::getHEIGHT(), DOWN);
             missiles.push_back(missile);
         } else if(player.getDirection() == RIGHT)
         {
-            GameObject missile(MISSILE, spriteLoader->getMissile_right(), player.getX() + GameObject::getWIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2, 0, 0, RIGHT);
+            GameObject missile(MISSILE, spriteLoader->getMissile_right(), player.getX() + GameObject::getWIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2, RIGHT);
             missiles.push_back(missile);
         } else if(player.getDirection() == LEFT)
         {
-            GameObject missile(MISSILE, spriteLoader->getMissile_left(), player.getX() - GameObject::getSMALL_WIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2 , 0, 0, LEFT);
+            GameObject missile(MISSILE, spriteLoader->getMissile_left(), player.getX() - GameObject::getSMALL_WIDTH() ,player.getY() + GameObject::getSMALL_HEIGHT()/2, LEFT);
             missiles.push_back(missile);
         }
     }

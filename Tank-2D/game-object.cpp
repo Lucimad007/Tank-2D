@@ -16,18 +16,70 @@ GameObject::GameObject()
     hitbox = QRect(0, 0, WIDTH, HEIGHT);
 }
 
-GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const int& health, const int& damage, const Direction& direction){
+GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const Direction& direction){
     this->type = type;
     this->sprite = sprite;
     this->x = x;
     this->y = y;
-    this->health = health;
-    this->damage = damage;
     this->direction = direction;
     if(type == MISSILE)
         hitbox = QRect(x, y, SMALL_WIDTH, SMALL_HEIGHT);
     else
         hitbox = QRect(x, y, WIDTH, HEIGHT);
+
+    if(type == PLAYER)
+    {
+        this->health = 3;
+        this->damage = 1;
+    } else if(type == COMMON_TANK)
+    {
+        this->health = 1;
+        this->damage = 1;
+    } else if(type == ARMORED_TANK)
+    {
+        this->health = 2;
+        this->damage = 1;
+    } else if(type == RANDOM_TANK)
+    {
+        this->health = 1;
+        this->damage = 1;
+    } else if(type == ARMORED_RANDOM_TANK)
+    {
+        this->health = 2;
+        this->damage = 1;
+    } else if(type == BRICK)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == STONE)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == WATER)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == FLAG)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == MISSILE)
+    {
+        this->health = 1;
+        this->damage = 1;
+    } else if(type == TANKI)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == CLOCK)
+    {
+        this->health = 1;
+        this->damage = 0;
+    } else if(type == STAR)
+    {
+        this->health = 1;
+        this->damage = 0;
+    }
 }
 
 int GameObject::getY() const
