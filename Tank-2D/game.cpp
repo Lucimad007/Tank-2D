@@ -64,101 +64,15 @@ void Game::clear(){
 
 void Game::updateLogic(){
     //random movements of tanks
-    QRect before, after;
-    for(auto it = tanks.begin(); it != tanks.end(); ++it)
-    {
-        before = QRect(it->getX(), it->getY(), it->getWIDTH(), it->getHEIGHT());
+    randomMovementsOfTanks();
 
-        it->counter++;
-        if(it->counter % it->steps == 0)
-            it->randomNumber = rand();
+    tanksShooting();
 
-        if(it->randomNumber % 4 == 0)
-        {
-            after = QRect(it->getX() + 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
-            it->setDirection(RIGHT);
-            if(!haveCollision(before, after))
-                it->setX(it->getX() + 4);
-        } else if(it->randomNumber % 4 == 1)
-        {
-            after = QRect(it->getX() - 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
-            it->setDirection(LEFT);
-            if(!haveCollision(before, after))
-                it->setX(it->getX() - 4);
-        } else if(it->randomNumber % 4 == 2)
-        {
-            after = QRect(it->getX(), it->getY() + 4, it->getWIDTH(), it->getHEIGHT());
-            it->setDirection(DOWN);
-            if(!haveCollision(before, after))
-                it->setY(it->getY() + 4);
+    //updating sprites
+    updateSprites();
 
-        } else if(it->randomNumber % 4 == 3)
-        {
-            after = QRect(it->getX(), it->getY() - 4, it->getWIDTH(), it->getHEIGHT());
-            it->setDirection(UP);
-            if(!haveCollision(before, after))
-                it->setY(it->getY() - 4);
-        }
-    }
-
-    //updating sprite paths
-    for(auto it = tanks.begin(); it != tanks.end(); ++it)
-    {
-        if(it->getType() == COMMON_TANK)
-        {
-            if(it->getDirection() == UP)
-                it->setSprite(spriteLoader->getCommon_tank_up());
-            else if(it->getDirection() == DOWN)
-                it->setSprite(spriteLoader->getCommon_tank_down());
-            else if(it->getDirection() == LEFT)
-                it->setSprite(spriteLoader->getCommon_tank_left());
-            else if(it->getDirection() == RIGHT)
-                it->setSprite(spriteLoader->getCommon_tank_right());
-        } else if(it->getType() == ARMORED_TANK)
-        {
-            if(it->getDirection() == UP)
-                it->setSprite(spriteLoader->getArmored_tank_up());
-            else if(it->getDirection() == DOWN)
-                it->setSprite(spriteLoader->getArmored_tank_down());
-            else if(it->getDirection() == LEFT)
-                it->setSprite(spriteLoader->getArmored_tank_left());
-            else if(it->getDirection() == RIGHT)
-                it->setSprite(spriteLoader->getArmored_tank_right());
-        } else if(it->getType() == RANDOM_TANK)
-        {
-            if(it->getDirection() == UP)
-                it->setSprite(spriteLoader->getRandom_tank_up());
-            else if(it->getDirection() == DOWN)
-                it->setSprite(spriteLoader->getRandom_tank_down());
-            else if(it->getDirection() == LEFT)
-                it->setSprite(spriteLoader->getRandom_tank_left());
-            else if(it->getDirection() == RIGHT)
-                it->setSprite(spriteLoader->getRandom_tank_right());
-        } else if(it->getType() == ARMORED_RANDOM_TANK)
-        {
-            if(it->getDirection() == UP)
-                it->setSprite(spriteLoader->getArmored_random_tank_up());
-            else if(it->getDirection() == DOWN)
-                it->setSprite(spriteLoader->getArmored_random_tank_down());
-            else if(it->getDirection() == LEFT)
-                it->setSprite(spriteLoader->getArmored_random_tank_left());
-            else if(it->getDirection() == RIGHT)
-                it->setSprite(spriteLoader->getArmored_random_tank_right());
-        }
-    }
-
-    //moveing missiles
-    for(auto it = missiles.begin(); it != missiles.end(); ++it)
-    {
-        if(it->getDirection() == UP)
-            it->setY(it->getY() - 4);
-        else if(it->getDirection() == DOWN)
-            it->setY(it->getY() + 4);
-        else if(it->getDirection() == RIGHT)
-            it->setX(it->getX() + 4);
-        else if(it->getDirection() == LEFT)
-            it->setX(it->getX() - 4);
-    }
+    //moving missiles
+    moveMissiles();
 
     deleteJunkMissiles();
 
@@ -252,6 +166,16 @@ void Game::detectMissileCollision()
             }
         }
     }
+
+    //player and missiles
+    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        if(player.getHitbox().intersects(it->getHitbox()))
+        {
+            missiles.erase(it);
+            player.setHealth(player.getHealth() - 1);
+        }
+    }
 }
 
 void Game::render(){
@@ -314,6 +238,133 @@ void Game::updateHitBoxes(){
     for(auto it = missiles.begin(); it != missiles.end(); ++it)
     {
         it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+    }
+}
+
+void Game::randomMovementsOfTanks(){
+    QRect before, after;
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        before = QRect(it->getX(), it->getY(), it->getWIDTH(), it->getHEIGHT());
+
+        it->counter++;
+        if(it->counter % it->steps == 0)
+            it->randomNumber = rand();
+
+        if(it->randomNumber % 4 == 0)
+        {
+            after = QRect(it->getX() + 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
+            it->setDirection(RIGHT);
+            if(!haveCollision(before, after))
+                it->setX(it->getX() + 4);
+        } else if(it->randomNumber % 4 == 1)
+        {
+            after = QRect(it->getX() - 4, it->getY(), it->getWIDTH(), it->getHEIGHT());
+            it->setDirection(LEFT);
+            if(!haveCollision(before, after))
+                it->setX(it->getX() - 4);
+        } else if(it->randomNumber % 4 == 2)
+        {
+            after = QRect(it->getX(), it->getY() + 4, it->getWIDTH(), it->getHEIGHT());
+            it->setDirection(DOWN);
+            if(!haveCollision(before, after))
+                it->setY(it->getY() + 4);
+
+        } else if(it->randomNumber % 4 == 3)
+        {
+            after = QRect(it->getX(), it->getY() - 4, it->getWIDTH(), it->getHEIGHT());
+            it->setDirection(UP);
+            if(!haveCollision(before, after))
+                it->setY(it->getY() - 4);
+        }
+    }
+
+}
+
+void Game::updateSprites(){
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        if(it->getType() == COMMON_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSprite(spriteLoader->getCommon_tank_up());
+            else if(it->getDirection() == DOWN)
+                it->setSprite(spriteLoader->getCommon_tank_down());
+            else if(it->getDirection() == LEFT)
+                it->setSprite(spriteLoader->getCommon_tank_left());
+            else if(it->getDirection() == RIGHT)
+                it->setSprite(spriteLoader->getCommon_tank_right());
+        } else if(it->getType() == ARMORED_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSprite(spriteLoader->getArmored_tank_up());
+            else if(it->getDirection() == DOWN)
+                it->setSprite(spriteLoader->getArmored_tank_down());
+            else if(it->getDirection() == LEFT)
+                it->setSprite(spriteLoader->getArmored_tank_left());
+            else if(it->getDirection() == RIGHT)
+                it->setSprite(spriteLoader->getArmored_tank_right());
+        } else if(it->getType() == RANDOM_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSprite(spriteLoader->getRandom_tank_up());
+            else if(it->getDirection() == DOWN)
+                it->setSprite(spriteLoader->getRandom_tank_down());
+            else if(it->getDirection() == LEFT)
+                it->setSprite(spriteLoader->getRandom_tank_left());
+            else if(it->getDirection() == RIGHT)
+                it->setSprite(spriteLoader->getRandom_tank_right());
+        } else if(it->getType() == ARMORED_RANDOM_TANK)
+        {
+            if(it->getDirection() == UP)
+                it->setSprite(spriteLoader->getArmored_random_tank_up());
+            else if(it->getDirection() == DOWN)
+                it->setSprite(spriteLoader->getArmored_random_tank_down());
+            else if(it->getDirection() == LEFT)
+                it->setSprite(spriteLoader->getArmored_random_tank_left());
+            else if(it->getDirection() == RIGHT)
+                it->setSprite(spriteLoader->getArmored_random_tank_right());
+        }
+    }
+}
+
+void Game::moveMissiles(){
+    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        if(it->getDirection() == UP)
+            it->setY(it->getY() - 4);
+        else if(it->getDirection() == DOWN)
+            it->setY(it->getY() + 4);
+        else if(it->getDirection() == RIGHT)
+            it->setX(it->getX() + 4);
+        else if(it->getDirection() == LEFT)
+            it->setX(it->getX() - 4);
+    }
+}
+
+void Game::tanksShooting(){
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        if(it->counter % FPS == 0)      //every second
+        {
+            if(it->getDirection() == UP)
+            {
+                GameObject missile(MISSILE, spriteLoader->getMissile_up(), it->getX() + GameObject::getSMALL_WIDTH()/2 ,it->getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
+                missiles.push_back(missile);
+            } else if(it->getDirection() == DOWN)
+            {
+                GameObject missile(MISSILE, spriteLoader->getMissile_down(), it->getX() + GameObject::getSMALL_WIDTH()/2, it->getY() + GameObject::getHEIGHT(), 0, 0, DOWN);
+                missiles.push_back(missile);
+            } else if(it->getDirection() == RIGHT)
+            {
+                GameObject missile(MISSILE, spriteLoader->getMissile_right(), it->getX() + GameObject::getWIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2, 0, 0, RIGHT);
+                missiles.push_back(missile);
+            } else if(it->getDirection() == LEFT)
+            {
+                GameObject missile(MISSILE, spriteLoader->getMissile_left(), it->getX() - GameObject::getSMALL_WIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2 , 0, 0, LEFT);
+                missiles.push_back(missile);
+            }
+        }
     }
 }
 
