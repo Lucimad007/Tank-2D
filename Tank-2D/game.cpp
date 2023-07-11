@@ -130,6 +130,9 @@ void Game::clear(){
 
 void Game::updateLogic(){
 
+    //delete game objects which have 0 health
+    deleteDeadObjects();
+
     //random movements of tanks
     randomMovementsOfTanks();
 
@@ -212,6 +215,32 @@ void Game::deleteJunkMissiles(){
     }
 }
 
+void Game::deleteDeadObjects(){
+    //tanks
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
+    {
+        if(it->getHealth() == 0)
+            tanks.erase(it);
+    }
+
+    //walls
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        if(it->getType() == STONE)  //we can not destroy stone in game
+            continue;
+        if(it->getHealth() == 0)
+            walls.erase(it);
+    }
+
+    //player
+    if(player.getHealth() == 0)
+        return;  //game over
+
+    //flag
+    if(flag.getHealth() == 0)
+        return;  //game over
+}
+
 
 void Game::detectMissileCollision()
 {
@@ -224,7 +253,7 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                tanks.erase(it);
+                it->setHealth(it->getHealth() - 1);
                 missiles.erase(itm);
             }
         }
@@ -239,7 +268,7 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                walls.erase(it);
+                it->setHealth(it->getHealth() - 1);
                 missiles.erase(itm);
             }
         }
@@ -252,8 +281,8 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                walls.erase(it);
-                missiles.erase(itm);
+                it->setHealth(it->getHealth() - 1);
+                enemyMissiles.erase(itm);
             }
         }
     }

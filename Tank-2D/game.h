@@ -22,6 +22,7 @@ public:
     void updateLogic();
     void limitObjects();
     void deleteJunkMissiles();
+    void deleteDeadObjects();
     void render();
     void updateHitBoxes();
     void randomMovementsOfTanks();
