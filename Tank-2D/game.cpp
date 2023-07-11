@@ -296,6 +296,24 @@ void Game::detectMissileCollision()
             player.setHealth(player.getHealth() - 1);
         }
     }
+
+    //flag and missiles
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); ++it)
+    {
+        if(flag.getHitbox().intersects(it->getHitbox()))
+        {
+            enemyMissiles.erase(it);
+            flag.setHealth(flag.getHealth() - 1);
+        }
+    }
+    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        if(flag.getHitbox().intersects(it->getHitbox()))
+        {
+            missiles.erase(it);
+            flag.setHealth(flag.getHealth() - 1);
+        }
+    }
 }
 
 void Game::render(){
