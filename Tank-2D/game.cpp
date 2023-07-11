@@ -155,8 +155,12 @@ void Game::updateLogic(){
 
     detectMissileCollision();
 
+    detectBonusCollision();
+
     if(player.counter)          //for restricting number of missiles being shot
         player.counter--;
+    if(timeStopCounter)
+        timeStopCounter--;
 
 }
 
@@ -223,7 +227,21 @@ void Game::deleteDeadObjects(){
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
         if(it->getHealth() == 0)
+        {
+            if((it->getType() == ARMORED_RANDOM_TANK) || (it->getType() == RANDOM_TANK))
+            {
+                int rnd = rand();
+                GameObject reward;
+                if(rnd%3 == 0)
+                    reward = GameObject(STAR, spriteLoader->getStar(), it->getX(), it->getY());
+                else if(rnd%3 == 1)
+                    reward = GameObject(TANKI, spriteLoader->getTanki(), it->getX(), it->getY());
+                else if(rnd%3 == 2)
+                    reward = GameObject(CLOCK, spriteLoader->getClock(), it->getX(), it->getY());
+                bonus.push_back(reward);
+            }
             tanks.erase(it);
+        }
     }
 
     //walls
@@ -299,6 +317,7 @@ void Game::detectMissileCollision()
             player.setHealth(player.getHealth() - 1);
             player.setX(player.getRespawnX());
             player.setY(player.getRespawnY());
+            player.setDamage(1);    //resetting to default damage
         }
     }
 
@@ -317,6 +336,29 @@ void Game::detectMissileCollision()
         {
             missiles.erase(it);
             flag.setHealth(flag.getHealth() - 1);
+        }
+    }
+}
+
+void Game::detectBonusCollision(){
+    if(bonus.empty())
+        return;
+
+    for(auto it = bonus.begin(); it != bonus.end(); ++it)
+    {
+        if(it->getHitbox().intersects(player.getHitbox()))
+        {
+            if(it->getType() == STAR)
+            {
+                player.setDamage(player.getDamage() + 1);
+            } else if(it->getType() == TANKI)
+            {
+                player.setHealth(player.getHealth() + 1);
+            } else if(it->getType() == CLOCK)
+            {
+                timeStopCounter += 4 * FPS;     //to block random movements for 4 seconds
+            }
+            bonus.erase(it);
         }
     }
 }
@@ -407,9 +449,17 @@ void Game::updateHitBoxes(){
     {
         it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
     }
+
+    //hitboxes of bonus items
+    for(auto it = bonus.begin(); it != bonus.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+    }
 }
 
 void Game::randomMovementsOfTanks(){
+    if(timeStopCounter)
+        return;
     QRect before, after;
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
@@ -571,6 +621,7 @@ bool Game::haveCollision(QRect before, QRect after){
     if(player.getHitbox() != before)
         if(player.getHitbox().intersects(after))
             return true;
+
 
     return false;
 }

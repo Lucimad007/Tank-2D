@@ -31,6 +31,7 @@ public:
     void tanksShooting();
     bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
     void detectMissileCollision();
+    void detectBonusCollision();
     void gameOver();
     ~Game();
 
@@ -43,6 +44,7 @@ private:
     Ui::Game *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
+    int timeStopCounter = 0;
     const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
     GameObject player;
