@@ -168,6 +168,9 @@ void Game::updateLogic(){
 
     detectMissileCollision();
 
+    if(player.counter)          //for restricting number of missiles being shot
+        player.counter--;
+
 }
 
 void Game::limitObjects(){
@@ -342,9 +345,6 @@ bool Game::haveCollision(QRect before, QRect after){
 }
 
 void Game::keyPressEvent(QKeyEvent* event){
-    if(player.counter)          //for restricting number of missiles being shot
-        player.counter--;
-
 
     if (event->key() == Qt::Key_A)
     {
@@ -384,7 +384,7 @@ void Game::keyPressEvent(QKeyEvent* event){
             player.setY(player.getY() + 4);
     } else if ((event->key() == Qt::Key_T) && (player.counter == 0))
     {
-        player.counter += 5;    //for restricting number of missiles being shot
+        player.counter += 10;    //for restricting number of missiles being shot
         if(player.getDirection() == UP)
         {
             GameObject missile(MISSILE, spriteLoader->getMissile_up(), player.getX() + GameObject::getSMALL_WIDTH()/2 ,player.getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
