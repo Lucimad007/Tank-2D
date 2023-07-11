@@ -1,6 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include <QString>
+#include <QRect>
 #include <QGraphicsPixmapItem>
 
 enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, YELLOW_TANK, STAR, TANKI, CLOCK, FLAG
@@ -44,6 +45,7 @@ private:
     QPixmap sprite;
     Type type;
     Direction direction;
+    QRect hitbox;
 public:
     int counter = 0;    //we can use it for different purposes
     int randomNumber = 0;
@@ -54,6 +56,8 @@ public:
     void setSprite(QPixmap newSprite);
     static int getSMALL_HEIGHT();
     static int getSMALL_WIDTH();
+    const QRect &getHitbox() const;
+    void setHitbox(const QRect &newHitbox);
 };
 
 #endif // GAMEOBJECT_H

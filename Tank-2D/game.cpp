@@ -40,7 +40,6 @@ void Game::loadLevel(){
             {
                 GameObject brick(BRICK, spriteLoader->getBrick(), i * 32 , j * 32, 1 , 1);
                 walls.push_back(brick);
-                hitBoxes.push_back(QRect(i * 32, j * 32 , 32, 32));
             }
 }
 
@@ -221,13 +220,13 @@ void Game::detectMissileCollision()
 {
     int counter1 = 0;
     int counter2 = 0;
-    for(auto it = hitBoxes.begin(); it != hitBoxes.end(); ++it)
+    for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
         counter1++;
-        for(auto itm = missileHitBoxes.begin(); itm != missileHitBoxes.end(); ++itm)
+        for(auto itm = missiles.begin(); itm != missiles.end(); ++itm)
         {
             counter2++;
-            if(it->intersects(*itm))
+            if(it->getHitbox().intersects(itm->getHitbox()))
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
@@ -278,34 +277,60 @@ void Game::render(){
 }
 
 void Game::updateHitBoxes(){
-    hitBoxes.clear();
     //hitboxes of tanks
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
-        hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
     }
 
     //hitboxes of walls
-
     for(auto it = walls.begin(); it != walls.end(); ++it)
     {
-        hitBoxes.push_back(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
     }
 
     //hitbox of the player
-    hitBoxes.push_back(QRect(player.getX() , player.getY() , player.getWIDTH(), player.getHEIGHT()));
+    player.setHitbox(QRect(player.getX() , player.getY() , player.getWIDTH(), player.getHEIGHT()));
 
     //hitboxes of the missiles
+    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+    }
 }
 
 bool Game::haveCollision(QRect before, QRect after){
-    for(auto it = hitBoxes.begin(); it!= hitBoxes.end(); ++it)
+    //tanks
+    for(auto it = tanks.begin(); it!= tanks.end(); ++it)
     {
-        if(before == *it)   //we should not compare the object to itself
+        if(before == it->getHitbox())   //we should not compare the object to itself
             continue;
-        if(it->intersects(after))
+        if(it->getHitbox().intersects(after))
             return true;
     }
+
+    //walls
+    for(auto it = walls.begin(); it!= walls.end(); ++it)
+    {
+        if(before == it->getHitbox())   //we should not compare the object to itself
+            continue;
+        if(it->getHitbox().intersects(after))
+            return true;
+    }
+
+    //missles
+    for(auto it = missiles.begin(); it!= missiles.end(); ++it)
+    {
+        if(before == it->getHitbox())   //we should not compare the object to itself
+            continue;
+        if(it->getHitbox().intersects(after))
+            return true;
+    }
+
+    //player
+    if(player.getHitbox() != before)
+        if(player.getHitbox().intersects(after))
+            return true;
 
     return false;
 }

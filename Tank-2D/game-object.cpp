@@ -1,5 +1,6 @@
 #include "game-object.h"
 #include <QDir>
+#include <QRect>
 
 int GameObject::WIDTH = 32;
 int GameObject::HEIGHT = 32;
@@ -12,6 +13,7 @@ GameObject::GameObject()
     y = 0;
     health = 0;
     damage = 0;
+    hitbox = QRect(0, 0, WIDTH, HEIGHT);
 }
 
 GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const int& health, const int& damage, const Direction& direction){
@@ -22,6 +24,10 @@ GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, co
     this->health = health;
     this->damage = damage;
     this->direction = direction;
+    if(type == MISSILE)
+        hitbox = QRect(x, y, SMALL_WIDTH, SMALL_HEIGHT);
+    else
+        hitbox = QRect(x, y, WIDTH, HEIGHT);
 }
 
 int GameObject::getY() const
@@ -87,6 +93,16 @@ void GameObject::setType(Type newType)
 int GameObject::getSMALL_WIDTH()
 {
     return SMALL_WIDTH;
+}
+
+void GameObject::setHitbox(const QRect &newHitbox)
+{
+    hitbox = newHitbox;
+}
+
+const QRect &GameObject::getHitbox() const
+{
+    return hitbox;
 }
 
 int GameObject::getSMALL_HEIGHT()

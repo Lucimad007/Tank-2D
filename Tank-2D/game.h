@@ -40,12 +40,10 @@ private:
     QGraphicsScene* scene = nullptr;
     GameObject player;
     GameObject flag;
-    QVector<GameObject> tanks;
-    QVector<GameObject> walls;
-    QVector<GameObject> bonus;
+    std::list<GameObject> tanks;
+    std::list<GameObject> walls;
+    std::list<GameObject> bonus;
     std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
-    QVector<QRect> hitBoxes;
-    QVector<QRect> missileHitBoxes;     //missiles should be seperate because their collision between other things would be destructive
 };
 
 #endif // GAME_H
