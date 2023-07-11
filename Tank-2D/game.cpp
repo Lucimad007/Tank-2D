@@ -63,13 +63,47 @@ void Game::loadLevel(int level){
     //end of loading file
 
     //loading map
+    //P : player, O : common tank, A : armored tank, c : random tank, C : armored random tank, B : brick, M : stone,
+    //W : water, F : flag, X : nothing
     for(int i = 0; i < 20; i++)
         for(int j = 0; j < 25; j++)
         {
-            if(positions[j][i] == 'X')
+            if(positions[j][i] == 'B')
             {
                 GameObject brick(BRICK, spriteLoader->getBrick(), j * cellSize, i * cellSize, 1, 0);
                 walls.push_back(brick);
+            } else if(positions[j][i] == 'W')
+            {
+                GameObject water(WATER, spriteLoader->getWater(), j * cellSize, i * cellSize, 1, 0);
+                walls.push_back(water);
+            } else if(positions[j][i] == 'M')
+            {
+                GameObject stone(STONE, spriteLoader->getStone(), j * cellSize, i * cellSize, 1, 0);
+                walls.push_back(stone);
+            } else if(positions[j][i] == 'F')
+            {
+                GameObject flag(FLAG, spriteLoader->getFlag(), j * cellSize, i * cellSize, 1, 0);
+                this->flag = flag;
+            } else if(positions[j][i] == 'C')
+            {
+                GameObject tank(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                tanks.push_back(tank);
+            } else if(positions[j][i] == 'c')
+            {
+                GameObject tank(RANDOM_TANK, spriteLoader->getRandom_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                tanks.push_back(tank);
+            } else if(positions[j][i] == 'A')
+            {
+                GameObject tank(ARMORED_TANK, spriteLoader->getArmored_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                tanks.push_back(tank);
+            } else if(positions[j][i] == 'O')
+            {
+                GameObject tank(COMMON_TANK, spriteLoader->getCommon_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                tanks.push_back(tank);
+            } else if(positions[j][i] == 'P')
+            {
+                GameObject player(PLAYER, spriteLoader->getYellow_tank_down(), j * cellSize, i * cellSize, 1, 0, DOWN);
+                this->player = player;
             }
         }
     //end of loading map
