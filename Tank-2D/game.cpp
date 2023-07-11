@@ -216,6 +216,27 @@ void Game::deleteJunkMissiles(){
     }
 }
 
+
+void Game::detectMissileCollision()
+{
+    int counter1 = 0;
+    int counter2 = 0;
+    for(auto it = hitBoxes.begin(); it != hitBoxes.end(); ++it)
+    {
+        counter1++;
+        for(auto itm = missileHitBoxes.begin(); itm != missileHitBoxes.end(); ++itm)
+        {
+            counter2++;
+            if(it->intersects(*itm))
+            {
+                //delete objects (not hitboxes only)
+                //do sth cool
+
+            }
+        }
+    }
+}
+
 void Game::render(){
     //rendering player
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(player.getSprite());
