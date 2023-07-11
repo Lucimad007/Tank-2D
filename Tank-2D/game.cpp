@@ -166,6 +166,8 @@ void Game::updateLogic(){
 
     limitObjects();     //we should ensure that none of the game objects are out of the scene
 
+    detectMissileCollision();
+
 }
 
 void Game::limitObjects(){
@@ -218,19 +220,32 @@ void Game::deleteJunkMissiles(){
 
 void Game::detectMissileCollision()
 {
-    int counter1 = 0;
-    int counter2 = 0;
+    //tanks and missiles
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
-        counter1++;
         for(auto itm = missiles.begin(); itm != missiles.end(); ++itm)
         {
-            counter2++;
             if(it->getHitbox().intersects(itm->getHitbox()))
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
+                tanks.erase(it);
+                missiles.erase(itm);
+            }
+        }
+    }
 
+    //walls and missiles
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        for(auto itm = missiles.begin(); itm != missiles.end(); ++itm)
+        {
+            if(it->getHitbox().intersects(itm->getHitbox()))
+            {
+                //delete objects (not hitboxes only)
+                //do sth cool
+                walls.erase(it);
+                missiles.erase(itm);
             }
         }
     }
@@ -311,15 +326,6 @@ bool Game::haveCollision(QRect before, QRect after){
 
     //walls
     for(auto it = walls.begin(); it!= walls.end(); ++it)
-    {
-        if(before == it->getHitbox())   //we should not compare the object to itself
-            continue;
-        if(it->getHitbox().intersects(after))
-            return true;
-    }
-
-    //missles
-    for(auto it = missiles.begin(); it!= missiles.end(); ++it)
     {
         if(before == it->getHitbox())   //we should not compare the object to itself
             continue;
