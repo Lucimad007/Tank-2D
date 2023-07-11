@@ -24,23 +24,55 @@ Game::Game(QWidget *parent) :
     ui->backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    GameObject tank1(PLAYER, spriteLoader->getYellow_tank_up(), 0, 0, 1, 1);
-    GameObject tank2(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_up(), 200, 50, 1, 1);
-    GameObject tank3(ARMORED_TANK, spriteLoader->getCommon_tank_up(), 350, 50, 1, 1);
-    tanks.push_front(tank2);
-    tanks.push_back(tank3);
-    player = tank1;
-    render();
-    loadLevel();
+    loadLevel(1);
 }
 
-void Game::loadLevel(){
-    for(int i = 0; i < 25; i++)
-        for(int j = 7; j < 10; j++)
+void Game::loadLevel(int level){
+
+    QString number = QString::number(level);
+    QString positions[25][20];
+    //loading file
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/levels/level" + number  + ".txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        QString data;
+        QByteArray temp;
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        while(!file.atEnd())
+        {
+           char c;
+           file.getChar(&c);
+           if((c == '\n') || (c == '\b') || (c == '\r'))
+               continue;
+           data += c;
+        }
+
+        for(int i = 0; i < 20; i++)
+            for(int j = 0; j < 25; j++)
             {
-                GameObject brick(BRICK, spriteLoader->getBrick(), i * 32 , j * 32, 1 , 1);
+                positions[j][i] = data.at(25 * i + j);
+            }
+    } else
+    {
+        qDebug() << "File not found.";
+        return;
+    }
+    //end of loading file
+
+    //loading map
+    for(int i = 0; i < 20; i++)
+        for(int j = 0; j < 25; j++)
+        {
+            if(positions[j][i] == 'X')
+            {
+                GameObject brick(BRICK, spriteLoader->getBrick(), j * cellSize, i * cellSize, 1, 0);
                 walls.push_back(brick);
             }
+        }
+    //end of loading map
 }
 
 void Game::loadIcon(){
@@ -63,6 +95,7 @@ void Game::clear(){
 }
 
 void Game::updateLogic(){
+
     //random movements of tanks
     randomMovementsOfTanks();
 
@@ -213,7 +246,20 @@ void Game::render(){
         scene->addItem(item);
     }
 
+    //bonus
+    for(auto it = bonus.begin(); it != bonus.end(); ++it)
+    {
+        QPixmap sprite(it->getSprite());
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(sprite);
+        item->setPos(it->getX(), it->getY());
+        scene->addItem(item);
+    }
 
+    //flag
+    QPixmap sprite(flag.getSprite());
+    QGraphicsPixmapItem* flagItem = new QGraphicsPixmapItem(sprite);
+    flagItem->setPos(flag.getX(), flag.getY());
+    scene->addItem(flagItem);
 
     scene->update();
 }

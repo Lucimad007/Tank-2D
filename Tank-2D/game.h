@@ -16,7 +16,7 @@ class Game : public QWidget
 
 public:
     explicit Game(QWidget *parent = nullptr);
-    void loadLevel();
+    void loadLevel(int level);
     void loadIcon();
     void clear();
     void updateLogic();
@@ -41,6 +41,7 @@ private:
     Ui::Game *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
+    const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
     GameObject player;
     GameObject flag;
