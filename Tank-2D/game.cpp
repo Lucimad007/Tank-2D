@@ -199,6 +199,17 @@ void Game::deleteJunkMissiles(){
         else if(it->getY() > this->height())
             missiles.erase(it);
     }
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); it++)
+    {
+        if(it->getX() > this->width())
+            enemyMissiles.erase(it);
+        else if(it->getX() + it->getSMALL_WIDTH() < 0)
+            enemyMissiles.erase(it);
+        else if(it->getY() + it->getSMALL_HEIGHT() < 0)
+            enemyMissiles.erase(it);
+        else if(it->getY() > this->height())
+            enemyMissiles.erase(it);
+    }
 }
 
 
@@ -233,9 +244,22 @@ void Game::detectMissileCollision()
             }
         }
     }
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        for(auto itm = enemyMissiles.begin(); itm != enemyMissiles.end(); ++itm)
+        {
+            if(it->getHitbox().intersects(itm->getHitbox()))
+            {
+                //delete objects (not hitboxes only)
+                //do sth cool
+                walls.erase(it);
+                missiles.erase(itm);
+            }
+        }
+    }
 
-    //player and missiles
-    for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    //player and enemy missiles
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); ++it)
     {
         if(player.getHitbox().intersects(it->getHitbox()))
         {
@@ -272,6 +296,14 @@ void Game::render(){
 
     //rendering missiles
     for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        QPixmap sprite(it->getSprite());
+        sprite = sprite.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());    //making missiles small
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(sprite);
+        item->setPos(it->getX(), it->getY());
+        scene->addItem(item);
+    }
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); ++it)
     {
         QPixmap sprite(it->getSprite());
         sprite = sprite.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());    //making missiles small
@@ -316,6 +348,10 @@ void Game::updateHitBoxes(){
 
     //hitboxes of the missiles
     for(auto it = missiles.begin(); it != missiles.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+    }
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); ++it)
     {
         it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
     }
@@ -420,6 +456,18 @@ void Game::moveMissiles(){
         else if(it->getDirection() == LEFT)
             it->setX(it->getX() - 4);
     }
+
+    for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); ++it)
+    {
+        if(it->getDirection() == UP)
+            it->setY(it->getY() - 4);
+        else if(it->getDirection() == DOWN)
+            it->setY(it->getY() + 4);
+        else if(it->getDirection() == RIGHT)
+            it->setX(it->getX() + 4);
+        else if(it->getDirection() == LEFT)
+            it->setX(it->getX() - 4);
+    }
 }
 
 void Game::tanksShooting(){
@@ -430,19 +478,19 @@ void Game::tanksShooting(){
             if(it->getDirection() == UP)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_up(), it->getX() + GameObject::getSMALL_WIDTH()/2 ,it->getY() - GameObject::getSMALL_HEIGHT(), 0, 0, UP);
-                missiles.push_back(missile);
+                enemyMissiles.push_back(missile);
             } else if(it->getDirection() == DOWN)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_down(), it->getX() + GameObject::getSMALL_WIDTH()/2, it->getY() + GameObject::getHEIGHT(), 0, 0, DOWN);
-                missiles.push_back(missile);
+                enemyMissiles.push_back(missile);
             } else if(it->getDirection() == RIGHT)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_right(), it->getX() + GameObject::getWIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2, 0, 0, RIGHT);
-                missiles.push_back(missile);
+                enemyMissiles.push_back(missile);
             } else if(it->getDirection() == LEFT)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_left(), it->getX() - GameObject::getSMALL_WIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2 , 0, 0, LEFT);
-                missiles.push_back(missile);
+                enemyMissiles.push_back(missile);
             }
         }
     }

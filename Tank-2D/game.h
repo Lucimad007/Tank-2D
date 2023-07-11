@@ -49,6 +49,7 @@ private:
     std::list<GameObject> walls;
     std::list<GameObject> bonus;
     std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
+    std::list<GameObject> enemyMissiles;
 };
 
 #endif // GAME_H
