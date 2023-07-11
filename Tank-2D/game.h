@@ -33,6 +33,7 @@ public:
     void detectMissileCollision();
     void detectBonusCollision();
     void gameOver();
+    void spawnTanks();
     ~Game();
 
     int getFPS() const;
@@ -45,6 +46,7 @@ private:
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
     int timeStopCounter = 0;
+    int numberOfTanks = 0;
     const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
     GameObject player;
@@ -54,6 +56,7 @@ private:
     std::list<GameObject> bonus;
     std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
     std::list<GameObject> enemyMissiles;
+    std::list<QRect> spawnPoints;
 };
 
 #endif // GAME_H

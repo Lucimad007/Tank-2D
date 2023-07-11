@@ -91,18 +91,26 @@ void Game::loadLevel(int level){
             {
                 GameObject tank(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
             } else if(positions[j][i] == 'c')
             {
                 GameObject tank(RANDOM_TANK, spriteLoader->getRandom_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
             } else if(positions[j][i] == 'A')
             {
                 GameObject tank(ARMORED_TANK, spriteLoader->getArmored_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
             } else if(positions[j][i] == 'O')
             {
                 GameObject tank(COMMON_TANK, spriteLoader->getCommon_tank_down(), j * cellSize, i * cellSize, DOWN);
                 tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
             } else if(positions[j][i] == 'P')
             {
                 GameObject player(PLAYER, spriteLoader->getYellow_tank_down(), j * cellSize, i * cellSize, DOWN);
@@ -156,6 +164,8 @@ void Game::updateLogic(){
     detectMissileCollision();
 
     detectBonusCollision();
+
+    spawnTanks();
 
     if(player.counter)          //for restricting number of missiles being shot
         player.counter--;
@@ -241,6 +251,7 @@ void Game::deleteDeadObjects(){
                 bonus.push_back(reward);
             }
             tanks.erase(it);
+            numberOfTanks--;
         }
     }
 
@@ -495,6 +506,54 @@ void Game::randomMovementsOfTanks(){
             if(!haveCollision(before, after))
                 it->setY(it->getY() - 4);
         }
+    }
+
+}
+
+void Game::spawnTanks(){
+    if(numberOfTanks >= 4)
+        return;
+
+    for(auto it = spawnPoints.begin(); it != spawnPoints.end(); ++it)
+    {
+        bool isSkipped = false;
+        //checking if player is in that respawn point
+        if(it->intersects(player.getHitbox()))
+            continue;
+        //checking if other tanks are in that respawn point
+        for(auto itm = tanks.begin(); itm != tanks.end(); ++itm)
+        {
+            if(it->intersects(itm->getHitbox()))
+            {
+                isSkipped = true;
+                continue;
+            }
+        }
+        if(isSkipped)
+            continue;
+
+        int number = rand();
+        if(number % 4 != 0)     //just for distributing tanks
+            continue;
+        GameObject tank;
+        int rnd = rand();
+        if(rnd % 4 == 0)
+        {
+            tank = GameObject(COMMON_TANK, spriteLoader->getCommon_tank_down(), it->x(), it->y(), DOWN);
+        } else if(rnd % 4 == 1)
+        {
+            tank = GameObject(ARMORED_TANK, spriteLoader->getArmored_tank_down(), it->x(), it->y(), DOWN);
+        } else if(rnd % 4 == 2)
+        {
+            tank = GameObject(RANDOM_TANK, spriteLoader->getRandom_tank_down(), it->x(), it->y(), DOWN);
+        } else if(rnd % 4 == 3)
+        {
+            tank = GameObject(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), it->x(), it->y(), DOWN);
+        }
+
+        numberOfTanks++;
+        tanks.push_back(tank);
+        return;
     }
 
 }
