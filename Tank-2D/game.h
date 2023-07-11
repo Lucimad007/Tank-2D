@@ -31,6 +31,7 @@ public:
     void tanksShooting();
     bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
     void detectMissileCollision();
+    void gameOver();
     ~Game();
 
     int getFPS() const;

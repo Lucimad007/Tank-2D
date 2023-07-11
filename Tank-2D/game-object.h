@@ -42,6 +42,8 @@ private:
     int damage;
     int x;
     int y;
+    int respawnX;
+    int respawnY;
     QPixmap sprite;
     Type type;
     Direction direction;
@@ -58,6 +60,10 @@ public:
     static int getSMALL_WIDTH();
     const QRect &getHitbox() const;
     void setHitbox(const QRect &newHitbox);
+    int getRespawnX() const;
+    void setRespawnX(int newRespawnX);
+    int getRespawnY() const;
+    void setRespawnY(int newRespawnY);
 };
 
 #endif // GAMEOBJECT_H

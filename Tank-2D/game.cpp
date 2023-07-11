@@ -5,6 +5,9 @@
 #include <QGraphicsPixmapItem>
 #include <QDir>
 #include <QKeyEvent>
+#include <QTimer>
+
+extern QTimer *timer;
 
 Game::Game(QWidget *parent) :
     QWidget(parent),
@@ -234,11 +237,11 @@ void Game::deleteDeadObjects(){
 
     //player
     if(player.getHealth() == 0)
-        return;  //game over
+        gameOver();
 
     //flag
     if(flag.getHealth() == 0)
-        return;  //game over
+        gameOver();
 }
 
 
@@ -294,6 +297,8 @@ void Game::detectMissileCollision()
         {
             missiles.erase(it);
             player.setHealth(player.getHealth() - 1);
+            player.setX(player.getRespawnX());
+            player.setY(player.getRespawnY());
         }
     }
 
@@ -638,6 +643,21 @@ void Game::keyPressEvent(QKeyEvent* event){
 int Game::getFPS() const
 {
     return FPS;
+}
+
+void Game::gameOver(){
+    timer->stop();
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Arts/gameOver.png";
+    QImage sprite(path);
+    QPixmap pixmap = QPixmap::fromImage(sprite);
+    pixmap = pixmap.scaled(this->width(), this->height());
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    item->setPos(0 , 0);
+    item->setZValue(1);     //make it to be external layer
+    scene->addItem(item);
+    scene->update();
 }
 
 Game::~Game()

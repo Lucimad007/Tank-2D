@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QTimer>
+QTimer *timer;
 Register* registerMenu;
 int main(int argc, char *argv[])
 {
@@ -15,7 +16,7 @@ int main(int argc, char *argv[])
     Game game;
 
     game.show();
-    QTimer *timer = new QTimer();
+    timer = new QTimer();
     Game::connect(timer, &QTimer::timeout, [&](){
         game.clear();
         game.updateLogic();

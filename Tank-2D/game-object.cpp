@@ -11,6 +11,8 @@ GameObject::GameObject()
 {
     x = 0;
     y = 0;
+    respawnX = 0;
+    respawnY = 0;
     health = 0;
     damage = 0;
     hitbox = QRect(0, 0, WIDTH, HEIGHT);
@@ -21,6 +23,8 @@ GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, co
     this->sprite = sprite;
     this->x = x;
     this->y = y;
+    this->respawnX = x;
+    this->respawnY = y;
     this->direction = direction;
     if(type == MISSILE)
         hitbox = QRect(x, y, SMALL_WIDTH, SMALL_HEIGHT);
@@ -140,6 +144,26 @@ Type GameObject::getType() const
 void GameObject::setType(Type newType)
 {
     type = newType;
+}
+
+int GameObject::getRespawnY() const
+{
+    return respawnY;
+}
+
+void GameObject::setRespawnY(int newRespawnY)
+{
+    respawnY = newRespawnY;
+}
+
+int GameObject::getRespawnX() const
+{
+    return respawnX;
+}
+
+void GameObject::setRespawnX(int newRespawnX)
+{
+    respawnX = newRespawnX;
 }
 
 int GameObject::getSMALL_WIDTH()
