@@ -9,6 +9,7 @@
 #include <QUiLoader>
 #include <QVBoxLayout>
 #include <QGraphicsView>
+#include <QPushButton>
 
 extern QTimer *timer;
 
@@ -813,16 +814,37 @@ void Game::winner(){
     {
         file.open(QIODevice::OpenModeFlag::ReadOnly);
         QWidget* widget = loader.load(&file, this);
-        //delete this->layout();
+
+        //loading flag logo
+        QGraphicsView* flagView = widget->findChild<QGraphicsView*>("flagView", Qt::FindChildrenRecursively);
+        flagView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        flagView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        flagView->setStyleSheet("border:transparent;");
+        QPixmap pixmap = spriteLoader->getFlag();
+        pixmap = pixmap.scaled(flagView->width(), flagView->height());
+        QGraphicsPixmapItem* pixItem = new QGraphicsPixmapItem(pixmap);
+        QGraphicsScene* tempScene = new QGraphicsScene();
+        tempScene->addItem(pixItem);
+        flagView->setScene(tempScene);
+
+        //connecting continue button
+        QPushButton* continueButton = widget->findChild<QPushButton*>("continueButton", Qt::FindChildrenRecursively);
+        connect(continueButton, &QPushButton::clicked, this, &Game::on_continueButton_clicked);
+
+        //setting widget
         QVBoxLayout* layout = new QVBoxLayout();
-                //this->clear();
         layout->addWidget(widget);
+        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
         this->setLayout(layout);
         this->setFixedSize(widget->size());     //resizing window
     } else
     {
         qDebug() << "File not found.";
     }
+}
+
+void Game::on_continueButton_clicked(){
+    //qDebug() << "Test";
 }
 
 Game::~Game()

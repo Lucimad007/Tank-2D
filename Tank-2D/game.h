@@ -43,6 +43,9 @@ public:
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 
+private slots:
+    void on_continueButton_clicked();
+
 private:
     Ui::Game *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically

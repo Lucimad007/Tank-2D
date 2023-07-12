@@ -149,7 +149,7 @@ void Register::setSelectLevelUI(){
         ui->setupUi(this);      //it heavily prevents our code from bugs
         this->setWindowTitle("Tank Battle City");
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fill the whole background
+        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
         layout->addWidget(widget);
         delete this->layout();      //clearing previous layout
         this->setLayout(layout);
