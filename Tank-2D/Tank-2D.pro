@@ -27,7 +27,8 @@ FORMS += \
     game.ui \
     menu.ui \
     register.ui \
-    select-level.ui
+    select-level.ui \
+    winner.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

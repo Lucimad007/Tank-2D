@@ -33,6 +33,8 @@ public:
     void detectMissileCollision();
     void detectBonusCollision();
     void gameOver();
+    void checkWinning();
+    void winner();
     void spawnTanks();
     ~Game();
 
@@ -46,7 +48,8 @@ private:
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
     int timeStopCounter = 0;
-    int numberOfTanks = 0;
+    int numberOfTanks = 0;  //tanks which are in the scene already
+    int remainingTanks = 0;    //tanks which are now spawned yet
     const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
     GameObject player;

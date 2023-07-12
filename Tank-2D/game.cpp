@@ -6,6 +6,8 @@
 #include <QDir>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QUiLoader>
+#include <QVBoxLayout>
 
 extern QTimer *timer;
 
@@ -31,7 +33,7 @@ Game::Game(QWidget *parent) :
 }
 
 void Game::loadLevel(int level){
-
+    remainingTanks = 2 + level * 4;     //tanks out of the scene
     QString number = QString::number(level);
     QString positions[25][20];
     //loading file
@@ -166,6 +168,8 @@ void Game::updateLogic(){
     detectBonusCollision();
 
     spawnTanks();
+
+    checkWinning();
 
     if(player.counter)          //for restricting number of missiles being shot
         player.counter--;
@@ -513,6 +517,8 @@ void Game::randomMovementsOfTanks(){
 void Game::spawnTanks(){
     if(numberOfTanks >= 4)
         return;
+    else if(remainingTanks <= 0)
+        return;
 
     for(auto it = spawnPoints.begin(); it != spawnPoints.end(); ++it)
     {
@@ -552,6 +558,7 @@ void Game::spawnTanks(){
         }
 
         numberOfTanks++;
+        remainingTanks--;
         tanks.push_back(tank);
         return;
     }
@@ -777,6 +784,33 @@ void Game::gameOver(){
     item->setZValue(1);     //make it to be external layer
     scene->addItem(item);
     scene->update();
+}
+
+void Game::checkWinning(){
+    if(remainingTanks <= 0)
+        if(numberOfTanks <= 0)
+            winner();
+}
+
+void Game::winner(){
+    timer->stop();
+//    ui->setupUi(this);
+//    QUiLoader loader;
+//    QFileInfo info = QFileInfo(QDir::currentPath());
+//    QString path = info.dir().path();
+//    path += "/Tank-2D/winner.ui";
+//    QFile file(path);
+//    if(file.exists())
+//    {
+//        QWidget* widget = loader.load(&file, this);
+//        delete this->layout();
+//        QVBoxLayout* layout = new QVBoxLayout();
+//        layout->addWidget(widget);
+//        this->setLayout(layout);
+//    } else
+//    {
+//        qDebug() << "File not found.";
+//    }
 }
 
 Game::~Game()
