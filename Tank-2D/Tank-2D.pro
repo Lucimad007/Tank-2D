@@ -14,14 +14,16 @@ SOURCES += \
     main.cpp \
     menu_event.cpp \
     register.cpp \
-    sprite-loader.cpp
+    sprite-loader.cpp \
+    user.cpp
 
 HEADERS += \
     game-object.h \
     game.h \
     menu_event.h \
     register.h \
-    sprite-loader.h
+    sprite-loader.h \
+    user.h
 
 FORMS += \
     game.ui \
