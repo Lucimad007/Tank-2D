@@ -11,6 +11,7 @@ GameObject::GameObject()
 {
     x = 0;
     y = 0;
+    speed = 0;
     respawnX = 0;
     respawnY = 0;
     health = 0;
@@ -35,54 +36,67 @@ GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, co
     {
         this->health = 3;
         this->damage = 1;
+        speed = 8;
     } else if(type == COMMON_TANK)
     {
         this->health = 1;
         this->damage = 1;
+        speed = 3;
     } else if(type == ARMORED_TANK)
     {
         this->health = 2;
         this->damage = 1;
+        speed = 2;
     } else if(type == RANDOM_TANK)
     {
         this->health = 1;
         this->damage = 1;
+        speed = 3;
     } else if(type == ARMORED_RANDOM_TANK)
     {
         this->health = 2;
         this->damage = 1;
+        speed = 2;
     } else if(type == BRICK)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == STONE)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == WATER)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == FLAG)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == MISSILE)
     {
         this->health = 1;
         this->damage = 1;
+        speed = 30;
     } else if(type == TANKI)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == CLOCK)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     } else if(type == STAR)
     {
         this->health = 1;
         this->damage = 0;
+        speed = 0;
     }
 }
 
@@ -144,6 +158,16 @@ Type GameObject::getType() const
 void GameObject::setType(Type newType)
 {
     type = newType;
+}
+
+int GameObject::getSpeed() const
+{
+    return speed;
+}
+
+void GameObject::setSpeed(int newSpeed)
+{
+    speed = newSpeed;
 }
 
 int GameObject::getRespawnY() const

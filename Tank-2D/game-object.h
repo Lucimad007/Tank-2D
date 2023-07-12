@@ -42,6 +42,7 @@ private:
     int damage;
     int x;
     int y;
+    int speed;
     int respawnX;
     int respawnY;
     QPixmap sprite;
@@ -64,6 +65,8 @@ public:
     void setRespawnX(int newRespawnX);
     int getRespawnY() const;
     void setRespawnY(int newRespawnY);
+    int getSpeed() const;
+    void setSpeed(int newSpeed);
 };
 
 #endif // GAMEOBJECT_H
