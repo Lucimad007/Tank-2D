@@ -52,6 +52,7 @@ private:
     int remainingTanks = 0;    //tanks which are now spawned yet
     const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
+    QGraphicsView* backgroundView = nullptr;
     GameObject player;
     GameObject flag;
     std::list<GameObject> tanks;

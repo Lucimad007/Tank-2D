@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QUiLoader>
 #include <QVBoxLayout>
+#include <QGraphicsView>
 
 extern QTimer *timer;
 
@@ -21,13 +22,16 @@ Game::Game(QWidget *parent) :
     loadIcon();
     this->setFixedSize(this->width(), this->height());
     scene = new QGraphicsScene();
-    ui->backgroundView->setScene(scene);
+    backgroundView = new QGraphicsView(this);
+    backgroundView->setFixedSize(this->size());
+    backgroundView->setStyleSheet("background-color: black;");
+    backgroundView->setScene(scene);
     //we should ensure that scene fills the whole QGraphicsView
-    scene->setSceneRect(ui->backgroundView->rect());
+    scene->setSceneRect(backgroundView->rect());
 
     //disable scrollbars if you don't want them to appear
-    ui->backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     loadLevel(1);
 }
@@ -794,23 +798,31 @@ void Game::checkWinning(){
 
 void Game::winner(){
     timer->stop();
-//    ui->setupUi(this);
-//    QUiLoader loader;
-//    QFileInfo info = QFileInfo(QDir::currentPath());
-//    QString path = info.dir().path();
-//    path += "/Tank-2D/winner.ui";
-//    QFile file(path);
-//    if(file.exists())
-//    {
-//        QWidget* widget = loader.load(&file, this);
-//        delete this->layout();
-//        QVBoxLayout* layout = new QVBoxLayout();
-//        layout->addWidget(widget);
-//        this->setLayout(layout);
-//    } else
-//    {
-//        qDebug() << "File not found.";
-//    }
+    ui->setupUi(this);
+    this->setWindowTitle("Tank Battle City");
+    scene->clear();
+    backgroundView->repaint();
+    backgroundView->deleteLater();
+
+    QUiLoader loader;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/winner.ui";
+    QFile file(path);
+    if(file.exists())
+    {
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        QWidget* widget = loader.load(&file, this);
+        //delete this->layout();
+        QVBoxLayout* layout = new QVBoxLayout();
+                //this->clear();
+        layout->addWidget(widget);
+        this->setLayout(layout);
+        this->setFixedSize(widget->size());     //resizing window
+    } else
+    {
+        qDebug() << "File not found.";
+    }
 }
 
 Game::~Game()

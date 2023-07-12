@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     game.show();
     timer = new QTimer();
-    Game::connect(timer, &QTimer::timeout, [&](){
+    QTimer::connect(timer, &QTimer::timeout, [&](){
         game.clear();
         game.updateLogic();
         game.render();
