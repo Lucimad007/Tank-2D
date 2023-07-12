@@ -236,7 +236,7 @@ void Game::deleteDeadObjects(){
     //tanks
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
-        if(it->getHealth() == 0)
+        if(it->getHealth() <= 0)
         {
             if((it->getType() == ARMORED_RANDOM_TANK) || (it->getType() == RANDOM_TANK))
             {
@@ -260,16 +260,16 @@ void Game::deleteDeadObjects(){
     {
         if(it->getType() == STONE)  //we can not destroy stone in game
             continue;
-        if(it->getHealth() == 0)
+        if(it->getHealth() <= 0)
             walls.erase(it);
     }
 
     //player
-    if(player.getHealth() == 0)
+    if(player.getHealth() <= 0)
         gameOver();
 
     //flag
-    if(flag.getHealth() == 0)
+    if(flag.getHealth() <= 0)
         gameOver();
 }
 
@@ -285,7 +285,7 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                it->setHealth(it->getHealth() - 1);
+                it->setHealth(it->getHealth() - player.getDamage());
                 missiles.erase(itm);
             }
         }
@@ -300,7 +300,7 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                it->setHealth(it->getHealth() - 1);
+                it->setHealth(it->getHealth() - player.getDamage());
                 missiles.erase(itm);
             }
         }
@@ -313,7 +313,7 @@ void Game::detectMissileCollision()
             {
                 //delete objects (not hitboxes only)
                 //do sth cool
-                it->setHealth(it->getHealth() - 1);
+                it->setHealth(it->getHealth() - itm->getDamage());      // - 1
                 enemyMissiles.erase(itm);
             }
         }
@@ -325,7 +325,7 @@ void Game::detectMissileCollision()
         if(player.getHitbox().intersects(it->getHitbox()))
         {
             missiles.erase(it);
-            player.setHealth(player.getHealth() - 1);
+            player.setHealth(player.getHealth() - it->getDamage());
             player.setX(player.getRespawnX());
             player.setY(player.getRespawnY());
             player.setDamage(1);    //resetting to default damage
@@ -338,7 +338,7 @@ void Game::detectMissileCollision()
         if(flag.getHitbox().intersects(it->getHitbox()))
         {
             enemyMissiles.erase(it);
-            flag.setHealth(flag.getHealth() - 1);
+            flag.setHealth(flag.getHealth() - it->getDamage());
         }
     }
     for(auto it = missiles.begin(); it != missiles.end(); ++it)
@@ -346,7 +346,7 @@ void Game::detectMissileCollision()
         if(flag.getHitbox().intersects(it->getHitbox()))
         {
             missiles.erase(it);
-            flag.setHealth(flag.getHealth() - 1);
+            flag.setHealth(flag.getHealth() - it->getDamage());
         }
     }
 }
@@ -636,21 +636,30 @@ void Game::tanksShooting(){
     {
         if(it->counter % FPS == 0)      //every second
         {
+            int damage;
+            if((it->getType() == ARMORED_RANDOM_TANK) || it->getType() == ARMORED_TANK)
+                damage = 2;
+            else if((it->getType() == RANDOM_TANK) || (it->getType() == COMMON_TANK))
+                damage = 1;
             if(it->getDirection() == UP)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_up(), it->getX() + GameObject::getSMALL_WIDTH()/2 ,it->getY() - GameObject::getSMALL_HEIGHT(), UP);
+                missile.setDamage(damage);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == DOWN)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_down(), it->getX() + GameObject::getSMALL_WIDTH()/2, it->getY() + GameObject::getHEIGHT(), DOWN);
+                missile.setDamage(damage);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == RIGHT)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_right(), it->getX() + GameObject::getWIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2, RIGHT);
+                missile.setDamage(damage);
                 enemyMissiles.push_back(missile);
             } else if(it->getDirection() == LEFT)
             {
                 GameObject missile(MISSILE, spriteLoader->getMissile_left(), it->getX() - GameObject::getSMALL_WIDTH() , it->getY() + GameObject::getSMALL_HEIGHT()/2 , LEFT);
+                missile.setDamage(damage);
                 enemyMissiles.push_back(missile);
             }
         }
