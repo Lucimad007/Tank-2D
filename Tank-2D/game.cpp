@@ -181,6 +181,11 @@ void Game::updateLogic(){
     if(timeStopCounter)
         timeStopCounter--;
 
+    for(auto it = bonus.begin(); it != bonus.end(); ++it)
+    {
+        it->counter--;      //managing lifespan of bonus items
+    }
+
 }
 
 void Game::limitObjects(){
@@ -257,6 +262,7 @@ void Game::deleteDeadObjects(){
                     reward = GameObject(TANKI, spriteLoader->getTanki(), it->getX(), it->getY());
                 else if(rnd%3 == 2)
                     reward = GameObject(CLOCK, spriteLoader->getClock(), it->getX(), it->getY());
+                reward.counter = this->FPS * 4;     //for 4 seconds lifespan
                 bonus.push_back(reward);
             }
             tanks.erase(it);
@@ -280,6 +286,13 @@ void Game::deleteDeadObjects(){
     //flag
     if(flag.getHealth() <= 0)
         gameOver();
+
+    //bonus items
+    for(auto it = bonus.begin(); it != bonus.end(); ++it)
+    {
+        if(it->counter <= 0)
+            bonus.erase(it);
+    }
 }
 
 
