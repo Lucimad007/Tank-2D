@@ -361,6 +361,8 @@ void Game::detectMissileCollision()
         {
             enemyMissiles.erase(it);
             flag.setHealth(flag.getHealth() - it->getDamage());
+            flag.setX(-1000);   //making it disapear
+            flag.setY(-1000);
         }
     }
     for(auto it = missiles.begin(); it != missiles.end(); ++it)
@@ -369,6 +371,8 @@ void Game::detectMissileCollision()
         {
             missiles.erase(it);
             flag.setHealth(flag.getHealth() - it->getDamage());
+            flag.setX(-1000);   //making it disapear
+            flag.setY(-1000);
         }
     }
 }
@@ -713,6 +717,11 @@ bool Game::haveCollision(QRect before, QRect after){
     //player
     if(player.getHitbox() != before)
         if(player.getHitbox().intersects(after))
+            return true;
+
+    //flag
+    if(flag.getHitbox() != before)
+        if(flag.getHitbox().intersects(after))
             return true;
 
 
