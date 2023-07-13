@@ -15,7 +15,7 @@ class Game : public QWidget
     Q_OBJECT
 
 public:
-    explicit Game(QWidget *parent = nullptr);
+    explicit Game(int currentLevel,QWidget *parent = nullptr);
     void loadLevel(int level);
     void loadIcon();
     void clear();
@@ -36,6 +36,7 @@ public:
     void checkWinning();
     void winner();
     void spawnTanks();
+    void clearGameObjects();
     ~Game();
 
     int getFPS() const;
@@ -54,6 +55,7 @@ private:
     int numberOfTanks = 0;  //tanks which are in the scene already
     int remainingTanks = 0;    //tanks which are now spawned yet
     const int cellSize = 32;
+    int currentLevel;
     QGraphicsScene* scene = nullptr;
     QGraphicsView* backgroundView = nullptr;
     GameObject player;

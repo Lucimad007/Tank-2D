@@ -5,9 +5,14 @@
 #include <QJsonDocument>
 #include <QVBoxLayout>
 #include <QtUiTools/QUiLoader>
+#include <QTimer>
 #include "register.h"
 #include "ui_register.h"
 #include "menu_event.h"
+#include <game.h>
+
+QTimer *timer;
+Game* game;
 
 Register::Register(QWidget *parent) :
     QWidget(parent),
@@ -307,41 +312,151 @@ void Register::on_registerButton_clicked()
 }
 
 void Register::on_level1Button_clicked(){
-    //qDebug() << "level 1";
+    game = new Game(1);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level2Button_clicked(){
-    //qDebug() << "level 2";
+    game = new Game(2);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level3Button_clicked(){
-    //qDebug() << "level 3";
+    game = new Game(3);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level4Button_clicked(){
-    //qDebug() << "level 4";
+    game = new Game(4);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level5Button_clicked(){
-    //qDebug() << "level 5";
+    game = new Game(5);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level6Button_clicked(){
-    //qDebug() << "level 6";
+    game = new Game(6);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level7Button_clicked(){
-    //qDebug() << "level 7";
+    game = new Game(7);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level8Button_clicked(){
-    //qDebug() << "level 8";
+    game = new Game(8);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level9Button_clicked(){
-    //qDebug() << "level 9";
+    game = new Game(9);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
 
 void Register::on_level10Button_clicked(){
-    //qDebug() << "level 10";
+    game = new Game(10);
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }

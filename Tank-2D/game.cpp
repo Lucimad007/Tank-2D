@@ -13,10 +13,11 @@
 
 extern QTimer *timer;
 
-Game::Game(QWidget *parent) :
+Game::Game(int currentLevel, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
+    this->currentLevel = currentLevel;
     spriteLoader = new SpriteLoader();
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");
@@ -34,10 +35,14 @@ Game::Game(QWidget *parent) :
     backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    loadLevel(1);
+    loadLevel(currentLevel);
 }
 
 void Game::loadLevel(int level){
+    if(level >= 11){
+        //show final menu
+        return;
+    }
     remainingTanks = 2 + level * 4;     //tanks out of the scene
     QString number = QString::number(level);
     QString positions[25][20];
@@ -824,6 +829,7 @@ void Game::winner(){
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");
     scene->clear();
+    scene->deleteLater();
     backgroundView->repaint();
     backgroundView->deleteLater();
 
@@ -865,8 +871,39 @@ void Game::winner(){
     }
 }
 
+void Game::clearGameObjects(){
+    tanks.clear();
+    walls.clear();
+    bonus.clear();
+    missiles.clear();
+    enemyMissiles.clear();
+    spawnPoints.clear();
+}
+
 void Game::on_continueButton_clicked(){
-    //qDebug() << "Test";
+    clearGameObjects();     //it is important to get rid of previous game objects
+    ui->setupUi(this);
+    this->setWindowTitle("Tank Battle City");
+    scene = new QGraphicsScene();
+    backgroundView = new QGraphicsView();
+    backgroundView->setFixedSize(this->size());
+    backgroundView->setStyleSheet("background-color: black;");
+    backgroundView->setScene(scene);
+    //we should ensure that scene fills the whole QGraphicsView
+    scene->setSceneRect(backgroundView->rect());
+
+    //disable scrollbars if you don't want them to appear
+    backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+    layout->addWidget(backgroundView);
+    delete this->layout();
+    this->setLayout(layout);
+
+    currentLevel++;
+    loadLevel(currentLevel);
+    timer->start();
 }
 
 Game::~Game()
