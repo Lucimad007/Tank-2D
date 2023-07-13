@@ -1,6 +1,7 @@
 #include "game.h"
 #include "ui_game.h"
 #include "sprite-loader.h"
+#include "register.h"
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <QDir>
@@ -12,6 +13,7 @@
 #include <QPushButton>
 
 extern QTimer *timer;
+extern Register* registerMenu;
 
 Game::Game(int currentLevel, QWidget *parent) :
     QWidget(parent),
@@ -40,7 +42,8 @@ Game::Game(int currentLevel, QWidget *parent) :
 
 void Game::loadLevel(int level){
     if(level >= 11){
-        //show final menu
+        registerMenu->show();
+        this->close();
         return;
     }
     remainingTanks = 2 + level * 4;     //tanks out of the scene
