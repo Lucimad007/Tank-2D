@@ -82,6 +82,7 @@ void Register::setMenuUI(){
         QGraphicsView* player1View = widget->findChild<QGraphicsView*>("player1View",Qt::FindChildrenRecursively);
         QGraphicsView* player2View = widget->findChild<QGraphicsView*>("player2View",Qt::FindChildrenRecursively);
         QGraphicsView* constructionView = widget->findChild<QGraphicsView*>("constructionView",Qt::FindChildrenRecursively);
+        QPushButton* scoreBoardButton = widget->findChild<QPushButton*>("scoreBoardButton", Qt::FindChildrenRecursively);
         if(!(logoView->isWidgetType()) || !(player1View->isWidgetType()) || !(player2View->isWidgetType()) || !(constructionView->isWidgetType()))
         {
             qDebug() << "Failed to find children widget.";
@@ -93,6 +94,9 @@ void Register::setMenuUI(){
         player1View->installEventFilter(menuEvent);
         player2View->installEventFilter(menuEvent);
         constructionView->installEventFilter(menuEvent);
+
+        //connecting to slot
+        connect(scoreBoardButton, &QPushButton::clicked, this, &Register::on_scoreBoardButton_clicked);
 
         //disabling scrolls
         logoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -206,6 +210,31 @@ void Register::setSelectLevelUI(){
     connect(level10Button, &QPushButton::clicked, this, &Register::on_level10Button_clicked);
 }
 
+void Register::setScoreBoardUI(){
+    //loading ui file
+    QWidget* widget;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D";
+    QUiLoader loader;
+    QFile file(path + "/score-board.ui");
+    if(file.open(QIODevice::OpenModeFlag::ReadOnly))
+    {
+        widget = loader.load(&file);
+        ui->setupUi(this);      //it heavily prevents our code from bugs
+        this->setWindowTitle("Tank Battle City");
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+        layout->addWidget(widget);
+        delete this->layout();      //clearing previous layout
+        this->setLayout(layout);
+
+    } else
+    {
+        qDebug() << "Failed to open file.";
+    }
+}
+
 Register::~Register()
 {
     delete ui;
@@ -309,6 +338,10 @@ void Register::on_registerButton_clicked()
     {
         qDebug() << "File not found.";
     }
+}
+
+void Register::on_scoreBoardButton_clicked(){
+    setScoreBoardUI();
 }
 
 void Register::on_level1Button_clicked(){

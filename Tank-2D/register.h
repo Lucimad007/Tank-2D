@@ -17,12 +17,15 @@ public:
     void loadIcon();
     void setMenuUI();
     void setSelectLevelUI();
+    void setScoreBoardUI();
     ~Register();
 
 private slots:
     void on_loginButton_clicked();
 
     void on_registerButton_clicked();
+
+    void on_scoreBoardButton_clicked();
 
     void on_level1Button_clicked();
     void on_level2Button_clicked();
@@ -34,6 +37,7 @@ private slots:
     void on_level8Button_clicked();
     void on_level9Button_clicked();
     void on_level10Button_clicked();
+
 private:
     Ui::Register *ui;
 };

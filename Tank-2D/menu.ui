@@ -68,6 +68,24 @@
     <string notr="true">border: transparent;</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="scoreBoardButton">
+   <property name="geometry">
+    <rect>
+     <x>145</x>
+     <y>430</y>
+     <width>190</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 30);
+font: 600 22pt &quot;Teko SemiBold&quot;;
+background: transparent;</string>
+   </property>
+   <property name="text">
+    <string>SCORE BOARD</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

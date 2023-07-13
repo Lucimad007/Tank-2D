@@ -29,6 +29,7 @@ FORMS += \
     game.ui \
     menu.ui \
     register.ui \
+    score-board.ui \
     select-level.ui \
     winner.ui
 
