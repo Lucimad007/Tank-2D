@@ -1,6 +1,7 @@
 #ifndef REGISTER_H
 #define REGISTER_H
 
+#include "user.h"
 #include <QWidget>
 
 namespace Ui {
@@ -15,10 +16,14 @@ public:
     explicit Register(QWidget *parent = nullptr);
     void loadBackground();
     void loadIcon();
+    User loadUserInfo(QString username);
     void setMenuUI();
     void setSelectLevelUI();
     void setScoreBoardUI();
     ~Register();
+
+    const User &getUser() const;
+    void setUser(const User &newUser);
 
 private slots:
     void on_loginButton_clicked();
@@ -40,6 +45,7 @@ private slots:
 
 private:
     Ui::Register *ui;
+    User user;
 };
 
 #endif // REGISTER_H

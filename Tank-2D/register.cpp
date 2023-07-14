@@ -60,6 +60,41 @@ void Register::loadIcon(){
     }
 }
 
+User Register::loadUserInfo(QString username){
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Database/info-of-users.txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        if(!file.open(QIODevice::OpenModeFlag::ReadOnly))
+            qDebug() << "File not found.";
+        QJsonObject json = QJsonObject();
+        QByteArray bytes = file.readAll();
+        QJsonDocument document = QJsonDocument::fromJson(bytes);
+        json = document.object();
+        file.close();
+
+        for(auto it = json.begin(); it != json.end(); ++it){
+            if(it.key() == username)
+            {
+                qDebug() << "test";
+                QJsonObject value = it.value().toObject();
+                int highestScore = value["highestScore"].toInt();
+                int gamesPlayed = value["gamesPlayed"].toInt();
+                double killPerDeath = value["killPerDeath"].toDouble();
+                User user(username, highestScore, gamesPlayed, killPerDeath);
+                return user;
+            }
+        }
+    } else
+    {
+        qDebug() << "File not found.";
+    }
+
+    return User(username, 0, 0, 0);
+}
+
 void Register::setMenuUI(){
     QFileInfo info = QFileInfo(QDir::currentPath());
     QString path = info.dir().path();
@@ -228,7 +263,6 @@ void Register::setScoreBoardUI(){
         layout->addWidget(widget);
         delete this->layout();      //clearing previous layout
         this->setLayout(layout);
-
     } else
     {
         qDebug() << "Failed to open file.";
@@ -274,6 +308,7 @@ void Register::on_loginButton_clicked()
             if(it.key() == username)
                 if(it.value().toString() == password)
                 {
+                    user = loadUserInfo(username);
                     setMenuUI();
                     return;
                 }
@@ -492,4 +527,14 @@ void Register::on_level10Button_clicked(){
     timer->start(((float)1/game->getFPS() * 1000));
 
     this->hide();
+}
+
+const User &Register::getUser() const
+{
+    return user;
+}
+
+void Register::setUser(const User &newUser)
+{
+    user = newUser;
 }
