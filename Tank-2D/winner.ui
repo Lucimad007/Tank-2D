@@ -74,7 +74,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
 font: 600 20pt &quot;Teko SemiBold&quot;;</string>
    </property>
    <property name="text">
-    <string>test</string>
+    <string>-</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

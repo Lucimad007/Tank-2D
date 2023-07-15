@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QGraphicsView>
 #include <QPushButton>
+#include <QLabel>
 
 extern QTimer *timer;
 extern Register* registerMenu;
@@ -843,9 +844,6 @@ void Game::winner(){
     user.setGamesPlayed(user.getGamesPlayed() + 1);
     registerMenu->setUser(user);
     registerMenu->saveUserInfo();
-    qDebug() << score;
-    qDebug() << "Test 2 : " << user.getUsername() << user.getHighScore();
-    qDebug() << "Test 3 : " << registerMenu->getUser().getUsername() << registerMenu->getUser().getHighScore();
 
     timer->stop();
     ui->setupUi(this);
@@ -876,6 +874,14 @@ void Game::winner(){
         QGraphicsScene* tempScene = new QGraphicsScene();
         tempScene->addItem(pixItem);
         flagView->setScene(tempScene);
+
+        //loading info
+        QLabel* playerName = widget->findChild<QLabel*>("playerName", Qt::FindChildrenRecursively);
+        playerName->setText(user.getUsername());
+        QLabel* playerScore = widget->findChild<QLabel*>("playerScore", Qt::FindChildrenRecursively);
+        playerScore->setText(QString::number(score));
+        QLabel* highestScore = widget->findChild<QLabel*>("highestScore", Qt::FindChildrenRecursively);
+        highestScore->setText(QString::number(user.getHighScore()));
 
         //connecting continue button
         QPushButton* continueButton = widget->findChild<QPushButton*>("continueButton", Qt::FindChildrenRecursively);

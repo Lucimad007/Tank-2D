@@ -1,10 +1,10 @@
 {
     "ali": {
-        "gamesPlayed": 9,
+        "gamesPlayed": 10,
         "highestScore": 1500
     },
     "test": {
-        "gamesPlayed": 1,
-        "highestScore": 1100
+        "gamesPlayed": 2,
+        "highestScore": 1500
     }
 }

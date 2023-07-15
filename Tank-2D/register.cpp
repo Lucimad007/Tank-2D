@@ -360,7 +360,6 @@ void Register::on_loginButton_clicked()
                 if(it.value().toString() == password)
                 {
                     user = loadUserInfo(username);
-                    qDebug() << "Test1 : " << user.getUsername() << user.getGamesPlayed() << user.getHighScore();
                     setMenuUI();
                     return;
                 }
