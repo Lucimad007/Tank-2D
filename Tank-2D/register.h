@@ -3,6 +3,7 @@
 
 #include "user.h"
 #include <QWidget>
+#include <map>
 
 namespace Ui {
 class Register;
@@ -21,6 +22,7 @@ public:
     void setMenuUI();
     void setSelectLevelUI();
     void setScoreBoardUI();
+    std::map<int, User> loadAllUsers();
     ~Register();
 
     User getUser();

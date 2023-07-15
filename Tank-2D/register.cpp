@@ -10,6 +10,7 @@
 #include "ui_register.h"
 #include "menu_event.h"
 #include <game.h>
+#include <map>
 
 QTimer *timer;
 Game* game;
@@ -144,6 +145,36 @@ void Register::saveUserInfo(){
     {
         qDebug() << "File not found.";
     }
+}
+
+std::map<int, User> Register::loadAllUsers(){
+    std::map<int , User> users;     //users sorted based on highest score
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Database/info-of-users.txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        if(!file.open(QIODevice::OpenModeFlag::ReadOnly))
+            qDebug() << "File not found.";
+        QJsonObject json = QJsonObject();
+        QByteArray bytes = file.readAll();
+        QJsonDocument document = QJsonDocument::fromJson(bytes);
+        json = document.object();
+        file.close();
+
+        for(auto it = json.begin(); it != json.end(); ++it){
+            QJsonObject targetUser = it.value().toObject();
+            User tempUser(it.key(), targetUser["highestScore"].toInt(), targetUser["gamesPlayed"].toInt());
+            users.insert(std::pair<int, User>(targetUser["highestScore"].toInt(), tempUser));
+        }
+
+    } else
+    {
+        qDebug() << "File not found.";
+    }
+
+    return users;
 }
 
 void Register::setMenuUI(){
@@ -307,6 +338,79 @@ void Register::setScoreBoardUI(){
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
+
+        //loading info
+        std::map<int, User> users = loadAllUsers();
+        auto it = users.end();      //map is sorted from small to larg
+
+        if(it != users.begin())     //(end = begin) means empty map!
+        {
+            std::advance(it , -1);
+            qDebug() << "Test 2 : " << it->second.getUsername() <<  it->second.getHighScore();
+            QLabel* firstUsername = widget->findChild<QLabel*>("firstUsername", Qt::FindChildrenRecursively);
+            firstUsername->setText(it->second.getUsername());
+            QLabel* firstHighestScore = widget->findChild<QLabel*>("firstHighestScore", Qt::FindChildrenRecursively);
+            firstHighestScore->setText(QString::number( it->second.getHighScore()));
+            QLabel* firstGames = widget->findChild<QLabel*>("firstGames", Qt::FindChildrenRecursively);
+            firstGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        if(it != users.begin())
+        {
+            std::advance(it , -1);
+            QLabel* secondUsername = widget->findChild<QLabel*>("secondUsername", Qt::FindChildrenRecursively);
+            secondUsername->setText(it->second.getUsername());
+            QLabel* secondHighestScore = widget->findChild<QLabel*>("secondHighestScore", Qt::FindChildrenRecursively);
+            secondHighestScore->setText(QString::number(it->second.getHighScore()));
+            QLabel* secondGames = widget->findChild<QLabel*>("secondGames", Qt::FindChildrenRecursively);
+            secondGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        if(it != users.begin())
+        {
+            std::advance(it , -1);
+            QLabel* thirdUsername = widget->findChild<QLabel*>("thirdUsername", Qt::FindChildrenRecursively);
+            thirdUsername->setText(it->second.getUsername());
+            QLabel* thirdHighestScore = widget->findChild<QLabel*>("thirdHighestScore", Qt::FindChildrenRecursively);
+            thirdHighestScore->setText(QString::number(it->second.getHighScore()));
+            QLabel* thirdGames = widget->findChild<QLabel*>("thirdGames", Qt::FindChildrenRecursively);
+            thirdGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        if(it != users.begin())
+        {
+            std::advance(it , -1);
+            QLabel* forthUsername = widget->findChild<QLabel*>("forthUsername", Qt::FindChildrenRecursively);
+            forthUsername->setText(it->second.getUsername());
+            QLabel* forthHighestScore = widget->findChild<QLabel*>("forthHighestScore", Qt::FindChildrenRecursively);
+            forthHighestScore->setText(QString::number(it->second.getHighScore()));
+            QLabel* forthGames = widget->findChild<QLabel*>("forthGames", Qt::FindChildrenRecursively);
+            forthGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        if(it != users.begin())
+        {
+            std::advance(it , -1);
+            QLabel* fifthUsername = widget->findChild<QLabel*>("fifthUsername", Qt::FindChildrenRecursively);
+            fifthUsername->setText(it->second.getUsername());
+            QLabel* fifthHighestScore = widget->findChild<QLabel*>("fifthHighestScore", Qt::FindChildrenRecursively);
+            fifthHighestScore->setText(QString::number(it->second.getHighScore()));
+            QLabel* fifthGames = widget->findChild<QLabel*>("fifthGames", Qt::FindChildrenRecursively);
+            fifthGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        if(it != users.begin())
+        {
+            std::advance(it , -1);
+            QLabel* sixthUsername = widget->findChild<QLabel*>("sixthUsername", Qt::FindChildrenRecursively);
+            sixthUsername->setText(it->second.getUsername());
+            QLabel* sixthHighestScore = widget->findChild<QLabel*>("sixthHighestScore", Qt::FindChildrenRecursively);
+            sixthHighestScore->setText(QString::number(it->second.getHighScore()));
+            QLabel* sixthGames = widget->findChild<QLabel*>("sixthGames", Qt::FindChildrenRecursively);
+            sixthGames->setText(QString::number(it->second.getGamesPlayed()));
+        }
+
+        //setting new ui
         ui->setupUi(this);      //it heavily prevents our code from bugs
         this->setWindowTitle("Tank Battle City");
         QVBoxLayout* layout = new QVBoxLayout();

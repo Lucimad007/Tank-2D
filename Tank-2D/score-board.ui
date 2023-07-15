@@ -50,12 +50,12 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <string>HIGHEST SCORE</string>
    </property>
   </widget>
-  <widget class="QLabel" name="killPerDeathLabel">
+  <widget class="QLabel" name="gamesLabel">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>390</x>
      <y>20</y>
-     <width>49</width>
+     <width>71</width>
      <height>31</height>
     </rect>
    </property>
@@ -64,7 +64,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
 font: 600 20pt &quot;Teko SemiBold&quot;;</string>
    </property>
    <property name="text">
-    <string>K / D</string>
+    <string>games</string>
    </property>
   </widget>
   <widget class="QLabel" name="firstLabel">
@@ -427,7 +427,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="fitstKillperDeath">
+  <widget class="QLabel" name="firstGames">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -447,7 +447,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="secondKillPerDeath">
+  <widget class="QLabel" name="secondGames">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -467,7 +467,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="thirdKillPerDeath">
+  <widget class="QLabel" name="thirdGames">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -487,7 +487,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="forthKillPerDeath">
+  <widget class="QLabel" name="forthGames">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -507,7 +507,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="fifthKillPerDeath">
+  <widget class="QLabel" name="fifthGames">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -527,7 +527,7 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="sixthKillPerDeath">
+  <widget class="QLabel" name="sixthGames">
    <property name="geometry">
     <rect>
      <x>390</x>
