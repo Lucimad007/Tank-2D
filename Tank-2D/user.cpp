@@ -7,11 +7,10 @@ User::User()
     highScore = 0;
 }
 
-User::User(QString username, int highScore, int gamesPlayed, double killPerDeath){
+User::User(QString username, int highScore, int gamesPlayed){
     this->username = username;
     this->highScore = highScore;
     this->gamesPlayed = gamesPlayed;
-    this->killPerDeath = killPerDeath;
 }
 
 const QString &User::getUsername() const
@@ -42,14 +41,4 @@ int User::getGamesPlayed() const
 void User::setGamesPlayed(int newGamesPlayed)
 {
     gamesPlayed = newGamesPlayed;
-}
-
-double User::getKillPerDeath() const
-{
-    return killPerDeath;
-}
-
-void User::setKillPerDeath(double newKillPerDeath)
-{
-    killPerDeath = newKillPerDeath;
 }

@@ -6,7 +6,7 @@ class User
 {
 public:
     User();
-    User(QString username, int highScore, int gamesPlayed, double killPerDeath);
+    User(QString username, int highScore, int gamesPlayed);
     const QString &getUsername() const;
     void setUsername(const QString &newUsername);
 
@@ -16,14 +16,11 @@ public:
     int getGamesPlayed() const;
     void setGamesPlayed(int newGamesPlayed);
 
-    double getKillPerDeath() const;
-    void setKillPerDeath(double newKillPerDeath);
 
 private:
     QString username;
     int highScore;
     int gamesPlayed;
-    double killPerDeath;
 };
 
 #endif // USER_H

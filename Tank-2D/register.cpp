@@ -78,12 +78,10 @@ User Register::loadUserInfo(QString username){
         for(auto it = json.begin(); it != json.end(); ++it){
             if(it.key() == username)
             {
-                qDebug() << "test";
                 QJsonObject value = it.value().toObject();
                 int highestScore = value["highestScore"].toInt();
                 int gamesPlayed = value["gamesPlayed"].toInt();
-                double killPerDeath = value["killPerDeath"].toDouble();
-                User user(username, highestScore, gamesPlayed, killPerDeath);
+                User user(username, highestScore, gamesPlayed);
                 return user;
             }
         }
@@ -92,7 +90,60 @@ User Register::loadUserInfo(QString username){
         qDebug() << "File not found.";
     }
 
-    return User(username, 0, 0, 0);
+    return User(username, 0, 0);
+}
+
+void Register::saveUserInfo(){
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Database/info-of-users.txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        if(!file.open(QIODevice::OpenModeFlag::ReadOnly))
+            qDebug() << "File not found.";
+        QJsonObject json = QJsonObject();
+        QByteArray bytes = file.readAll();
+        QJsonDocument document = QJsonDocument::fromJson(bytes);
+        json = document.object();
+
+        file.close();
+
+        for(auto it = json.begin(); it != json.end(); ++it)
+        {
+            if(it.key() == user.getUsername())
+            {
+                //it.value().toObject()     is info of our target user
+                QJsonObject targetUser = it.value().toObject();
+                targetUser["highestScore"] = user.getHighScore();
+                targetUser["gamesPlayed"] = user.getGamesPlayed();
+                json.erase(it);
+                json.insert(user.getUsername(), targetUser);
+                if(!file.open(QIODevice::OpenModeFlag::ReadWrite))
+                    qDebug() << "File not found.";
+                document = QJsonDocument(json);
+                file.write(document.toJson());
+                file.close();
+                return;
+            }
+        }
+
+        //if user was not in the file
+        QJsonObject targetUser;
+        targetUser["highestScore"] = user.getHighScore();
+        targetUser["gamesPlayed"] = user.getGamesPlayed();
+        json.insert(user.getUsername(), targetUser);
+        if(!file.open(QIODevice::OpenModeFlag::ReadWrite))
+            qDebug() << "File not found.";
+        document = QJsonDocument(json);
+        file.write(document.toJson());
+        file.close();
+        return;
+
+    } else
+    {
+        qDebug() << "File not found.";
+    }
 }
 
 void Register::setMenuUI(){
@@ -309,6 +360,7 @@ void Register::on_loginButton_clicked()
                 if(it.value().toString() == password)
                 {
                     user = loadUserInfo(username);
+                    qDebug() << "Test1 : " << user.getUsername() << user.getGamesPlayed() << user.getHighScore();
                     setMenuUI();
                     return;
                 }
@@ -529,12 +581,12 @@ void Register::on_level10Button_clicked(){
     this->hide();
 }
 
-const User &Register::getUser() const
+User Register::getUser()
 {
     return user;
 }
 
-void Register::setUser(const User &newUser)
+void Register::setUser(User newUser)
 {
     user = newUser;
 }

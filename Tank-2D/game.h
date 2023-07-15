@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include "game-object.h"
 #include "sprite-loader.h"
+#include "user.h"
 
 namespace Ui {
 class Game;
@@ -66,6 +67,8 @@ private:
     std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
     std::list<GameObject> enemyMissiles;
     std::list<QRect> spawnPoints;
+    User user;
+    int score = 0;
 };
 
 #endif // GAME_H

@@ -2,6 +2,7 @@
 #include "ui_game.h"
 #include "sprite-loader.h"
 #include "register.h"
+#include "user.h"
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
 #include <QDir>
@@ -19,6 +20,7 @@ Game::Game(int currentLevel, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
+    user = registerMenu->getUser();
     this->currentLevel = currentLevel;
     spriteLoader = new SpriteLoader();
     ui->setupUi(this);
@@ -273,8 +275,16 @@ void Game::deleteDeadObjects(){
                 reward.counter = this->FPS * 4;     //for 4 seconds lifespan
                 bonus.push_back(reward);
             }
+            if((it->getType() == ARMORED_RANDOM_TANK) || it->getType() == ARMORED_TANK)
+            {
+                score += 200;
+            } else
+            {
+                score += 100;
+            }
             tanks.erase(it);
             numberOfTanks--;
+
         }
     }
 
@@ -828,6 +838,15 @@ void Game::checkWinning(){
 }
 
 void Game::winner(){
+    if(user.getHighScore() < score)
+        user.setHighScore(score);
+    user.setGamesPlayed(user.getGamesPlayed() + 1);
+    registerMenu->setUser(user);
+    registerMenu->saveUserInfo();
+    qDebug() << score;
+    qDebug() << "Test 2 : " << user.getUsername() << user.getHighScore();
+    qDebug() << "Test 3 : " << registerMenu->getUser().getUsername() << registerMenu->getUser().getHighScore();
+
     timer->stop();
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");

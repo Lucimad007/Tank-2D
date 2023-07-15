@@ -1,3 +1,10 @@
 {
-	"ali" : { "highestScore" : 3, "gamesPlayed" : 7, "killPerDeath" : 3.4}
+    "ali": {
+        "gamesPlayed": 9,
+        "highestScore": 1500
+    },
+    "test": {
+        "gamesPlayed": 1,
+        "highestScore": 1100
+    }
 }

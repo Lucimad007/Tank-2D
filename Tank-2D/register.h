@@ -17,14 +17,14 @@ public:
     void loadBackground();
     void loadIcon();
     User loadUserInfo(QString username);
+    void saveUserInfo();
     void setMenuUI();
     void setSelectLevelUI();
     void setScoreBoardUI();
     ~Register();
 
-    const User &getUser() const;
-    void setUser(const User &newUser);
-
+    User getUser();
+    void setUser(User newUser);
 private slots:
     void on_loginButton_clicked();
 
