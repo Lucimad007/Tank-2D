@@ -13,6 +13,7 @@ SOURCES += \
     game.cpp \
     main.cpp \
     menu_event.cpp \
+    multi-player.cpp \
     register.cpp \
     sprite-loader.cpp \
     user.cpp
@@ -21,6 +22,7 @@ HEADERS += \
     game-object.h \
     game.h \
     menu_event.h \
+    multi-player.h \
     register.h \
     sprite-loader.h \
     user.h
@@ -28,6 +30,7 @@ HEADERS += \
 FORMS += \
     game.ui \
     menu.ui \
+    multi-player.ui \
     register.ui \
     score-board.ui \
     select-level.ui \

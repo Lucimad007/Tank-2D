@@ -1,8 +1,10 @@
 #include "menu_event.h"
 #include "register.h"
+#include "multi-player.h"
 #include <QMouseEvent>
 
 extern Register* registerMenu;
+extern MultiPlayer* multiPlayer;
 
 MenuEvent::MenuEvent()
 {
@@ -22,7 +24,9 @@ bool MenuEvent::eventFilter(QObject* obj, QEvent* event){
                 registerMenu->setSelectLevelUI();
             } else if(view->objectName() == "player2View")
             {
-                qDebug() << "2 players";
+                multiPlayer = new MultiPlayer();
+                registerMenu->hide();
+                multiPlayer->show();
             } else if(view->objectName() == "constructionView")
             {
                 qDebug() << "construction mode";
