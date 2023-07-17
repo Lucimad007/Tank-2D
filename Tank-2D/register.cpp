@@ -13,7 +13,7 @@
 #include <game.h>
 #include <map>
 
-QTimer *timer;
+QTimer *timer, *multiPlayerTimer;
 Game* game;
 MultiPlayer* multiPlayer = nullptr;
 

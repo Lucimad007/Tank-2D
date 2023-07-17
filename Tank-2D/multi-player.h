@@ -18,8 +18,12 @@ public:
     explicit MultiPlayer(QWidget *parent = nullptr);
     void loadIcon();
     void loadMap();
+    void clear();
+    void updateLogic();
     void render();
     ~MultiPlayer();
+
+    int getFPS() const;
 
 private:
     Ui::MultiPlayer *ui;

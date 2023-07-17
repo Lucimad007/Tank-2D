@@ -117,6 +117,15 @@ void MultiPlayer::loadMap(){
     //end of loading map
 }
 
+void MultiPlayer::clear(){
+    scene->clear();
+    scene->update();
+}
+
+void MultiPlayer::updateLogic(){
+
+}
+
 void MultiPlayer::render(){
 
     //rendering walls
@@ -175,4 +184,9 @@ void MultiPlayer::render(){
 MultiPlayer::~MultiPlayer()
 {
     delete ui;
+}
+
+int MultiPlayer::getFPS() const
+{
+    return FPS;
 }
