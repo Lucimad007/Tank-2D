@@ -2,6 +2,7 @@
 #define MULTIPLAYER_H
 
 #include <QWidget>
+#include <QKeyEvent>
 #include <QGraphicsView>
 #include "sprite-loader.h"
 #include "game-object.h"
@@ -21,6 +22,14 @@ public:
     void clear();
     void updateLogic();
     void render();
+    void updateHitBoxes();
+    void limitObjects();
+    void deleteJunkMissiles();
+    void deleteDeadObjects();
+    void moveMissiles();
+    bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
+    void detectMissileCollision();
+    void keyPressEvent(QKeyEvent* event) override;
     ~MultiPlayer();
 
     int getFPS() const;

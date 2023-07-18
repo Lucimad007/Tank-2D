@@ -27,7 +27,6 @@ MultiPlayer::MultiPlayer(QWidget *parent) :
     backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     loadMap();
-    render();
 }
 
 void MultiPlayer::loadIcon(){
@@ -124,6 +123,24 @@ void MultiPlayer::clear(){
 
 void MultiPlayer::updateLogic(){
 
+    //moving missiles
+    moveMissiles();     //put this function first because early missiles shouldn't move
+
+    //delete game objects which have 0 health
+    deleteDeadObjects();
+
+    deleteJunkMissiles();
+
+    updateHitBoxes();
+
+    limitObjects();     //we should ensure that none of the game objects are out of the scene
+
+    detectMissileCollision();
+
+    if(player1.counter)          //for restricting number of missiles being shot
+        player1.counter--;
+    if(player2.counter)          //for restricting number of missiles being shot
+        player2.counter--;
 }
 
 void MultiPlayer::render(){
@@ -179,6 +196,372 @@ void MultiPlayer::render(){
     scene->addItem(flagItemP2);
 
     scene->update();
+}
+
+void MultiPlayer::keyPressEvent(QKeyEvent* event){
+
+    if (event->key() == Qt::Key_A)
+    {
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX() - player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(LEFT);
+        player1.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player1.setX(player1.getX() - player1.getSpeed());
+    } else if (event->key() == Qt::Key_D)
+    {
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX() + player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(RIGHT);
+        player1.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player1.setX(player1.getX() + player1.getSpeed());
+    } else if (event->key() == Qt::Key_W)
+    {
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX(), player1.getY() - player1.getSpeed(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(UP);
+        player1.setSprite(spriteLoader->getYellow_tank_up());
+        if(!haveCollision(before, after))
+            player1.setY(player1.getY() - player1.getSpeed());
+    } else if (event->key() == Qt::Key_S)
+    {
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX(), player1.getY() + player1.getSpeed(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(DOWN);
+        player1.setSprite(spriteLoader->getYellow_tank_down());
+        if(!haveCollision(before, after))
+            player1.setY(player1.getY() + player1.getSpeed());
+    } else if ((event->key() == Qt::Key_T) && (player1.counter == 0))
+    {
+        player1.counter += 10;    //for restricting number of missiles being shot
+        if(player1.getDirection() == UP)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_up(), player1.getX() + GameObject::getSMALL_WIDTH()/2 ,player1.getY(), UP);
+            player1Missiles.push_back(missile);
+        } else if(player1.getDirection() == DOWN)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_down(), player1.getX() + GameObject::getSMALL_WIDTH()/2, player1.getY(), DOWN);
+            player1Missiles.push_back(missile);
+        } else if(player1.getDirection() == RIGHT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_right(), player1.getX(),player1.getY() + GameObject::getSMALL_HEIGHT()/2, RIGHT);
+            player1Missiles.push_back(missile);
+        } else if(player1.getDirection() == LEFT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_left(), player1.getX(), player1.getY() + GameObject::getSMALL_HEIGHT()/2, LEFT);
+            player1Missiles.push_back(missile);
+        }
+    } else if (event->key() == Qt::Key_4)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX() - player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(LEFT);
+        player2.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player2.setX(player2.getX() - player2.getSpeed());
+    } else if (event->key() == Qt::Key_6)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX() + player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(RIGHT);
+        player2.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player2.setX(player2.getX() + player2.getSpeed());
+    } else if (event->key() == Qt::Key_8)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX(), player2.getY() - player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(UP);
+        player2.setSprite(spriteLoader->getYellow_tank_up());
+        if(!haveCollision(before, after))
+            player2.setY(player2.getY() - player2.getSpeed());
+    } else if (event->key() == Qt::Key_5)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX(), player2.getY() + player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(DOWN);
+        player2.setSprite(spriteLoader->getYellow_tank_down());
+        if(!haveCollision(before, after))
+            player2.setY(player2.getY() + player2.getSpeed());
+    } else if ((event->key() == Qt::Key_P) && (player2.counter == 0))
+    {
+        player2.counter += 10;    //for restricting number of missiles being shot
+        if(player2.getDirection() == UP)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_up(), player2.getX() + GameObject::getSMALL_WIDTH()/2 ,player2.getY(), UP);
+            player2Missiles.push_back(missile);
+        } else if(player2.getDirection() == DOWN)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_down(), player2.getX() + GameObject::getSMALL_WIDTH()/2, player2.getY(), DOWN);
+            player2Missiles.push_back(missile);
+        } else if(player2.getDirection() == RIGHT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_right(), player2.getX(),player2.getY() + GameObject::getSMALL_HEIGHT()/2, RIGHT);
+            player2Missiles.push_back(missile);
+        } else if(player2.getDirection() == LEFT)
+        {
+            GameObject missile(MISSILE, spriteLoader->getMissile_left(), player2.getX(), player2.getY() + GameObject::getSMALL_HEIGHT()/2, LEFT);
+            player2Missiles.push_back(missile);
+        }
+    }
+    // Call the base class implementation
+    QWidget::keyPressEvent(event);
+}
+
+void MultiPlayer::updateHitBoxes(){
+
+    //hitboxes of walls
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getWIDTH(), it->getHEIGHT()));
+    }
+
+    //hitboxes of the players
+    player1.setHitbox(QRect(player1.getX() , player1.getY() , player1.getWIDTH(), player1.getHEIGHT()));
+    player2.setHitbox(QRect(player2.getX() , player2.getY() , player2.getWIDTH(), player2.getHEIGHT()));
+
+    //hitboxes of the missiles
+    for(auto it = player1Missiles.begin(); it != player1Missiles.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+    }
+    for(auto it = player2Missiles.begin(); it != player2Missiles.end(); ++it)
+    {
+        it->setHitbox(QRect(it->getX() , it->getY() , it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+    }
+}
+
+void MultiPlayer::limitObjects(){
+
+    //restricting players
+    //left
+    if(player1.getX() < 0)
+        player1.setX(0);
+    if(player2.getX() < 0)
+        player2.setX(0);
+    //right
+    if(this->width() - player1.getWIDTH() < player1.getX())
+        player1.setX(this->width() - player1.getWIDTH());
+    if(this->width() - player2.getWIDTH() < player2.getX())
+        player2.setX(this->width() - player2.getWIDTH());
+    //up
+    if(player1.getY() < 0)
+        player1.setY(0);
+    if(player2.getY() < 0)
+        player2.setY(0);
+    //down
+    if(this->height() - player1.getHEIGHT() < player1.getY())
+        player1.setY(this->height() - player1.getHEIGHT());
+    if(this->height() - player2.getHEIGHT() < player2.getY())
+        player2.setY(this->height() - player2.getHEIGHT());
+}
+
+void MultiPlayer::deleteJunkMissiles(){
+    for(auto it = player1Missiles.begin(); it != player1Missiles.end(); it++)
+    {
+        if(it->getX() > this->width())
+            player1Missiles.erase(it);
+        else if(it->getX() + it->getSMALL_WIDTH() < 0)
+            player1Missiles.erase(it);
+        else if(it->getY() + it->getSMALL_HEIGHT() < 0)
+            player1Missiles.erase(it);
+        else if(it->getY() > this->height())
+            player1Missiles.erase(it);
+    }
+    for(auto it = player2Missiles.begin(); it != player2Missiles.end(); it++)
+    {
+        if(it->getX() > this->width())
+            player2Missiles.erase(it);
+        else if(it->getX() + it->getSMALL_WIDTH() < 0)
+            player2Missiles.erase(it);
+        else if(it->getY() + it->getSMALL_HEIGHT() < 0)
+            player2Missiles.erase(it);
+        else if(it->getY() > this->height())
+            player2Missiles.erase(it);
+    }
+}
+
+void MultiPlayer::deleteDeadObjects(){
+
+    //walls
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        if(it->getType() == STONE)  //we can not destroy stone in game
+            continue;
+        if(it->getHealth() <= 0)
+            walls.erase(it);
+    }
+
+    //players
+    if(player1.getHealth() <= 0)
+        qDebug() << "Player 2 Won!";
+    if(player2.getHealth() <= 0)
+        qDebug() << "Player 1 Won!";
+
+    //flags
+    if(flag1.getHealth() <= 0)
+        qDebug() << "Player 2 Won!";
+    if(flag2.getHealth() <= 0)
+        qDebug() << "Player 1 Won!";
+}
+
+void MultiPlayer::moveMissiles(){
+    for(auto it = player1Missiles.begin(); it != player1Missiles.end(); ++it)
+    {
+        if(it->getDirection() == UP)
+            it->setY(it->getY() - it->getSpeed());
+        else if(it->getDirection() == DOWN)
+            it->setY(it->getY() + it->getSpeed());
+        else if(it->getDirection() == RIGHT)
+            it->setX(it->getX() + it->getSpeed());
+        else if(it->getDirection() == LEFT)
+            it->setX(it->getX() - it->getSpeed());
+    }
+
+    for(auto it = player2Missiles.begin(); it != player2Missiles.end(); ++it)
+    {
+        if(it->getDirection() == UP)
+            it->setY(it->getY() - it->getSpeed());
+        else if(it->getDirection() == DOWN)
+            it->setY(it->getY() + it->getSpeed());
+        else if(it->getDirection() == RIGHT)
+            it->setX(it->getX() + it->getSpeed());
+        else if(it->getDirection() == LEFT)
+            it->setX(it->getX() - it->getSpeed());
+    }
+}
+
+bool MultiPlayer::haveCollision(QRect before, QRect after){
+
+    //walls
+    for(auto it = walls.begin(); it!= walls.end(); ++it)
+    {
+        if(before == it->getHitbox())   //we should not compare the object to itself
+            continue;
+        if(it->getHitbox().intersects(after))
+            return true;
+    }
+
+    //players
+    if(player1.getHitbox() != before)
+        if(player1.getHitbox().intersects(after))
+            return true;
+
+    if(player2.getHitbox() != before)
+        if(player2.getHitbox().intersects(after))
+            return true;
+
+    //flags
+    if(flag1.getHitbox() != before)
+        if(flag1.getHitbox().intersects(after))
+            return true;
+
+    if(flag2.getHitbox() != before)
+        if(flag2.getHitbox().intersects(after))
+            return true;
+
+
+    return false;
+}
+
+void MultiPlayer::detectMissileCollision()
+{
+    //walls and missiles
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        for(auto itm = player1Missiles.begin(); itm != player1Missiles.end(); ++itm)
+        {
+            if(it->getHitbox().intersects(itm->getHitbox()))
+            {
+                //delete objects (not hitboxes only)
+                //do sth cool
+                it->setHealth(it->getHealth() - itm->getDamage());
+                player1Missiles.erase(itm);
+            }
+        }
+    }
+    for(auto it = walls.begin(); it != walls.end(); ++it)
+    {
+        for(auto itm = player2Missiles.begin(); itm != player2Missiles.end(); ++itm)
+        {
+            if(it->getHitbox().intersects(itm->getHitbox()))
+            {
+                //delete objects (not hitboxes only)
+                //do sth cool
+                it->setHealth(it->getHealth() - itm->getDamage());      // - 1
+                player2Missiles.erase(itm);
+            }
+        }
+    }
+
+    //players and missiles
+    for(auto it = player1Missiles.begin(); it != player1Missiles.end(); ++it)
+    {
+        if(player2.getHitbox().intersects(it->getHitbox()))
+        {
+            player1Missiles.erase(it);
+            player2.setHealth(player2.getHealth() - it->getDamage());
+            player2.setX(player2.getRespawnX());
+            player2.setY(player2.getRespawnY());
+            player2.setDamage(1);    //resetting to default damage
+        }
+    }
+    for(auto it = player2Missiles.begin(); it != player2Missiles.end(); ++it)
+    {
+        if(player1.getHitbox().intersects(it->getHitbox()))
+        {
+            player2Missiles.erase(it);
+            player1.setHealth(player1.getHealth() - it->getDamage());
+            player1.setX(player1.getRespawnX());
+            player1.setY(player1.getRespawnY());
+            player1.setDamage(1);    //resetting to default damage
+        }
+    }
+
+    //flags and missiles
+    for(auto it = player1Missiles.begin(); it != player1Missiles.end(); ++it)
+    {
+        if(flag1.getHitbox().intersects(it->getHitbox()))
+        {
+            player1Missiles.erase(it);
+            flag1.setHealth(flag1.getHealth() - it->getDamage());
+            flag1.setX(-1000);   //making it disapear
+            flag1.setY(-1000);
+        }
+        else if(flag2.getHitbox().intersects(it->getHitbox()))
+        {
+            player1Missiles.erase(it);
+            flag2.setHealth(flag2.getHealth() - it->getDamage());
+            flag2.setX(-1000);   //making it disapear
+            flag2.setY(-1000);
+        }
+    }
+    for(auto it = player2Missiles.begin(); it != player2Missiles.end(); ++it)
+    {
+        if(flag1.getHitbox().intersects(it->getHitbox()))
+        {
+            player2Missiles.erase(it);
+            flag1.setHealth(flag1.getHealth() - it->getDamage());
+            flag1.setX(-1000);   //making it disapear
+            flag1.setY(-1000);
+        }
+        else if(flag2.getHitbox().intersects(it->getHitbox()))
+        {
+            player2Missiles.erase(it);
+            flag2.setHealth(flag2.getHealth() - it->getDamage());
+            flag2.setX(-1000);   //making it disapear
+            flag2.setY(-1000);
+        }
+    }
 }
 
 MultiPlayer::~MultiPlayer()
