@@ -680,6 +680,9 @@ void Game::moveMissiles(){
 }
 
 void Game::tanksShooting(){
+    if(timeStopCounter)
+        return;
+
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
         if(it->counter % FPS == 0)      //every second
