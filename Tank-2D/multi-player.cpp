@@ -105,7 +105,7 @@ void MultiPlayer::loadMap(){
 
             } else if(positions[j][i] == 'p')
             {
-                GameObject player(PLAYER, spriteLoader->getYellow_tank_up(), j * cellSize, i * cellSize, DOWN);
+                GameObject player(PLAYER, spriteLoader->getYellow_tank_up(), j * cellSize, i * cellSize, UP);
                 this->player1 = player;
             } else if(positions[j][i] == 'P')
             {
@@ -141,6 +141,7 @@ void MultiPlayer::updateLogic(){
         player1.counter--;
     if(player2.counter)          //for restricting number of missiles being shot
         player2.counter--;
+
 }
 
 void MultiPlayer::render(){
