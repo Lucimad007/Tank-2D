@@ -1,0 +1,6 @@
+{
+    "test": {
+        "gamesPlayed": 1,
+        "highestScore": 1200
+    }
+}

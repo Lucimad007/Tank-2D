@@ -7,6 +7,8 @@
 #include "sprite-loader.h"
 #include "user.h"
 
+enum PlayerMovementDirection {MOVE_UP, MOVE_DOWN , MOVE_LEFT, MOVE_RIGHT, NONE};
+
 namespace Ui {
 class Game;
 }
@@ -37,6 +39,7 @@ public:
     void checkWinning();
     void winner();
     void spawnTanks();
+    void movePlayer();
     void clearGameObjects();
     ~Game();
 
@@ -44,6 +47,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private slots:
     void on_continueButton_clicked();
@@ -52,6 +56,8 @@ private:
     Ui::Game *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
+    const int WIDTH = 800;
+    const int HEIGHT = 640;
     int timeStopCounter = 0;
     int numberOfTanks = 0;  //tanks which are in the scene already
     int remainingTanks = 0;    //tanks which are now spawned yet
@@ -69,6 +75,7 @@ private:
     std::list<QRect> spawnPoints;
     User user;
     int score = 0;
+    PlayerMovementDirection playerDirection = NONE;
 };
 
 #endif // GAME_H

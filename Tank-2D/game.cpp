@@ -30,7 +30,7 @@ Game::Game(int currentLevel, QWidget *parent) :
     this->setFixedSize(this->width(), this->height());
     scene = new QGraphicsScene();
     backgroundView = new QGraphicsView(this);
-    backgroundView->setFixedSize(this->size());
+    backgroundView->setFixedSize(QSize(WIDTH, HEIGHT));
     backgroundView->setStyleSheet("background-color: black;");
     backgroundView->setScene(scene);
     //we should ensure that scene fills the whole QGraphicsView
@@ -158,6 +158,8 @@ void Game::clear(){
 }
 
 void Game::updateLogic(){
+    //moving player
+    movePlayer();
 
     //moving missiles
     moveMissiles();     //put this function first because early missiles shouldn't move
@@ -207,14 +209,14 @@ void Game::limitObjects(){
         if(it->getX() < 0)
             it->setX(0);
         //right
-        if(this->width() - it->getWIDTH() < it->getX())
-            it->setX(this->width() - it->getWIDTH());
+        if(WIDTH - it->getWIDTH() < it->getX())
+            it->setX(WIDTH - it->getWIDTH());
         //up
         if(it->getY() < 0)
             it->setY(0);
         //down
-        if(this->height() - it->getHEIGHT() < it->getY())
-            it->setY(this->height() - it->getHEIGHT());
+        if(HEIGHT - it->getHEIGHT() < it->getY())
+            it->setY(HEIGHT - it->getHEIGHT());
     }
 
     //restricting player
@@ -222,37 +224,37 @@ void Game::limitObjects(){
     if(player.getX() < 0)
         player.setX(0);
     //right
-    if(this->width() - player.getWIDTH() < player.getX())
-        player.setX(this->width() - player.getWIDTH());
+    if(WIDTH - player.getWIDTH() < player.getX())
+        player.setX(WIDTH - player.getWIDTH());
     //up
     if(player.getY() < 0)
         player.setY(0);
     //down
-    if(this->height() - player.getHEIGHT() < player.getY())
-        player.setY(this->height() - player.getHEIGHT());
+    if(HEIGHT - player.getHEIGHT() < player.getY())
+        player.setY(HEIGHT - player.getHEIGHT());
 }
 
 void Game::deleteJunkMissiles(){
     for(auto it = missiles.begin(); it != missiles.end(); it++)
     {
-        if(it->getX() > this->width())
+        if(it->getX() > WIDTH)
             missiles.erase(it);
         else if(it->getX() + it->getSMALL_WIDTH() < 0)
             missiles.erase(it);
         else if(it->getY() + it->getSMALL_HEIGHT() < 0)
             missiles.erase(it);
-        else if(it->getY() > this->height())
+        else if(it->getY() > HEIGHT)
             missiles.erase(it);
     }
     for(auto it = enemyMissiles.begin(); it != enemyMissiles.end(); it++)
     {
-        if(it->getX() > this->width())
+        if(it->getX() > WIDTH)
             enemyMissiles.erase(it);
         else if(it->getX() + it->getSMALL_WIDTH() < 0)
             enemyMissiles.erase(it);
         else if(it->getY() + it->getSMALL_HEIGHT() < 0)
             enemyMissiles.erase(it);
-        else if(it->getY() > this->height())
+        else if(it->getY() > HEIGHT)
             enemyMissiles.erase(it);
     }
 }
@@ -750,27 +752,8 @@ bool Game::haveCollision(QRect before, QRect after){
     return false;
 }
 
-void Game::keyPressEvent(QKeyEvent* event){
-
-    if (event->key() == Qt::Key_A)
-    {
-        QRect before, after;
-        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
-        after = QRect(player.getX() - player.getSpeed(), player.getY(), player.getWIDTH(), player.getHEIGHT());
-        player.setDirection(LEFT);
-        player.setSprite(spriteLoader->getYellow_tank_left());
-        if(!haveCollision(before, after))
-            player.setX(player.getX() - player.getSpeed());
-    } else if (event->key() == Qt::Key_D)
-    {
-        QRect before, after;
-        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
-        after = QRect(player.getX() + player.getSpeed(), player.getY(), player.getWIDTH(), player.getHEIGHT());
-        player.setDirection(RIGHT);
-        player.setSprite(spriteLoader->getYellow_tank_right());
-        if(!haveCollision(before, after))
-            player.setX(player.getX() + player.getSpeed());
-    } else if (event->key() == Qt::Key_W)
+void Game::movePlayer(){
+    if(playerDirection == MOVE_UP)
     {
         QRect before, after;
         before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
@@ -779,7 +762,7 @@ void Game::keyPressEvent(QKeyEvent* event){
         player.setSprite(spriteLoader->getYellow_tank_up());
         if(!haveCollision(before, after))
             player.setY(player.getY() - player.getSpeed());
-    } else if (event->key() == Qt::Key_S)
+    } else if(playerDirection == MOVE_DOWN)
     {
         QRect before, after;
         before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
@@ -788,6 +771,40 @@ void Game::keyPressEvent(QKeyEvent* event){
         player.setSprite(spriteLoader->getYellow_tank_down());
         if(!haveCollision(before, after))
             player.setY(player.getY() + player.getSpeed());
+    } else if(playerDirection == MOVE_LEFT){
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX() - player.getSpeed(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        player.setDirection(LEFT);
+        player.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player.setX(player.getX() - player.getSpeed());
+    } else if(playerDirection == MOVE_RIGHT)
+    {
+        QRect before, after;
+        before = QRect(player.getX(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        after = QRect(player.getX() + player.getSpeed(), player.getY(), player.getWIDTH(), player.getHEIGHT());
+        player.setDirection(RIGHT);
+        player.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player.setX(player.getX() + player.getSpeed());
+    }
+}
+
+void Game::keyPressEvent(QKeyEvent* event){
+
+    if (event->key() == Qt::Key_A)
+    {
+        playerDirection = MOVE_LEFT;
+    } else if (event->key() == Qt::Key_D)
+    {
+        playerDirection = MOVE_RIGHT;
+    } else if (event->key() == Qt::Key_W)
+    {
+        playerDirection = MOVE_UP;
+    } else if (event->key() == Qt::Key_S)
+    {
+        playerDirection = MOVE_DOWN;
     } else if ((event->key() == Qt::Key_T) && (player.counter == 0))
     {
         player.counter += 10;    //for restricting number of missiles being shot
@@ -815,6 +832,24 @@ void Game::keyPressEvent(QKeyEvent* event){
     QWidget::keyPressEvent(event);
 }
 
+void Game::keyReleaseEvent(QKeyEvent* event) {
+
+    //Note : second conditions are for preventing player movement from delay which is caused by pressing and releasing
+    // keys approximately simultaneous
+
+    if(event->key() == Qt::Key_A && player.getDirection() == LEFT)
+        playerDirection = NONE;
+    else if((event->key() == Qt::Key_S) && player.getDirection() == DOWN)
+        playerDirection = NONE;
+    else if(event->key() == Qt::Key_D && player.getDirection() == RIGHT)
+        playerDirection = NONE;
+    else if(event->key() == Qt::Key_W && player.getDirection() == UP)
+        playerDirection = NONE;
+
+    // Call the base class implementation
+    QWidget::keyReleaseEvent(event);
+}
+
 int Game::getFPS() const
 {
     return FPS;
@@ -827,7 +862,7 @@ void Game::gameOver(){
     path += "/Tank-2D/Arts/gameOver.png";
     QImage sprite(path);
     QPixmap pixmap = QPixmap::fromImage(sprite);
-    pixmap = pixmap.scaled(this->width(), this->height());
+    pixmap = pixmap.scaled(WIDTH, HEIGHT);
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
     item->setPos(0 , 0);
     item->setZValue(1);     //make it to be external layer
