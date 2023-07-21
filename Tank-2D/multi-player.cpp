@@ -16,7 +16,7 @@ MultiPlayer::MultiPlayer(QWidget *parent) :
     this->setFixedSize(this->width(), this->height());
     scene = new QGraphicsScene();
     backgroundView = new QGraphicsView(this);
-    backgroundView->setFixedSize(this->size());
+    backgroundView->setFixedSize(QSize(WIDTH, HEIGHT));
     backgroundView->setStyleSheet("background-color: black;");
     backgroundView->setScene(scene);
     //we should ensure that scene fills the whole QGraphicsView
@@ -122,6 +122,8 @@ void MultiPlayer::clear(){
 }
 
 void MultiPlayer::updateLogic(){
+    //moving players
+    movePlayers();
 
     //moving missiles
     moveMissiles();     //put this function first because early missiles shouldn't move
@@ -199,27 +201,9 @@ void MultiPlayer::render(){
     scene->update();
 }
 
-void MultiPlayer::keyPressEvent(QKeyEvent* event){
-
-    if (event->key() == Qt::Key_A)
-    {
-        QRect before, after;
-        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
-        after = QRect(player1.getX() - player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
-        player1.setDirection(LEFT);
-        player1.setSprite(spriteLoader->getYellow_tank_left());
-        if(!haveCollision(before, after))
-            player1.setX(player1.getX() - player1.getSpeed());
-    } else if (event->key() == Qt::Key_D)
-    {
-        QRect before, after;
-        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
-        after = QRect(player1.getX() + player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
-        player1.setDirection(RIGHT);
-        player1.setSprite(spriteLoader->getYellow_tank_right());
-        if(!haveCollision(before, after))
-            player1.setX(player1.getX() + player1.getSpeed());
-    } else if (event->key() == Qt::Key_W)
+void MultiPlayer::movePlayers(){
+    //player1
+    if(player1Direction == MOVE_UP)
     {
         QRect before, after;
         before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
@@ -228,7 +212,7 @@ void MultiPlayer::keyPressEvent(QKeyEvent* event){
         player1.setSprite(spriteLoader->getYellow_tank_up());
         if(!haveCollision(before, after))
             player1.setY(player1.getY() - player1.getSpeed());
-    } else if (event->key() == Qt::Key_S)
+    } else if(player1Direction == MOVE_DOWN)
     {
         QRect before, after;
         before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
@@ -237,6 +221,78 @@ void MultiPlayer::keyPressEvent(QKeyEvent* event){
         player1.setSprite(spriteLoader->getYellow_tank_down());
         if(!haveCollision(before, after))
             player1.setY(player1.getY() + player1.getSpeed());
+    } else if(player1Direction == MOVE_LEFT){
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX() - player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(LEFT);
+        player1.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player1.setX(player1.getX() - player1.getSpeed());
+    } else if(player1Direction == MOVE_RIGHT)
+    {
+        QRect before, after;
+        before = QRect(player1.getX(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        after = QRect(player1.getX() + player1.getSpeed(), player1.getY(), player1.getWIDTH(), player1.getHEIGHT());
+        player1.setDirection(RIGHT);
+        player1.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player1.setX(player1.getX() + player1.getSpeed());
+    }
+
+    //player2
+    if(player2Direction == MOVE_UP)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX(), player2.getY() - player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(UP);
+        player2.setSprite(spriteLoader->getYellow_tank_up());
+        if(!haveCollision(before, after))
+            player2.setY(player2.getY() - player2.getSpeed());
+    } else if(player2Direction == MOVE_DOWN)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX(), player2.getY() + player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(DOWN);
+        player2.setSprite(spriteLoader->getYellow_tank_down());
+        if(!haveCollision(before, after))
+            player2.setY(player2.getY() + player2.getSpeed());
+    } else if(player2Direction == MOVE_LEFT){
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX() - player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(LEFT);
+        player2.setSprite(spriteLoader->getYellow_tank_left());
+        if(!haveCollision(before, after))
+            player2.setX(player2.getX() - player2.getSpeed());
+    } else if(player2Direction == MOVE_RIGHT)
+    {
+        QRect before, after;
+        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        after = QRect(player2.getX() + player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
+        player2.setDirection(RIGHT);
+        player2.setSprite(spriteLoader->getYellow_tank_right());
+        if(!haveCollision(before, after))
+            player2.setX(player2.getX() + player2.getSpeed());
+    }
+}
+
+void MultiPlayer::keyPressEvent(QKeyEvent* event){
+
+    if (event->key() == Qt::Key_A)
+    {
+        player1Direction = MOVE_LEFT;
+    } else if (event->key() == Qt::Key_D)
+    {
+        player1Direction = MOVE_RIGHT;
+    } else if (event->key() == Qt::Key_W)
+    {
+        player1Direction = MOVE_UP;
+    } else if (event->key() == Qt::Key_S)
+    {
+        player1Direction = MOVE_DOWN;
     } else if ((event->key() == Qt::Key_T) && (player1.counter == 0))
     {
         player1.counter += 10;    //for restricting number of missiles being shot
@@ -259,40 +315,16 @@ void MultiPlayer::keyPressEvent(QKeyEvent* event){
         }
     } else if (event->key() == Qt::Key_4)
     {
-        QRect before, after;
-        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        after = QRect(player2.getX() - player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        player2.setDirection(LEFT);
-        player2.setSprite(spriteLoader->getYellow_tank_left());
-        if(!haveCollision(before, after))
-            player2.setX(player2.getX() - player2.getSpeed());
+        player2Direction = MOVE_LEFT;
     } else if (event->key() == Qt::Key_6)
     {
-        QRect before, after;
-        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        after = QRect(player2.getX() + player2.getSpeed(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        player2.setDirection(RIGHT);
-        player2.setSprite(spriteLoader->getYellow_tank_right());
-        if(!haveCollision(before, after))
-            player2.setX(player2.getX() + player2.getSpeed());
+        player2Direction = MOVE_RIGHT;
     } else if (event->key() == Qt::Key_8)
     {
-        QRect before, after;
-        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        after = QRect(player2.getX(), player2.getY() - player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
-        player2.setDirection(UP);
-        player2.setSprite(spriteLoader->getYellow_tank_up());
-        if(!haveCollision(before, after))
-            player2.setY(player2.getY() - player2.getSpeed());
+        player2Direction = MOVE_UP;
     } else if (event->key() == Qt::Key_5)
     {
-        QRect before, after;
-        before = QRect(player2.getX(), player2.getY(), player2.getWIDTH(), player2.getHEIGHT());
-        after = QRect(player2.getX(), player2.getY() + player2.getSpeed(), player2.getWIDTH(), player2.getHEIGHT());
-        player2.setDirection(DOWN);
-        player2.setSprite(spriteLoader->getYellow_tank_down());
-        if(!haveCollision(before, after))
-            player2.setY(player2.getY() + player2.getSpeed());
+        player2Direction = MOVE_DOWN;
     } else if ((event->key() == Qt::Key_P) && (player2.counter == 0))
     {
         player2.counter += 10;    //for restricting number of missiles being shot
@@ -316,6 +348,32 @@ void MultiPlayer::keyPressEvent(QKeyEvent* event){
     }
     // Call the base class implementation
     QWidget::keyPressEvent(event);
+}
+
+void MultiPlayer::keyReleaseEvent(QKeyEvent* event){
+    //Note : second conditions are for preventing player movement from delay which is caused by pressing and releasing
+    // keys approximately simultaneous
+
+    if(event->key() == Qt::Key_A && player1.getDirection() == LEFT)
+        player1Direction = NONE;
+    else if(event->key() == Qt::Key_S && player1.getDirection() == DOWN)
+        player1Direction = NONE;
+    else if(event->key() == Qt::Key_D && player1.getDirection() == RIGHT)
+        player1Direction = NONE;
+    else if(event->key() == Qt::Key_W && player1.getDirection() == UP)
+        player1Direction = NONE;
+
+    if(event->key() == Qt::Key_4 && player2.getDirection() == LEFT)
+        player2Direction = NONE;
+    else if(event->key() == Qt::Key_5 && player2.getDirection() == DOWN)
+        player2Direction = NONE;
+    else if(event->key() == Qt::Key_6 && player2.getDirection() == RIGHT)
+        player2Direction = NONE;
+    else if(event->key() == Qt::Key_8 && player2.getDirection() == UP)
+        player2Direction = NONE;
+
+    // Call the base class implementation
+    QWidget::keyReleaseEvent(event);
 }
 
 void MultiPlayer::updateHitBoxes(){
@@ -350,43 +408,43 @@ void MultiPlayer::limitObjects(){
     if(player2.getX() < 0)
         player2.setX(0);
     //right
-    if(this->width() - player1.getWIDTH() < player1.getX())
-        player1.setX(this->width() - player1.getWIDTH());
-    if(this->width() - player2.getWIDTH() < player2.getX())
-        player2.setX(this->width() - player2.getWIDTH());
+    if(WIDTH - player1.getWIDTH() < player1.getX())
+        player1.setX(WIDTH - player1.getWIDTH());
+    if(WIDTH - player2.getWIDTH() < player2.getX())
+        player2.setX(WIDTH - player2.getWIDTH());
     //up
     if(player1.getY() < 0)
         player1.setY(0);
     if(player2.getY() < 0)
         player2.setY(0);
     //down
-    if(this->height() - player1.getHEIGHT() < player1.getY())
-        player1.setY(this->height() - player1.getHEIGHT());
-    if(this->height() - player2.getHEIGHT() < player2.getY())
-        player2.setY(this->height() - player2.getHEIGHT());
+    if(HEIGHT - player1.getHEIGHT() < player1.getY())
+        player1.setY(HEIGHT - player1.getHEIGHT());
+    if(HEIGHT - player2.getHEIGHT() < player2.getY())
+        player2.setY(HEIGHT - player2.getHEIGHT());
 }
 
 void MultiPlayer::deleteJunkMissiles(){
     for(auto it = player1Missiles.begin(); it != player1Missiles.end(); it++)
     {
-        if(it->getX() > this->width())
+        if(it->getX() > WIDTH)
             player1Missiles.erase(it);
         else if(it->getX() + it->getSMALL_WIDTH() < 0)
             player1Missiles.erase(it);
         else if(it->getY() + it->getSMALL_HEIGHT() < 0)
             player1Missiles.erase(it);
-        else if(it->getY() > this->height())
+        else if(it->getY() > HEIGHT)
             player1Missiles.erase(it);
     }
     for(auto it = player2Missiles.begin(); it != player2Missiles.end(); it++)
     {
-        if(it->getX() > this->width())
+        if(it->getX() > WIDTH)
             player2Missiles.erase(it);
         else if(it->getX() + it->getSMALL_WIDTH() < 0)
             player2Missiles.erase(it);
         else if(it->getY() + it->getSMALL_HEIGHT() < 0)
             player2Missiles.erase(it);
-        else if(it->getY() > this->height())
+        else if(it->getY() > HEIGHT)
             player2Missiles.erase(it);
     }
 }

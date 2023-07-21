@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 #include "sprite-loader.h"
 #include "game-object.h"
+#include "game.h"       //to access PlayerMovementDirection enum;
 
 namespace Ui {
 class MultiPlayer;
@@ -29,15 +30,20 @@ public:
     void moveMissiles();
     bool haveCollision(QRect before, QRect after);  //before object is for authentication. due to our code the objects can be in the same posision unless they are the same object.
     void detectMissileCollision();
-    void keyPressEvent(QKeyEvent* event) override;
+    void movePlayers();
+    int getFPS() const;
     ~MultiPlayer();
 
-    int getFPS() const;
+private slots:
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
     Ui::MultiPlayer *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
+    const int WIDTH = 800;
+    const int HEIGHT = 640;
     const int cellSize = 32;
     QGraphicsScene* scene = nullptr;
     QGraphicsView* backgroundView = nullptr;
@@ -45,6 +51,8 @@ private:
     std::list<GameObject> walls;
     std::list<GameObject> player1Missiles;     //QList has a bug when we are erasing the last element
     std::list<GameObject> player2Missiles;
+    PlayerMovementDirection player1Direction = NONE;
+    PlayerMovementDirection player2Direction = NONE;
 };
 
 #endif // MULTIPLAYER_H
