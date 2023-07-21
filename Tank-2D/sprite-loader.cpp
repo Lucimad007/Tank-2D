@@ -132,6 +132,10 @@ SpriteLoader::SpriteLoader()
     sprite = QImage(path + "missile-right.gif");
     pixmap = QPixmap::fromImage(sprite);
     missile_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "heart.png");
+    pixmap = QPixmap::fromImage(sprite);
+    heart = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 }
 
 QPixmap SpriteLoader::getYellow_tank_up() const
@@ -287,4 +291,9 @@ const QPixmap &SpriteLoader::getMissile_left() const
 const QPixmap &SpriteLoader::getMissile_right() const
 {
     return missile_right;
+}
+
+const QPixmap &SpriteLoader::getHeart() const
+{
+    return heart;
 }

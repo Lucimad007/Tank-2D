@@ -41,6 +41,7 @@ public:
     void spawnTanks();
     void movePlayer();
     void clearGameObjects();
+    void updateSidebar();
     ~Game();
 
     int getFPS() const;

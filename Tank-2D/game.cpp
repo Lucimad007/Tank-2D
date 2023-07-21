@@ -136,6 +136,14 @@ void Game::loadLevel(int level){
             }
         }
     //end of loading map
+
+    //loading heart
+    QPixmap pixmap = spriteLoader->getHeart();
+    pixmap = pixmap.scaled(ui->heartView->width(), ui->heartView->height());
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    QGraphicsScene* tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->heartView->setScene(tempScene);
 }
 
 void Game::loadIcon(){
@@ -368,7 +376,7 @@ void Game::detectMissileCollision()
         if(player.getHitbox().intersects(it->getHitbox()))
         {
             missiles.erase(it);
-            player.setHealth(player.getHealth() - it->getDamage());
+            player.setHealth(player.getHealth() - 1);
             player.setX(player.getRespawnX());
             player.setY(player.getRespawnY());
             player.setDamage(1);    //resetting to default damage
@@ -480,6 +488,9 @@ void Game::render(){
     scene->addItem(flagItem);
 
     scene->update();
+
+    //rendering player state
+    updateSidebar();
 }
 
 void Game::updateHitBoxes(){
@@ -930,7 +941,7 @@ void Game::winner(){
         layout->addWidget(widget);
         layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
         this->setLayout(layout);
-        this->setFixedSize(widget->size());     //resizing window
+        this->setFixedSize(WIDTH, HEIGHT);     //resizing window
     } else
     {
         qDebug() << "File not found.";
@@ -952,7 +963,7 @@ void Game::on_continueButton_clicked(){
     this->setWindowTitle("Tank Battle City");
     scene = new QGraphicsScene();
     backgroundView = new QGraphicsView();
-    backgroundView->setFixedSize(this->size());
+    backgroundView->setFixedSize(QSize(WIDTH, HEIGHT));
     backgroundView->setStyleSheet("background-color: black;");
     backgroundView->setScene(scene);
     //we should ensure that scene fills the whole QGraphicsView
@@ -970,6 +981,12 @@ void Game::on_continueButton_clicked(){
     currentLevel++;
     loadLevel(currentLevel);
     timer->start();
+}
+
+void Game::updateSidebar(){
+    //player health
+    int health = player.getHealth() >= 0 ? player.getHealth() : 0;
+    ui->healthNumberLabel->setText(QString::number(health));
 }
 
 Game::~Game()

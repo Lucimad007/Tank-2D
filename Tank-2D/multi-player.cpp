@@ -114,6 +114,19 @@ void MultiPlayer::loadMap(){
             }
         }
     //end of loading map
+
+    //loading hearts
+    QPixmap pixmap = spriteLoader->getHeart();
+    pixmap = pixmap.scaled(ui->heart1View->width(), ui->heart1View->height());
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    QGraphicsScene* tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->heart1View->setScene(tempScene);
+    pixmap = pixmap.scaled(ui->heart2View->width(), ui->heart2View->height());
+    item = new QGraphicsPixmapItem(pixmap);
+    tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->heart2View->setScene(tempScene);
 }
 
 void MultiPlayer::clear(){
@@ -199,6 +212,9 @@ void MultiPlayer::render(){
     scene->addItem(flagItemP2);
 
     scene->update();
+
+    //rendering players' states
+    updateSidebar();
 }
 
 void MultiPlayer::movePlayers(){
@@ -621,6 +637,15 @@ void MultiPlayer::detectMissileCollision()
             flag2.setY(-1000);
         }
     }
+}
+
+void MultiPlayer::updateSidebar(){
+    //players health
+    int health1 = player1.getHealth() >= 0 ? player1.getHealth() : 0;
+    ui->healthNumber1Label->setText(QString::number(health1));
+
+    int health2 = player2.getHealth() >= 0 ? player2.getHealth() : 0;
+    ui->healthNumber2Label->setText(QString::number(health2));
 }
 
 MultiPlayer::~MultiPlayer()

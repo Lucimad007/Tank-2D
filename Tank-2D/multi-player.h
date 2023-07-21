@@ -32,6 +32,7 @@ public:
     void detectMissileCollision();
     void movePlayers();
     int getFPS() const;
+    void updateSidebar();
     ~MultiPlayer();
 
 private slots:
