@@ -137,13 +137,21 @@ void Game::loadLevel(int level){
         }
     //end of loading map
 
-    //loading heart
+    //loading heartView
     QPixmap pixmap = spriteLoader->getHeart();
     pixmap = pixmap.scaled(ui->heartView->width(), ui->heartView->height());
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
     QGraphicsScene* tempScene = new QGraphicsScene();
     tempScene->addItem(item);
     ui->heartView->setScene(tempScene);
+
+    //loading tankView
+    pixmap = spriteLoader->getCommon_tank_up();
+    pixmap = pixmap.scaled(ui->enemyView->width(), ui->enemyView->height());
+    item = new QGraphicsPixmapItem(pixmap);
+    tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->enemyView->setScene(tempScene);
 }
 
 void Game::loadIcon(){
@@ -987,6 +995,10 @@ void Game::updateSidebar(){
     //player health
     int health = player.getHealth() >= 0 ? player.getHealth() : 0;
     ui->healthNumberLabel->setText(QString::number(health));
+
+    //remaining enemies
+    int tanks = remainingTanks + numberOfTanks;
+    ui->tanksNumberLabel->setText(QString::number(tanks));
 }
 
 Game::~Game()
