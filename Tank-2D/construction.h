@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include "sprite-loader.h"
 #include "user.h"
+#include "game-object.h"
 
 namespace Ui {
 class construction;
@@ -31,6 +32,7 @@ private:
     QGraphicsView* backgroundView = nullptr;
     User user;
     QString blocks[25][20];
+    GameObject* currentObject;
 };
 
 #endif // CONSTRUCTION_H
