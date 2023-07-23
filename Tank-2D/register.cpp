@@ -10,12 +10,14 @@
 #include "ui_register.h"
 #include "menu_event.h"
 #include "multi-player.h"
+#include "construction.h"
 #include <game.h>
 #include <map>
 
 QTimer *timer, *multiPlayerTimer;
 Game* game;
 MultiPlayer* multiPlayer = nullptr;
+Construction* construction;
 
 Register::Register(QWidget *parent) :
     QWidget(parent),

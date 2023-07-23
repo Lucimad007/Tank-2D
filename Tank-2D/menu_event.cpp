@@ -1,12 +1,14 @@
 #include "menu_event.h"
 #include "register.h"
 #include "multi-player.h"
+#include "construction.h"
 #include <QMouseEvent>
 #include <QTimer>
 
 extern Register* registerMenu;
 extern MultiPlayer* multiPlayer;
 extern QTimer *multiPlayerTimer;
+extern Construction* construction;
 
 MenuEvent::MenuEvent()
 {
@@ -38,7 +40,9 @@ bool MenuEvent::eventFilter(QObject* obj, QEvent* event){
                 multiPlayerTimer->start(((float)1/multiPlayer->getFPS() * 1000));
             } else if(view->objectName() == "constructionView")
             {
-                qDebug() << "construction mode";
+                construction = new Construction();
+                registerMenu->hide();
+                construction->show();
             }
         }
     }

@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    construction.cpp \
     game-object.cpp \
     game.cpp \
     main.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     user.cpp
 
 HEADERS += \
+    construction.h \
     game-object.h \
     game.h \
     menu_event.h \
@@ -28,6 +30,7 @@ HEADERS += \
     user.h
 
 FORMS += \
+    construction.ui \
     game.ui \
     menu.ui \
     multi-player.ui \
