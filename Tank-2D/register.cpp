@@ -8,7 +8,7 @@
 #include <QTimer>
 #include "register.h"
 #include "ui_register.h"
-#include "menu_event.h"
+#include "menu-event.h"
 #include "multi-player.h"
 #include "construction.h"
 #include <game.h>

@@ -9,21 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    blocks-event-filter.cpp \
     construction.cpp \
     game-object.cpp \
     game.cpp \
     main.cpp \
-    menu_event.cpp \
+    menu-event.cpp \
     multi-player.cpp \
     register.cpp \
     sprite-loader.cpp \
     user.cpp
 
 HEADERS += \
+    blocks-event-filter.h \
     construction.h \
     game-object.h \
     game.h \
-    menu_event.h \
+    menu-event.h \
     multi-player.h \
     register.h \
     sprite-loader.h \

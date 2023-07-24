@@ -5,12 +5,13 @@
 #include <QTimer>
 
 Register* registerMenu;
+QApplication* app;
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+   app = new QApplication(argc, argv);
     registerMenu = new Register();
     registerMenu->show();
 
-    return app.exec();
+    return app->exec();
 }

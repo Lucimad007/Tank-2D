@@ -1,5 +1,6 @@
 #include "construction.h"
 #include "ui_construction.h"
+#include "blocks-event-filter.h"
 #include <QDir>
 
 Construction::Construction(QWidget *parent) :
@@ -14,6 +15,18 @@ Construction::Construction(QWidget *parent) :
     loadIcon();
     this->setWindowTitle("Tank Battle City");
     this->setFixedSize(QSize(this->width(), this->height()));
+
+    //installing event filters
+    BlocksEventFilter* eventFilter = new BlocksEventFilter();
+    ui->playerView->installEventFilter(eventFilter);
+    ui->flagView->installEventFilter(eventFilter);
+    ui->commonTankView->installEventFilter(eventFilter);
+    ui->armoredTankView->installEventFilter(eventFilter);
+    ui->randomCommonTankView->installEventFilter(eventFilter);
+    ui->randomArmoredTankView->installEventFilter(eventFilter);
+    ui->brickView->installEventFilter(eventFilter);
+    ui->waterView->installEventFilter(eventFilter);
+    ui->stoneView->installEventFilter(eventFilter);
 
     //setting sidebar images
     QPixmap pixmap = spriteLoader->getYellow_tank_up();
@@ -116,3 +129,33 @@ Construction::~Construction()
 {
     delete ui;
 }
+
+void Construction::on_saveButton_clicked()
+{
+
+}
+
+
+void Construction::on_menuButton_clicked()
+{
+
+}
+
+
+void Construction::on_tankiCheckBox_stateChanged(int arg1)
+{
+
+}
+
+
+void Construction::on_starCheckBox_stateChanged(int arg1)
+{
+
+}
+
+
+void Construction::on_clockCheckBox_stateChanged(int arg1)
+{
+
+}
+

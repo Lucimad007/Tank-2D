@@ -1,4 +1,4 @@
-#include "menu_event.h"
+#include "menu-event.h"
 #include "register.h"
 #include "multi-player.h"
 #include "construction.h"

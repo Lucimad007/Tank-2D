@@ -20,6 +20,17 @@ public:
     void loadIcon();
     ~Construction();
 
+private slots:
+    void on_saveButton_clicked();
+
+    void on_menuButton_clicked();
+
+    void on_tankiCheckBox_stateChanged(int arg1);
+
+    void on_starCheckBox_stateChanged(int arg1);
+
+    void on_clockCheckBox_stateChanged(int arg1);
+
 private:
     Ui::construction *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
