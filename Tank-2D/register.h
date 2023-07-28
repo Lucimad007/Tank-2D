@@ -4,6 +4,9 @@
 #include "user.h"
 #include <QWidget>
 #include <map>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QScrollArea>
 
 namespace Ui {
 class Register;
@@ -25,9 +28,9 @@ public:
     void setConstructUI();
     std::map<int, User> loadAllUsers();
     ~Register();
-
     User getUser();
     void setUser(User newUser);
+    void addCustomLevelPrototype(QString name);
 private slots:
     void on_loginButton_clicked();
 
@@ -51,9 +54,16 @@ private slots:
     void on_deleteAllButton_clicked();
     void on_randomButton_clicked();
 
+    void on_deleteButtonCustomLevel_clicked();
+    void on_editButtonCustomLevel_clicked();
+    void on_playButtonCustomLevel_clicked();
+
 private:
     Ui::Register *ui;
     User user;
+    QVBoxLayout* customLevelsLayout = nullptr;
+    QSplitter* customLevelsSplitter = nullptr;
+    QScrollArea* scrollAreaCustomLevel = nullptr;
 };
 
 #endif // REGISTER_H

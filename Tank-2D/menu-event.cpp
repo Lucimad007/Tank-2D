@@ -41,6 +41,10 @@ bool MenuEvent::eventFilter(QObject* obj, QEvent* event){
             } else if(view->objectName() == "constructionView")
             {
                 registerMenu->setConstructUI();
+                registerMenu->addCustomLevelPrototype("Test3");
+                registerMenu->addCustomLevelPrototype("Test2");
+                for(int i = 0; i < 10; i++)
+                    registerMenu->addCustomLevelPrototype("Test1");
             }
         }
     }

@@ -23,6 +23,10 @@ Register::Register(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Register)
 {
+    customLevelsLayout = new QVBoxLayout();
+    customLevelsSplitter = new QSplitter(Qt::Vertical);
+    scrollAreaCustomLevel = new QScrollArea();
+
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");
     this->setFixedSize(this->width(), this->height());
@@ -448,6 +452,8 @@ void Register::setConstructUI(){
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
+        scrollAreaCustomLevel = widget->findChild<QScrollArea*>("scrollArea", Qt::FindChildrenRecursively);
+        customLevelsSplitter = new QSplitter(Qt::Vertical);     //getting rid of previous one
 
         //connecting to slots
         QPushButton* backButton = widget->findChild<QPushButton*>("backButton", Qt::FindChildrenRecursively);
@@ -581,6 +587,38 @@ void Register::on_registerButton_clicked()
 
 void Register::on_scoreBoardButton_clicked(){
     setScoreBoardUI();
+}
+
+void Register::addCustomLevelPrototype(QString name){
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D";
+    QUiLoader loader;
+    QFile file(path + "/custom-level.ui");
+    if(file.open(QIODevice::OpenModeFlag::ReadOnly))
+    {
+        QWidget* widget = loader.load(&file);
+        file.close();
+        widget->setFixedSize(QSize(widget->width(), widget->height()));
+        QLabel* nameLabel = widget->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+        nameLabel->setText(name);
+
+        scrollAreaCustomLevel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        scrollAreaCustomLevel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        scrollAreaCustomLevel->setContentsMargins(0, 0, 0, 0);
+        customLevelsSplitter->addWidget(widget);
+        scrollAreaCustomLevel->setWidget(customLevelsSplitter);
+
+        //connecting slots
+        QPushButton* deleteButton = widget->findChild<QPushButton*>("deleteButton", Qt::FindChildrenRecursively);
+        QPushButton* editButton = widget->findChild<QPushButton*>("editButton", Qt::FindChildrenRecursively);
+        QPushButton* playButton = widget->findChild<QPushButton*>("playButton", Qt::FindChildrenRecursively);
+        connect(deleteButton, &QPushButton::clicked, this, &Register::on_deleteButtonCustomLevel_clicked);
+        connect(editButton, &QPushButton::clicked, this, &Register::on_editButtonCustomLevel_clicked);
+        connect(playButton, &QPushButton::clicked, this, &Register::on_playButtonCustomLevel_clicked);
+    } else {
+        qDebug() << "Could Not Open File.";
+    }
 }
 
 void Register::on_level1Button_clicked(){
@@ -759,4 +797,14 @@ void Register::on_deleteAllButton_clicked(){
 
 void Register::on_randomButton_clicked(){
     //play a random custom level
+}
+
+void Register::on_deleteButtonCustomLevel_clicked(){
+    qDebug() << "Delete Level";
+}
+void Register::on_editButtonCustomLevel_clicked(){
+    qDebug() << "Edit Level";
+}
+void Register::on_playButtonCustomLevel_clicked(){
+    qDebug() << "Play Level";
 }
