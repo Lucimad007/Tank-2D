@@ -61,6 +61,7 @@ private slots:
 
 private:
     Ui::Game *ui;
+    QWidget* originalUI = nullptr;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically
     int FPS = 60;
     const int WIDTH = 800;

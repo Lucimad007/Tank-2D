@@ -21,6 +21,27 @@ Game::Game(int currentLevel, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
+
+    //loading original ui for later
+    QUiLoader loader;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString uiPath = info.dir().path();
+    uiPath += "/Tank-2D/game.ui";
+    QFile file(uiPath);
+    if(file.exists()){
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        originalUI = loader.load(&file);
+        QPushButton* restartButton = originalUI->findChild<QPushButton*>("restartButton", Qt::FindChildrenRecursively);
+        QPushButton* pauseButton = originalUI->findChild<QPushButton*>("pauseButton", Qt::FindChildrenRecursively);
+        QPushButton* menuButton = originalUI->findChild<QPushButton*>("menuButton", Qt::FindChildrenRecursively);
+        connect(restartButton, &QPushButton::clicked, this, &Game::on_restartButton_clicked);
+        connect(pauseButton, &QPushButton::clicked, this, &Game::on_pauseButton_clicked);
+        connect(menuButton, &QPushButton::clicked, this, &Game::on_menuButton_clicked);
+    } else {
+        qDebug() << "Failed finding file";
+    }
+
+    //setting other stuff
     user = registerMenu->getUser();
     this->currentLevel = currentLevel;
     spriteLoader = new SpriteLoader();
@@ -949,6 +970,7 @@ void Game::winner(){
         QVBoxLayout* layout = new QVBoxLayout();
         layout->addWidget(widget);
         layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+        delete this->layout();
         this->setLayout(layout);
         this->setFixedSize(WIDTH, HEIGHT);     //resizing window
     } else
@@ -968,8 +990,18 @@ void Game::clearGameObjects(){
 
 void Game::on_continueButton_clicked(){
     clearGameObjects();     //it is important to get rid of previous game objects
+
+    //setting original widget
     ui->setupUi(this);
+    QVBoxLayout* layout = new QVBoxLayout();
+
+    layout->addWidget(originalUI);
+    layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+    delete this->layout();
+    this->setFixedSize(originalUI->width(), originalUI->height());     //resizing window
     this->setWindowTitle("Tank Battle City");
+    this->setFixedSize(QSize(originalUI->width(), originalUI->height()));
+
     scene = new QGraphicsScene();
     backgroundView = new QGraphicsView();
     backgroundView->setFixedSize(QSize(WIDTH, HEIGHT));
@@ -981,10 +1013,8 @@ void Game::on_continueButton_clicked(){
     //disable scrollbars if you don't want them to appear
     backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
     layout->addWidget(backgroundView);
-    delete this->layout();
+
     this->setLayout(layout);
 
     currentLevel++;
@@ -994,12 +1024,14 @@ void Game::on_continueButton_clicked(){
 
 void Game::updateSidebar(){
     //player health
+    QLabel* healthNumberLabel = this->findChild<QLabel*>("healthNumberLabel", Qt::FindChildrenRecursively);
     int health = player.getHealth() >= 0 ? player.getHealth() : 0;
-    ui->healthNumberLabel->setText(QString::number(health));
+    healthNumberLabel->setText(QString::number(health));
 
     //remaining enemies
+    QLabel* tanksNumberLabel = this->findChild<QLabel*>("tanksNumberLabel", Qt::FindChildrenRecursively);
     int tanks = remainingTanks + numberOfTanks;
-    ui->tanksNumberLabel->setText(QString::number(tanks));
+    tanksNumberLabel->setText(QString::number(tanks));
 }
 
 Game::~Game()
@@ -1010,12 +1042,13 @@ Game::~Game()
 
 void Game::on_pauseButton_clicked()
 {
-    if(ui->pauseButton->text() == "PAUSE"){
+    QPushButton* pauseButton = this->findChild<QPushButton*>("pauseButton", Qt::FindChildrenRecursively);
+    if(pauseButton->text() == "PAUSE"){
         timer->stop();
-        ui->pauseButton->setText("CONTINUE");
-    } else if(ui->pauseButton->text() == "CONTINUE"){
+        pauseButton->setText("CONTINUE");
+    } else if(pauseButton->text() == "CONTINUE"){
         timer->start();
-        ui->pauseButton->setText("PAUSE");
+        pauseButton->setText("PAUSE");
     }
 }
 
@@ -1033,7 +1066,6 @@ void Game::on_restartButton_clicked()
 {
     timer->stop();
     clearGameObjects();
-    qDebug() << currentLevel;
     loadLevel(currentLevel);
     timer->start();
 }
