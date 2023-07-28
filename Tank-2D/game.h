@@ -53,6 +53,12 @@ protected:
 private slots:
     void on_continueButton_clicked();
 
+    void on_pauseButton_clicked();
+
+    void on_menuButton_clicked();
+
+    void on_restartButton_clicked();
+
 private:
     Ui::Game *ui;
     SpriteLoader* spriteLoader;     //we read files once to improve code performance critically

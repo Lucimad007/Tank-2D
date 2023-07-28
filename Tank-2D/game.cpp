@@ -49,6 +49,7 @@ void Game::loadLevel(int level){
         this->close();
         return;
     }
+    numberOfTanks = 0;
     remainingTanks = 2 + level * 4;     //tanks out of the scene
     QString number = QString::number(level);
     QString positions[25][20];
@@ -1006,3 +1007,34 @@ Game::~Game()
     delete ui;
     delete scene;
 }
+
+void Game::on_pauseButton_clicked()
+{
+    if(ui->pauseButton->text() == "PAUSE"){
+        timer->stop();
+        ui->pauseButton->setText("CONTINUE");
+    } else if(ui->pauseButton->text() == "CONTINUE"){
+        timer->start();
+        ui->pauseButton->setText("PAUSE");
+    }
+}
+
+
+void Game::on_menuButton_clicked()
+{
+    timer->stop();
+    this->close();
+    registerMenu->setMenuUI();
+    registerMenu->show();
+}
+
+
+void Game::on_restartButton_clicked()
+{
+    timer->stop();
+    clearGameObjects();
+    qDebug() << currentLevel;
+    loadLevel(currentLevel);
+    timer->start();
+}
+
