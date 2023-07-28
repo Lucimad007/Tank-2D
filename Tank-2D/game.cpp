@@ -1042,6 +1042,7 @@ Game::~Game()
 
 void Game::on_pauseButton_clicked()
 {
+    playerDirection = NONE;
     QPushButton* pauseButton = this->findChild<QPushButton*>("pauseButton", Qt::FindChildrenRecursively);
     if(pauseButton->text() == "PAUSE"){
         timer->stop();

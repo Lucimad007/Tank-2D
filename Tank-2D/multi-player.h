@@ -32,12 +32,19 @@ public:
     void detectMissileCollision();
     void movePlayers();
     int getFPS() const;
+    void clearGameObjects();
     void updateSidebar();
     ~MultiPlayer();
 
 private slots:
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
+
+    void on_pauseButton_clicked();
+
+    void on_menuButton_clicked();
+
+    void on_restartButton_clicked();
 
 private:
     Ui::MultiPlayer *ui;

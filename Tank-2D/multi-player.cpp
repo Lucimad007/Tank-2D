@@ -1,9 +1,14 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QDir>
+#include <QTimer>
 #include "multi-player.h"
+#include "register.h"
 #include "ui_multi-player.h"
 #include "game-object.h"
+
+extern QTimer *multiPlayerTimer;
+extern Register* registerMenu;
 
 MultiPlayer::MultiPlayer(QWidget *parent) :
     QWidget(parent),
@@ -657,3 +662,41 @@ int MultiPlayer::getFPS() const
 {
     return FPS;
 }
+
+void MultiPlayer::clearGameObjects(){
+    walls.clear();
+    player1Missiles.clear();
+    player2Missiles.clear();
+}
+
+void MultiPlayer::on_pauseButton_clicked()
+{
+    player1Direction = NONE;
+    player2Direction = NONE;
+    if(ui->pauseButton->text() == "PAUSE"){
+        multiPlayerTimer->stop();
+        ui->pauseButton->setText("CONTINUE");
+    } else if(ui->pauseButton->text() == "CONTINUE"){
+        multiPlayerTimer->start();
+        ui->pauseButton->setText("PAUSE");
+    }
+}
+
+
+void MultiPlayer::on_menuButton_clicked()
+{
+    multiPlayerTimer->stop();
+    this->close();
+    registerMenu->setMenuUI();
+    registerMenu->show();
+}
+
+
+void MultiPlayer::on_restartButton_clicked()
+{
+    multiPlayerTimer->stop();
+    clearGameObjects();
+    loadMap();
+    multiPlayerTimer->start();
+}
+
