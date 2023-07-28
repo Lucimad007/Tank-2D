@@ -12,7 +12,7 @@ class GameObject
 {
 public:
     GameObject();
-    GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const Direction& direction = UP);
+    GameObject(const Type& type, const QPixmap& sprite, const int& x = 0, const int& y = 0, const Direction& direction = UP);
 
     int getY() const;
     void setY(int newY);

@@ -18,7 +18,14 @@ class Construction : public QWidget
 public:
     explicit Construction(QWidget *parent = nullptr);
     void loadIcon();
+    void saveToFile(QString name);
     ~Construction();
+
+    GameObject getCurrentObject() const;
+    void setCurrentObject(GameObject newCurrentObject);
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
 
 private slots:
     void on_saveButton_clicked();
@@ -43,7 +50,7 @@ private:
     QGraphicsView* backgroundView = nullptr;
     User user;
     QString blocks[25][20];
-    GameObject* currentObject;
+    GameObject currentObject;
 };
 
 #endif // CONSTRUCTION_H
