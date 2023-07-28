@@ -276,6 +276,11 @@ void Register::setSelectLevelUI(){
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
+
+        //connecting slot
+        QPushButton* backButton = widget->findChild<QPushButton*>("backButton", Qt::FindChildrenRecursively);
+        connect(backButton, &QPushButton::clicked, this, &Register::on_backButton_clicked);
+
         ui->setupUi(this);      //it heavily prevents our code from bugs
         this->setWindowTitle("Tank Battle City");
         QVBoxLayout* layout = new QVBoxLayout();
@@ -342,6 +347,10 @@ void Register::setScoreBoardUI(){
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
+
+        //connecting slot
+        QPushButton* backButton = widget->findChild<QPushButton*>("backButton", Qt::FindChildrenRecursively);
+        connect(backButton, &QPushButton::clicked, this, &Register::on_backButton_clicked);
 
         //loading info
         std::map<int, User> users = loadAllUsers();

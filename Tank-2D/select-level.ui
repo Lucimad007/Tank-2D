@@ -203,6 +203,24 @@ background: transparent;</string>
     <string>LEVEL 7</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="backButton">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>435</y>
+     <width>80</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+font: 600 20pt &quot;Teko SemiBold&quot;;
+background: transparent;</string>
+   </property>
+   <property name="text">
+    <string>BACK</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

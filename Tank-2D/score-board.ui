@@ -547,6 +547,23 @@ font: 600 20pt &quot;Teko SemiBold&quot;;</string>
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QPushButton" name="backButton">
+   <property name="geometry">
+    <rect>
+     <x>205</x>
+     <y>433</y>
+     <width>70</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+font: 600 20pt &quot;Teko SemiBold&quot;;</string>
+   </property>
+   <property name="text">
+    <string>BACK</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
