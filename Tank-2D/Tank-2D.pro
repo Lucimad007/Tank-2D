@@ -32,6 +32,7 @@ HEADERS += \
     user.h
 
 FORMS += \
+    construct.ui \
     construction.ui \
     game.ui \
     menu.ui \

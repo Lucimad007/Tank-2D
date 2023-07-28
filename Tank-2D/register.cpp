@@ -428,6 +428,42 @@ void Register::setScoreBoardUI(){
     }
 }
 
+void Register::setConstructUI(){
+    //loading ui file
+    QWidget* widget;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D";
+    QUiLoader loader;
+    QFile file(path + "/construct.ui");
+    if(file.open(QIODevice::OpenModeFlag::ReadOnly))
+    {
+        widget = loader.load(&file);
+
+        //connecting to slots
+        QPushButton* backButton = widget->findChild<QPushButton*>("backButton", Qt::FindChildrenRecursively);
+        QPushButton* deleteAllButton = widget->findChild<QPushButton*>("deleteAllButton", Qt::FindChildrenRecursively);
+        QPushButton* randomButton = widget->findChild<QPushButton*>("randomButton", Qt::FindChildrenRecursively);
+        QPushButton* newButton = widget->findChild<QPushButton*>("newButton", Qt::FindChildrenRecursively);
+        connect(backButton, &QPushButton::clicked, this, &Register::on_backButton_clicked);
+        connect(deleteAllButton, &QPushButton::clicked, this, &Register::on_deleteAllButton_clicked);
+        connect(randomButton, &QPushButton::clicked, this, &Register::on_randomButton_clicked);
+        connect(newButton, &QPushButton::clicked, this, &Register::on_newButton_clicked);
+
+        //setting new ui
+        ui->setupUi(this);      //it heavily prevents our code from bugs
+        this->setWindowTitle("Tank Battle City");
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+        layout->addWidget(widget);
+        delete this->layout();      //clearing previous layout
+        this->setLayout(layout);
+    } else {
+        qDebug() << "Could Not Open File.";
+    }
+
+}
+
 Register::~Register()
 {
     delete ui;
@@ -696,4 +732,22 @@ User Register::getUser()
 void Register::setUser(User newUser)
 {
     user = newUser;
+}
+
+void Register::on_backButton_clicked(){     //back to main menu
+    this->setMenuUI();
+}
+
+void Register::on_newButton_clicked(){
+    construction = new Construction();
+    this->hide();
+    construction->show();
+}
+
+void Register::on_deleteAllButton_clicked(){
+    //delete all custom levels
+}
+
+void Register::on_randomButton_clicked(){
+    //play a random custom level
 }

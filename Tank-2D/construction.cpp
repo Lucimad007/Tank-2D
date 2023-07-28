@@ -248,4 +248,3 @@ void Construction::setCurrentObject(GameObject newCurrentObject)
 {
     currentObject = newCurrentObject;
 }
-

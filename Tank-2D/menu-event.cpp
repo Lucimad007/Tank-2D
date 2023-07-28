@@ -40,9 +40,7 @@ bool MenuEvent::eventFilter(QObject* obj, QEvent* event){
                 multiPlayerTimer->start(((float)1/multiPlayer->getFPS() * 1000));
             } else if(view->objectName() == "constructionView")
             {
-                construction = new Construction();
-                registerMenu->hide();
-                construction->show();
+                registerMenu->setConstructUI();
             }
         }
     }

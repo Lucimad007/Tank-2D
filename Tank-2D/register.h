@@ -22,6 +22,7 @@ public:
     void setMenuUI();
     void setSelectLevelUI();
     void setScoreBoardUI();
+    void setConstructUI();
     std::map<int, User> loadAllUsers();
     ~Register();
 
@@ -44,6 +45,11 @@ private slots:
     void on_level8Button_clicked();
     void on_level9Button_clicked();
     void on_level10Button_clicked();
+
+    void on_backButton_clicked();   //back to main menu
+    void on_newButton_clicked();
+    void on_deleteAllButton_clicked();
+    void on_randomButton_clicked();
 
 private:
     Ui::Register *ui;
