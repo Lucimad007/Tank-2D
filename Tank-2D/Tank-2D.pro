@@ -34,6 +34,7 @@ HEADERS += \
 FORMS += \
     construct.ui \
     construction.ui \
+    custom-level.ui \
     game.ui \
     menu.ui \
     multi-player.ui \
