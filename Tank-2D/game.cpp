@@ -21,7 +21,7 @@ Game::Game(int currentLevel, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Game)
 {
-
+    levelState = SINGLE_PLAYER_LEVEL;
     //loading original ui for later
     QUiLoader loader;
     QFileInfo info = QFileInfo(QDir::currentPath());
@@ -64,6 +64,52 @@ Game::Game(int currentLevel, QWidget *parent) :
     loadLevel(currentLevel);
 }
 
+Game::Game(QString levelName,QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Game)
+{
+    levelState = CUSTOM_LEVEL;
+    //loading original ui for later
+    QUiLoader loader;
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString uiPath = info.dir().path();
+    uiPath += "/Tank-2D/game.ui";
+    QFile file(uiPath);
+    if(file.exists()){
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        originalUI = loader.load(&file);
+        QPushButton* restartButton = originalUI->findChild<QPushButton*>("restartButton", Qt::FindChildrenRecursively);
+        QPushButton* pauseButton = originalUI->findChild<QPushButton*>("pauseButton", Qt::FindChildrenRecursively);
+        QPushButton* menuButton = originalUI->findChild<QPushButton*>("menuButton", Qt::FindChildrenRecursively);
+        connect(restartButton, &QPushButton::clicked, this, &Game::on_restartButton_clicked);
+        connect(pauseButton, &QPushButton::clicked, this, &Game::on_pauseButton_clicked);
+        connect(menuButton, &QPushButton::clicked, this, &Game::on_menuButton_clicked);
+    } else {
+        qDebug() << "Failed finding file";
+    }
+
+    //setting other stuff
+    user = registerMenu->getUser();
+    spriteLoader = new SpriteLoader();
+    ui->setupUi(this);
+    this->setWindowTitle("Tank Battle City");
+    loadIcon();
+    this->setFixedSize(this->width(), this->height());
+    scene = new QGraphicsScene();
+    backgroundView = new QGraphicsView(this);
+    backgroundView->setFixedSize(QSize(WIDTH, HEIGHT));
+    backgroundView->setStyleSheet("background-color: black;");
+    backgroundView->setScene(scene);
+    //we should ensure that scene fills the whole QGraphicsView
+    scene->setSceneRect(backgroundView->rect());
+
+    //disable scrollbars if you don't want them to appear
+    backgroundView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    backgroundView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    loadLevel(levelName);
+}
+
 void Game::loadLevel(int level){
     if(level >= 11){
         registerMenu->show();
@@ -78,6 +124,112 @@ void Game::loadLevel(int level){
     QFileInfo info = QFileInfo(QDir::currentPath());
     QString path = info.dir().path();
     path += "/Tank-2D/levels/level" + number  + ".txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        QString data;
+        QByteArray temp;
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        while(!file.atEnd())
+        {
+           char c;
+           file.getChar(&c);
+           if((c == '\n') || (c == '\b') || (c == '\r'))
+               continue;
+           data += c;
+        }
+
+        for(int i = 0; i < 20; i++)
+            for(int j = 0; j < 25; j++)
+            {
+                positions[j][i] = data.at(25 * i + j);
+            }
+    } else
+    {
+        qDebug() << "File not found.";
+        return;
+    }
+    //end of loading file
+
+    //loading map
+    //P : player, O : common tank, A : armored tank, c : random tank, C : armored random tank, B : brick, M : stone,
+    //W : water, F : flag, X : nothing
+    for(int i = 0; i < 20; i++)
+        for(int j = 0; j < 25; j++)
+        {
+            if(positions[j][i] == 'B')
+            {
+                GameObject brick(BRICK, spriteLoader->getBrick(), j * cellSize, i * cellSize);
+                walls.push_back(brick);
+            } else if(positions[j][i] == 'W')
+            {
+                GameObject water(WATER, spriteLoader->getWater(), j * cellSize, i * cellSize);
+                walls.push_back(water);
+            } else if(positions[j][i] == 'M')
+            {
+                GameObject stone(STONE, spriteLoader->getStone(), j * cellSize, i * cellSize);
+                walls.push_back(stone);
+            } else if(positions[j][i] == 'F')
+            {
+                GameObject flag(FLAG, spriteLoader->getFlag(), j * cellSize, i * cellSize);
+                this->flag = flag;
+            } else if(positions[j][i] == 'C')
+            {
+                GameObject tank(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down(), j * cellSize, i * cellSize, DOWN);
+                tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
+            } else if(positions[j][i] == 'c')
+            {
+                GameObject tank(RANDOM_TANK, spriteLoader->getRandom_tank_down(), j * cellSize, i * cellSize, DOWN);
+                tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
+            } else if(positions[j][i] == 'A')
+            {
+                GameObject tank(ARMORED_TANK, spriteLoader->getArmored_tank_down(), j * cellSize, i * cellSize, DOWN);
+                tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
+            } else if(positions[j][i] == 'O')
+            {
+                GameObject tank(COMMON_TANK, spriteLoader->getCommon_tank_down(), j * cellSize, i * cellSize, DOWN);
+                tanks.push_back(tank);
+                spawnPoints.push_back(tank.getHitbox());
+                numberOfTanks++;
+            } else if(positions[j][i] == 'P')
+            {
+                GameObject player(PLAYER, spriteLoader->getYellow_tank_down(), j * cellSize, i * cellSize, DOWN);
+                this->player = player;
+            }
+        }
+    //end of loading map
+
+    //loading heartView
+    QPixmap pixmap = spriteLoader->getHeart();
+    pixmap = pixmap.scaled(ui->heartView->width(), ui->heartView->height());
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    QGraphicsScene* tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->heartView->setScene(tempScene);
+
+    //loading tankView
+    pixmap = spriteLoader->getCommon_tank_up();
+    pixmap = pixmap.scaled(ui->enemyView->width(), ui->enemyView->height());
+    item = new QGraphicsPixmapItem(pixmap);
+    tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->enemyView->setScene(tempScene);
+}
+
+void Game::loadLevel(QString name){
+    numberOfTanks = 0;
+    remainingTanks = 2 + 2 * 4;     //default (for now
+    QString positions[25][20];
+    //loading file
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels/" + name  + ".txt";
     QFile file(path);
     if(file.exists())
     {
@@ -928,54 +1080,68 @@ void Game::winner(){
     ui->setupUi(this);
     this->setWindowTitle("Tank Battle City");
     scene->clear();
-    scene->deleteLater();
-    backgroundView->repaint();
-    backgroundView->deleteLater();
 
-    QUiLoader loader;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/winner.ui";
-    QFile file(path);
-    if(file.exists())
-    {
-        file.open(QIODevice::OpenModeFlag::ReadOnly);
-        QWidget* widget = loader.load(&file, this);
+    if(levelState == SINGLE_PLAYER_LEVEL){
+        scene->deleteLater();
+        backgroundView->repaint();
+        backgroundView->deleteLater();
+        QUiLoader loader;
+        QFileInfo info = QFileInfo(QDir::currentPath());
+        QString path = info.dir().path();
+        path += "/Tank-2D/winner.ui";
+        QFile file(path);
+        if(file.exists())
+        {
+            file.open(QIODevice::OpenModeFlag::ReadOnly);
+            QWidget* widget = loader.load(&file, this);
 
-        //loading flag logo
-        QGraphicsView* flagView = widget->findChild<QGraphicsView*>("flagView", Qt::FindChildrenRecursively);
-        flagView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        flagView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        flagView->setStyleSheet("border:transparent;");
-        QPixmap pixmap = spriteLoader->getFlag();
-        pixmap = pixmap.scaled(flagView->width(), flagView->height());
-        QGraphicsPixmapItem* pixItem = new QGraphicsPixmapItem(pixmap);
-        QGraphicsScene* tempScene = new QGraphicsScene();
-        tempScene->addItem(pixItem);
-        flagView->setScene(tempScene);
+            //loading flag logo
+            QGraphicsView* flagView = widget->findChild<QGraphicsView*>("flagView", Qt::FindChildrenRecursively);
+            flagView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            flagView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            flagView->setStyleSheet("border:transparent;");
+            QPixmap pixmap = spriteLoader->getFlag();
+            pixmap = pixmap.scaled(flagView->width(), flagView->height());
+            QGraphicsPixmapItem* pixItem = new QGraphicsPixmapItem(pixmap);
+            QGraphicsScene* tempScene = new QGraphicsScene();
+            tempScene->addItem(pixItem);
+            flagView->setScene(tempScene);
 
-        //loading info
-        QLabel* playerName = widget->findChild<QLabel*>("playerName", Qt::FindChildrenRecursively);
-        playerName->setText(user.getUsername());
-        QLabel* playerScore = widget->findChild<QLabel*>("playerScore", Qt::FindChildrenRecursively);
-        playerScore->setText(QString::number(score));
-        QLabel* highestScore = widget->findChild<QLabel*>("highestScore", Qt::FindChildrenRecursively);
-        highestScore->setText(QString::number(user.getHighScore()));
+            //loading info
+            QLabel* playerName = widget->findChild<QLabel*>("playerName", Qt::FindChildrenRecursively);
+            playerName->setText(user.getUsername());
+            QLabel* playerScore = widget->findChild<QLabel*>("playerScore", Qt::FindChildrenRecursively);
+            playerScore->setText(QString::number(score));
+            QLabel* highestScore = widget->findChild<QLabel*>("highestScore", Qt::FindChildrenRecursively);
+            highestScore->setText(QString::number(user.getHighScore()));
 
-        //connecting continue button
-        QPushButton* continueButton = widget->findChild<QPushButton*>("continueButton", Qt::FindChildrenRecursively);
-        connect(continueButton, &QPushButton::clicked, this, &Game::on_continueButton_clicked);
+            //connecting continue button
+            QPushButton* continueButton = widget->findChild<QPushButton*>("continueButton", Qt::FindChildrenRecursively);
+            connect(continueButton, &QPushButton::clicked, this, &Game::on_continueButton_clicked);
 
-        //setting widget
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget(widget);
-        layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
-        delete this->layout();
-        this->setLayout(layout);
-        this->setFixedSize(WIDTH, HEIGHT);     //resizing window
-    } else
-    {
-        qDebug() << "File not found.";
+            //setting widget
+            QVBoxLayout* layout = new QVBoxLayout();
+            layout->addWidget(widget);
+            layout->setContentsMargins(0 ,0 ,0 ,0);     //now it fills the whole background
+            delete this->layout();
+            this->setLayout(layout);
+            this->setFixedSize(WIDTH, HEIGHT);     //resizing window
+        } else
+        {
+            qDebug() << "File not found.";
+        }
+    } else if((currentLevel == 10) || (levelState == CUSTOM_LEVEL)){
+        QFileInfo info = QFileInfo(QDir::currentPath());
+        QString path = info.dir().path();
+        path += "/Tank-2D/Arts/winner.png";
+        QImage sprite(path);
+        QPixmap pixmap = QPixmap::fromImage(sprite);
+        pixmap = pixmap.scaled(WIDTH, HEIGHT);
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+        item->setPos(0 , 0);
+        item->setZValue(1);     //make it to be external layer
+        scene->addItem(item);
+        scene->update();
     }
 }
 
@@ -1065,9 +1231,16 @@ void Game::on_menuButton_clicked()
 
 void Game::on_restartButton_clicked()
 {
-    timer->stop();
-    clearGameObjects();
-    loadLevel(currentLevel);
-    timer->start();
+    if(levelState == SINGLE_PLAYER_LEVEL){
+        timer->stop();
+        clearGameObjects();
+        loadLevel(currentLevel);
+        timer->start();
+    } else if(levelState == CUSTOM_LEVEL){
+        timer->stop();
+        clearGameObjects();
+        loadLevel("test");
+        timer->start();
+    }
 }
 

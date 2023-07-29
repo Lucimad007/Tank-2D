@@ -8,6 +8,7 @@
 #include "user.h"
 
 enum PlayerMovementDirection {MOVE_UP, MOVE_DOWN , MOVE_LEFT, MOVE_RIGHT, NONE};
+enum LevelState {SINGLE_PLAYER_LEVEL, CUSTOM_LEVEL, NONE_LEVEL};
 
 namespace Ui {
 class Game;
@@ -19,7 +20,9 @@ class Game : public QWidget
 
 public:
     explicit Game(int currentLevel,QWidget *parent = nullptr);
+    explicit Game(QString levelName,QWidget *parent = nullptr);
     void loadLevel(int level);
+    void loadLevel(QString name);
     void loadIcon();
     void clear();
     void updateLogic();
@@ -84,6 +87,7 @@ private:
     User user;
     int score = 0;
     PlayerMovementDirection playerDirection = NONE;
+    LevelState levelState = NONE_LEVEL;
 };
 
 #endif // GAME_H

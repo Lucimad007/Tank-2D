@@ -843,5 +843,16 @@ void Register::on_editButtonCustomLevel_clicked(){
     qDebug() << "Edit Level";
 }
 void Register::on_playButtonCustomLevel_clicked(){
-    qDebug() << "Play Level";
+    game = new Game("test");
+    game->show();
+
+    timer = new QTimer();
+    QTimer::connect(timer, &QTimer::timeout, [&](){
+        game->clear();
+        game->updateLogic();
+        game->render();
+    });
+    timer->start(((float)1/game->getFPS() * 1000));
+
+    this->hide();
 }
