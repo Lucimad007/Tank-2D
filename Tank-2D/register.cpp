@@ -621,6 +621,24 @@ void Register::addCustomLevelPrototype(QString name){
     }
 }
 
+void Register::loadCustomLevelPrototypes(){
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels";
+    QDir directory(path);
+    QStringList filters;
+    filters << "*.txt";     //to match only txt files
+
+    directory.setFilter(QDir::Files | QDir::NoSymLinks);
+    directory.setNameFilters(filters);
+
+    QFileInfoList fileList = directory.entryInfoList();
+
+    foreach(QFileInfo fileInfo, fileList){
+        addCustomLevelPrototype(fileInfo.baseName());
+    }
+}
+
 void Register::on_level1Button_clicked(){
     game = new Game(1);
     game->show();

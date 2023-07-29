@@ -31,6 +31,7 @@ public:
     User getUser();
     void setUser(User newUser);
     void addCustomLevelPrototype(QString name);
+    void loadCustomLevelPrototypes();
 private slots:
     void on_loginButton_clicked();
 
