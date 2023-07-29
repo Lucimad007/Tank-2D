@@ -19,6 +19,7 @@ public:
     explicit Construction(QWidget *parent = nullptr);
     void loadIcon();
     void saveToFile(QString name);
+    void inline setDefaultCursor();
     ~Construction();
 
     GameObject getCurrentObject() const;

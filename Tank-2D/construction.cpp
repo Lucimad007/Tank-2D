@@ -1,8 +1,12 @@
 #include "construction.h"
 #include "ui_construction.h"
 #include "blocks-event-filter.h"
+#include "register.h"
 #include <QDir>
 #include <QMouseEvent>
+
+extern Register* registerMenu;
+extern QApplication* app;
 
 Construction::Construction(QWidget *parent) :
     QWidget(parent),
@@ -215,10 +219,17 @@ void Construction::on_saveButton_clicked()
     ui->nameLineEdit->setText("");
 }
 
+void inline Construction::setDefaultCursor(){
+    QCursor cursor;
+    app->setOverrideCursor(cursor);
+}
 
 void Construction::on_menuButton_clicked()
 {
-
+    this->close();
+    setDefaultCursor();
+    registerMenu->setMenuUI();
+    registerMenu->show();
 }
 
 

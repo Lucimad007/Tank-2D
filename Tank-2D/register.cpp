@@ -23,7 +23,6 @@ Register::Register(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Register)
 {
-    customLevelsLayout = new QVBoxLayout();
     customLevelsSplitter = new QSplitter(Qt::Vertical);
     scrollAreaCustomLevel = new QScrollArea();
 
@@ -810,7 +809,27 @@ void Register::on_newButton_clicked(){
 }
 
 void Register::on_deleteAllButton_clicked(){
-    //delete all custom levels
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels";
+    QDir directory(path);
+    QStringList filters;
+    filters << "*.txt";     //to match only txt files
+
+    directory.setFilter(QDir::Files | QDir::NoSymLinks);
+    directory.setNameFilters(filters);
+
+    QFileInfoList fileList = directory.entryInfoList();
+
+    foreach(QFileInfo fileInfo, fileList){
+        QString filePath = fileInfo.absoluteFilePath();
+        QFile::remove(filePath);
+    }
+
+    //clearing prototypes
+    customLevelsSplitter->deleteLater();
+    customLevelsSplitter = new QSplitter(Qt::Vertical);
+    scrollAreaCustomLevel->setWidget(customLevelsSplitter);
 }
 
 void Register::on_randomButton_clicked(){

@@ -62,7 +62,6 @@ private slots:
 private:
     Ui::Register *ui;
     User user;
-    QVBoxLayout* customLevelsLayout = nullptr;
     QSplitter* customLevelsSplitter = nullptr;
     QScrollArea* scrollAreaCustomLevel = nullptr;
 };
