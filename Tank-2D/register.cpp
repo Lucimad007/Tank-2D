@@ -622,6 +622,7 @@ void Register::addCustomLevelPrototype(QString name){
 
 void Register::loadCustomLevelPrototypes(){
     //clearing previous prototypes
+    delete customLevelsSplitter;
     customLevelsSplitter = new QSplitter(Qt::Vertical);
 
     //loading new prototypes
