@@ -621,6 +621,10 @@ void Register::addCustomLevelPrototype(QString name){
 }
 
 void Register::loadCustomLevelPrototypes(){
+    //clearing previous prototypes
+    customLevelsSplitter = new QSplitter(Qt::Vertical);
+
+    //loading new prototypes
     QFileInfo info = QFileInfo(QDir::currentPath());
     QString path = info.dir().path();
     path += "/Tank-2D/custom-levels";
@@ -837,7 +841,19 @@ void Register::on_randomButton_clicked(){
 }
 
 void Register::on_deleteButtonCustomLevel_clicked(){
-    qDebug() << "Delete Level";
+    QLabel* nameLabel = this->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+    QString name = nameLabel->text();
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels/" + name + ".txt";
+    QFile file(path);
+    if(file.exists()){
+        file.remove();
+        loadCustomLevelPrototypes();
+    } else {
+        qDebug() << "File Does Not Exist";
+        loadCustomLevelPrototypes();
+    }
 }
 void Register::on_editButtonCustomLevel_clicked(){
     qDebug() << "Edit Level";

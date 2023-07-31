@@ -1081,7 +1081,7 @@ void Game::winner(){
     this->setWindowTitle("Tank Battle City");
     scene->clear();
 
-    if(levelState == SINGLE_PLAYER_LEVEL){
+    if((levelState == SINGLE_PLAYER_LEVEL) && (currentLevel != 10)){
         scene->deleteLater();
         backgroundView->repaint();
         backgroundView->deleteLater();
