@@ -142,6 +142,89 @@ void Construction::loadIcon(){
     }
 }
 
+void Construction::loadMap(QString name){
+    currentObject = GameObject(NONE_GAME_OBJECT, spriteLoader->getYellow_tank_up());
+    QString positions[25][20];
+    //loading file
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels/" + name  + ".txt";
+    QFile file(path);
+    if(file.exists())
+    {
+        QString data;
+        QByteArray temp;
+        file.open(QIODevice::OpenModeFlag::ReadOnly);
+        while(!file.atEnd())
+        {
+           char c;
+           file.getChar(&c);
+           if((c == '\n') || (c == '\b') || (c == '\r'))
+               continue;
+           data += c;
+        }
+
+        for(int i = 0; i < 20; i++)
+            for(int j = 0; j < 25; j++)
+            {
+                positions[j][i] = data.at(25 * i + j);
+            }
+    } else
+    {
+        qDebug() << "File not found.";
+        return;
+    }
+    //end of loading file
+
+    for(int i = 0; i < 20; i++)
+    {
+        for(int j = 0; j < 25; j++)
+        {
+           currentObject = GameObject(NONE_GAME_OBJECT, spriteLoader->getYellow_tank_up());
+           blocks[j][i] = positions[j][i];
+
+           if(positions[j][i] == 'B')
+           {
+                currentObject = GameObject(BRICK, spriteLoader->getBrick());;
+           } else if(positions[j][i] == 'W')
+           {
+               currentObject = GameObject(WATER, spriteLoader->getWater());;
+           } else if(positions[j][i] == 'M')
+           {
+               currentObject = GameObject(STONE, spriteLoader->getStone());;
+           } else if(positions[j][i] == 'F')
+           {
+               currentObject = GameObject(FLAG, spriteLoader->getFlag());;
+           } else if(positions[j][i] == 'C')
+           {
+               currentObject = GameObject(ARMORED_RANDOM_TANK, spriteLoader->getArmored_random_tank_down());
+           } else if(positions[j][i] == 'c')
+           {
+               currentObject = GameObject(RANDOM_TANK, spriteLoader->getRandom_tank_down());;
+           } else if(positions[j][i] == 'A')
+           {
+               currentObject = GameObject(ARMORED_TANK, spriteLoader->getArmored_tank_down());
+           } else if(positions[j][i] == 'O')
+           {
+               currentObject = GameObject(COMMON_TANK, spriteLoader->getCommon_tank_down());
+           } else if(positions[j][i] == 'P')
+           {
+               currentObject = GameObject(PLAYER, spriteLoader->getYellow_tank_up());
+           }
+
+           if(currentObject.getType() != NONE_GAME_OBJECT){
+               QPixmap pixmap = currentObject.getSprite();
+               pixmap = pixmap.scaled(cellSize, cellSize);
+               QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+               item->setPos(j*cellSize, i * cellSize);
+               scene->addItem(item);
+               scene->update();
+               backgroundView->update();
+           }
+        }
+    }
+}
+
 Construction::~Construction()
 {
     delete ui;
@@ -156,6 +239,8 @@ void Construction::mousePressEvent(QMouseEvent* event){
         else if(y < 0 || y > HEIGHT)
             return;
 
+        if(currentObject.getType() == NONE_GAME_OBJECT)
+            return;
 
         if(currentObject.getType() == PLAYER){
             blocks[x/cellSize][y/cellSize] = "P";

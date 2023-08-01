@@ -857,7 +857,12 @@ void Register::on_deleteButtonCustomLevel_clicked(){
     }
 }
 void Register::on_editButtonCustomLevel_clicked(){
-    qDebug() << "Edit Level";
+    construction = new Construction();
+    QLabel* nameLabel = this->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+    QString name = nameLabel->text();
+    construction->loadMap(name);
+    this->hide();
+    construction->show();
 }
 void Register::on_playButtonCustomLevel_clicked(){
     game = new Game("test");

@@ -5,7 +5,7 @@
 #include <QGraphicsPixmapItem>
 
 enum Type {PLAYER, ARMORED_RANDOM_TANK, ARMORED_TANK, COMMON_TANK, RANDOM_TANK, STAR, TANKI, CLOCK, FLAG
-          , WATER, STONE , BRICK, MISSILE};
+          , WATER, STONE , BRICK, MISSILE, NONE_GAME_OBJECT};
 enum Direction {LEFT , RIGHT, UP, DOWN};
 
 class GameObject

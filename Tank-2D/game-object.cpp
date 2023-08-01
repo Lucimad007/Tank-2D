@@ -17,6 +17,7 @@ GameObject::GameObject()
     health = 0;
     damage = 0;
     hitbox = QRect(0, 0, WIDTH, HEIGHT);
+    type = NONE_GAME_OBJECT;
 }
 
 GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, const int& y, const Direction& direction){

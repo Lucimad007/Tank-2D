@@ -20,6 +20,7 @@ public:
     void loadIcon();
     void saveToFile(QString name);
     void inline setDefaultCursor();
+    void loadMap(QString name);
     ~Construction();
 
     GameObject getCurrentObject() const;
