@@ -88,6 +88,9 @@ private:
     int score = 0;
     PlayerMovementDirection playerDirection = NONE;
     LevelState levelState = NONE_LEVEL;
+    bool hasTanki = true;
+    bool hasStar = true;
+    bool hasClock = true;
 };
 
 #endif // GAME_H
