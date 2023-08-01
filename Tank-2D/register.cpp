@@ -612,9 +612,9 @@ void Register::addCustomLevelPrototype(QString name){
         QPushButton* deleteButton = widget->findChild<QPushButton*>("deleteButton", Qt::FindChildrenRecursively);
         QPushButton* editButton = widget->findChild<QPushButton*>("editButton", Qt::FindChildrenRecursively);
         QPushButton* playButton = widget->findChild<QPushButton*>("playButton", Qt::FindChildrenRecursively);
-        connect(deleteButton, &QPushButton::clicked, this, &Register::on_deleteButtonCustomLevel_clicked);
+        connect(deleteButton, &QPushButton::clicked, this, [=]{on_deleteButtonCustomLevel_clicked(widget);});
         connect(editButton, &QPushButton::clicked, this, [=]{on_editButtonCustomLevel_clicked(widget);});
-        connect(playButton, &QPushButton::clicked, this, &Register::on_playButtonCustomLevel_clicked);
+        connect(playButton, &QPushButton::clicked, this, [=]{on_playButtonCustomLevel_clicked(widget);});
     } else {
         qDebug() << "Could Not Open File.";
     }
@@ -838,11 +838,43 @@ void Register::on_deleteAllButton_clicked(){
 }
 
 void Register::on_randomButton_clicked(){
-    //play a random custom level
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels";
+    QDir directory(path);
+    QStringList filters;
+    filters << "*.txt";     //to match only txt files
+
+    directory.setFilter(QDir::Files | QDir::NoSymLinks);
+    directory.setNameFilters(filters);
+
+    QFileInfoList fileList = directory.entryInfoList();
+
+    int rnd = rand();
+    rnd %= fileList.count();
+    foreach(QFileInfo file , fileList){
+        if(!rnd){
+            QString name = file.baseName();
+            game = new Game(name);
+            game->show();
+
+            timer = new QTimer();
+            QTimer::connect(timer, &QTimer::timeout, [&](){
+                game->clear();
+                game->updateLogic();
+                game->render();
+            });
+            timer->start(((float)1/game->getFPS() * 1000));
+
+            this->hide();
+            break;
+        }
+        rnd--;
+    }
 }
 
-void Register::on_deleteButtonCustomLevel_clicked(){
-    QLabel* nameLabel = this->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+void Register::on_deleteButtonCustomLevel_clicked(QWidget* parent){
+    QLabel* nameLabel = parent->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
     QString name = nameLabel->text();
     QFileInfo info = QFileInfo(QDir::currentPath());
     QString path = info.dir().path();
@@ -864,8 +896,9 @@ void Register::on_editButtonCustomLevel_clicked(QWidget* parent){
     this->hide();
     construction->show();
 }
-void Register::on_playButtonCustomLevel_clicked(){
-    game = new Game("test");
+void Register::on_playButtonCustomLevel_clicked(QWidget* parent){
+    QLabel* nameLabel = parent->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+    game = new Game(nameLabel->text());
     game->show();
 
     timer = new QTimer();

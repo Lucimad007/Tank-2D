@@ -55,9 +55,9 @@ private slots:
     void on_deleteAllButton_clicked();
     void on_randomButton_clicked();
 
-    void on_deleteButtonCustomLevel_clicked();
+    void on_deleteButtonCustomLevel_clicked(QWidget* parent);
     void on_editButtonCustomLevel_clicked(QWidget* parent);
-    void on_playButtonCustomLevel_clicked();
+    void on_playButtonCustomLevel_clicked(QWidget* parent);
 
 private:
     Ui::Register *ui;

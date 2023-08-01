@@ -9,7 +9,8 @@ QApplication* app;
 
 int main(int argc, char *argv[])
 {
-   app = new QApplication(argc, argv);
+    srand(NULL);    //NULL IS DEFINED ZERO
+    app = new QApplication(argc, argv);
     registerMenu = new Register();
     registerMenu->show();
 
