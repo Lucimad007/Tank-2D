@@ -613,7 +613,7 @@ void Register::addCustomLevelPrototype(QString name){
         QPushButton* editButton = widget->findChild<QPushButton*>("editButton", Qt::FindChildrenRecursively);
         QPushButton* playButton = widget->findChild<QPushButton*>("playButton", Qt::FindChildrenRecursively);
         connect(deleteButton, &QPushButton::clicked, this, &Register::on_deleteButtonCustomLevel_clicked);
-        connect(editButton, &QPushButton::clicked, this, &Register::on_editButtonCustomLevel_clicked);
+        connect(editButton, &QPushButton::clicked, this, [=]{on_editButtonCustomLevel_clicked(widget);});
         connect(playButton, &QPushButton::clicked, this, &Register::on_playButtonCustomLevel_clicked);
     } else {
         qDebug() << "Could Not Open File.";
@@ -856,9 +856,9 @@ void Register::on_deleteButtonCustomLevel_clicked(){
         loadCustomLevelPrototypes();
     }
 }
-void Register::on_editButtonCustomLevel_clicked(){
+void Register::on_editButtonCustomLevel_clicked(QWidget* parent){
     construction = new Construction();
-    QLabel* nameLabel = this->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
+    QLabel* nameLabel = parent->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
     QString name = nameLabel->text();
     construction->loadMap(name);
     this->hide();
