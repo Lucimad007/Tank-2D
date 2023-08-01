@@ -849,6 +849,8 @@ void Register::on_randomButton_clicked(){
     directory.setNameFilters(filters);
 
     QFileInfoList fileList = directory.entryInfoList();
+    if(fileList.count() == 0)
+        return;
 
     int rnd = rand();
     rnd %= fileList.count();
