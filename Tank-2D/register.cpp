@@ -900,7 +900,26 @@ void Register::on_editButtonCustomLevel_clicked(QWidget* parent){
 }
 void Register::on_playButtonCustomLevel_clicked(QWidget* parent){
     QLabel* nameLabel = parent->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
-    game = new Game(nameLabel->text());
+    QString name = nameLabel->text();
+    game = new Game(name);
+
+    //loading json file
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/custom-levels/";
+    QFile jsonFile(path + name + ".json");
+    if(jsonFile.exists()){
+        jsonFile.open(QIODevice::OpenModeFlag::ReadOnly);
+        QByteArray data = jsonFile.readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        QJsonObject json = doc.object();
+        game->setHasTanki(json["hasTanki"].toBool());
+        game->setHasStar(json["hasStar"].toBool());
+        game->setHasClock(json["hasClock"].toBool());
+    } else {
+        qDebug() << "Json File Does Not Exist.";
+    }
+
     game->show();
 
     timer = new QTimer();

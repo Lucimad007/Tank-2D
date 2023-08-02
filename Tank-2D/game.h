@@ -49,6 +49,15 @@ public:
 
     int getFPS() const;
 
+    bool getHasClock() const;
+    void setHasClock(bool newHasClock);
+
+    bool getHasStar() const;
+    void setHasStar(bool newHasStar);
+
+    bool getHasTanki() const;
+    void setHasTanki(bool newHasTanki);
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;

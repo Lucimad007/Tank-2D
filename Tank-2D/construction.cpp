@@ -4,6 +4,8 @@
 #include "register.h"
 #include <QDir>
 #include <QMouseEvent>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 extern Register* registerMenu;
 extern QApplication* app;
@@ -148,8 +150,22 @@ void Construction::loadMap(QString name){
     //loading file
     QFileInfo info = QFileInfo(QDir::currentPath());
     QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/" + name  + ".txt";
-    QFile file(path);
+    path += "/Tank-2D/custom-levels/";
+    QFile file(path + name + ".txt");
+    QFile jsonFile(path + name + ".json");
+    //loading json file
+    if(jsonFile.exists()){
+        jsonFile.open(QIODevice::OpenModeFlag::ReadOnly);
+        QByteArray data = jsonFile.readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        QJsonObject json = doc.object();
+        setHasTanki(json["hasTanki"].toBool());
+        setHasStar(json["hasStar"].toBool());
+        setHasClock(json["hasClock"].toBool());
+    } else {
+        qDebug() << "Json File Does Not Exist.";
+    }
+    //loading file
     if(file.exists())
     {
         QString data;
@@ -279,7 +295,16 @@ void Construction::saveToFile(QString name){
     QString path = info.dir().path();
     path += "/Tank-2D/custom-levels/";
     QFile file(path + name + ".txt");
+    QJsonObject json;
+    QFile jsonFile(path + name + ".json");
+    json["hasTanki"] = hasTanki;
+    json["hasStar"] = hasStar;
+    json["hasClock"] = hasClock;
     file.open(QIODevice::OpenModeFlag::WriteOnly);
+    jsonFile.open(QIODevice::OpenModeFlag::WriteOnly);
+    QJsonDocument doc = QJsonDocument(json);
+    QByteArray data(doc.toJson());
+    jsonFile.write(data);
 
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 25; j++)
@@ -290,6 +315,8 @@ void Construction::saveToFile(QString name){
 
         file.write("\n");
     }
+    file.close();
+    jsonFile.close();
 }
 
 void Construction::on_saveButton_clicked()
@@ -318,20 +345,72 @@ void Construction::on_menuButton_clicked()
 }
 
 
-void Construction::on_tankiCheckBox_stateChanged(int arg1)
+void Construction::on_tankiCheckBox_stateChanged(int state)
 {
-
+    if(state == Qt::CheckState::Checked)
+        hasTanki = true;
+    else
+        hasTanki = false;
 }
 
 
-void Construction::on_starCheckBox_stateChanged(int arg1)
+void Construction::on_starCheckBox_stateChanged(int state)
 {
-
+    if(state == Qt::CheckState::Checked)
+        hasStar = true;
+    else
+        hasStar = false;
 }
 
 
-void Construction::on_clockCheckBox_stateChanged(int arg1)
+void Construction::on_clockCheckBox_stateChanged(int state)
 {
+    if(state == Qt::CheckState::Checked)
+        hasClock = true;
+    else
+        hasClock = false;
+}
+
+bool Construction::getHasClock() const
+{
+    return hasClock;
+}
+
+void Construction::setHasClock(bool newHasClock)
+{
+    hasClock = newHasClock;
+    if(hasClock)
+    {
+        ui->clockCheckBox->setChecked(true);
+    }
+}
+
+bool Construction::getHasStar() const
+{
+    return hasStar;
+}
+
+void Construction::setHasStar(bool newHasStar)
+{
+    hasStar = newHasStar;
+    if(hasStar)
+    {
+        ui->starCheckBox->setChecked(true);
+    }
+}
+
+bool Construction::getHasTanki() const
+{
+    return hasTanki;
+}
+
+void Construction::setHasTanki(bool newHasTanki)
+{
+    hasTanki = newHasTanki;
+    if(hasTanki)
+    {
+        ui->tankiCheckBox->setChecked(true);
+    }
 
 }
 

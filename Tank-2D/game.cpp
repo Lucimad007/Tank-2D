@@ -484,18 +484,18 @@ void Game::deleteDeadObjects(){
                 else if(rnd%3 == 1){
                     if(hasTanki)
                         reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
-                    else if(hasStar)
-                        reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
                     else if(hasClock)
                         reward = GameObject(CLOCK, spriteLoader->getClock(), tempTank.getX(), tempTank.getY());
+                    else if(hasStar)
+                        reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
                 }
                 else if(rnd%3 == 2){
                     if(hasClock)
                         reward = GameObject(CLOCK, spriteLoader->getClock(), tempTank.getX(), tempTank.getY());
-                    else if(hasTanki)
-                        reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
                     else if(hasStar)
                         reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
+                    else if(hasTanki)
+                        reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
                 }
                 reward.counter = this->FPS * 4;     //for 4 seconds lifespan
                 bonus.push_back(reward);
@@ -1265,5 +1265,35 @@ void Game::on_restartButton_clicked()
         loadLevel("test");
         timer->start();
     }
+}
+
+bool Game::getHasTanki() const
+{
+    return hasTanki;
+}
+
+void Game::setHasTanki(bool newHasTanki)
+{
+    hasTanki = newHasTanki;
+}
+
+bool Game::getHasStar() const
+{
+    return hasStar;
+}
+
+void Game::setHasStar(bool newHasStar)
+{
+    hasStar = newHasStar;
+}
+
+bool Game::getHasClock() const
+{
+    return hasClock;
+}
+
+void Game::setHasClock(bool newHasClock)
+{
+    hasClock = newHasClock;
 }
 

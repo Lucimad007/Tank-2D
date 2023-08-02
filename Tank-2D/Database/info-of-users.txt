@@ -1,6 +1,6 @@
 {
     "test": {
-        "gamesPlayed": 68,
+        "gamesPlayed": 69,
         "highestScore": 7600
     }
 }
