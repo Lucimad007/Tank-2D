@@ -483,15 +483,15 @@ void MultiPlayer::deleteDeadObjects(){
 
     //players
     if(player1.getHealth() <= 0)
-        qDebug() << "Player 2 Won!";
+        player2Winner();
     if(player2.getHealth() <= 0)
-        qDebug() << "Player 1 Won!";
+        player1Winner();
 
     //flags
     if(flag1.getHealth() <= 0)
-        qDebug() << "Player 2 Won!";
+        player2Winner();
     if(flag2.getHealth() <= 0)
-        qDebug() << "Player 1 Won!";
+        player1Winner();
 }
 
 void MultiPlayer::moveMissiles(){
@@ -667,6 +667,36 @@ void MultiPlayer::clearGameObjects(){
     walls.clear();
     player1Missiles.clear();
     player2Missiles.clear();
+}
+
+void MultiPlayer::player1Winner(){
+    multiPlayerTimer->stop();
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Arts/player1won.png";
+    QImage sprite(path);
+    QPixmap pixmap = QPixmap::fromImage(sprite);
+    pixmap = pixmap.scaled(WIDTH, HEIGHT);
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    item->setPos(0 , 0);
+    item->setZValue(1);     //make it to be external layer
+    scene->addItem(item);
+    scene->update();
+}
+
+void MultiPlayer::player2Winner(){
+    multiPlayerTimer->stop();
+    QFileInfo info = QFileInfo(QDir::currentPath());
+    QString path = info.dir().path();
+    path += "/Tank-2D/Arts/player2won.png";
+    QImage sprite(path);
+    QPixmap pixmap = QPixmap::fromImage(sprite);
+    pixmap = pixmap.scaled(WIDTH, HEIGHT);
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+    item->setPos(0 , 0);
+    item->setZValue(1);     //make it to be external layer
+    scene->addItem(item);
+    scene->update();
 }
 
 void MultiPlayer::on_pauseButton_clicked()

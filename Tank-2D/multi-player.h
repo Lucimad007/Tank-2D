@@ -34,6 +34,8 @@ public:
     int getFPS() const;
     void clearGameObjects();
     void updateSidebar();
+    void player2Winner();
+    void player1Winner();
     ~MultiPlayer();
 
 private slots:
