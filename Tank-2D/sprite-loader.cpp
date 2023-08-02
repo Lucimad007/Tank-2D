@@ -136,6 +136,14 @@ SpriteLoader::SpriteLoader()
     sprite = QImage(path + "heart.png");
     pixmap = QPixmap::fromImage(sprite);
     heart = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "cross.png");
+    pixmap = QPixmap::fromImage(sprite);
+    cross = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "black.png");
+    pixmap = QPixmap::fromImage(sprite);
+    black = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 }
 
 QPixmap SpriteLoader::getYellow_tank_up() const
@@ -296,4 +304,24 @@ const QPixmap &SpriteLoader::getMissile_right() const
 const QPixmap &SpriteLoader::getHeart() const
 {
     return heart;
+}
+
+const QPixmap &SpriteLoader::getCross() const
+{
+    return cross;
+}
+
+void SpriteLoader::setCross(const QPixmap &newCross)
+{
+    cross = newCross;
+}
+
+const QPixmap &SpriteLoader::getBlack() const
+{
+    return black;
+}
+
+void SpriteLoader::setBlack(const QPixmap &newBlack)
+{
+    black = newBlack;
 }

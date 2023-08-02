@@ -153,7 +153,7 @@
    <property name="geometry">
     <rect>
      <x>910</x>
-     <y>380</y>
+     <y>470</y>
      <width>81</width>
      <height>91</height>
     </rect>
@@ -241,9 +241,9 @@ background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5
   <widget class="QLabel" name="infoLabel">
    <property name="geometry">
     <rect>
-     <x>830</x>
+     <x>810</x>
      <y>500</y>
-     <width>141</width>
+     <width>71</width>
      <height>16</height>
     </rect>
    </property>
@@ -251,7 +251,7 @@ background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5
     <string notr="true">color: rgb(255, 255, 255);</string>
    </property>
    <property name="text">
-    <string>Enter Name of This Level</string>
+    <string>Name</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -260,14 +260,17 @@ background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5
   <widget class="QLineEdit" name="nameLineEdit">
    <property name="geometry">
     <rect>
-     <x>850</x>
+     <x>820</x>
      <y>530</y>
-     <width>113</width>
+     <width>81</width>
      <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
    <property name="placeholderText">
     <string>Name ...</string>
@@ -291,6 +294,19 @@ color: rgb(255, 0, 0);</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="crossView">
+   <property name="geometry">
+    <rect>
+     <x>920</x>
+     <y>390</y>
+     <width>64</width>
+     <height>64</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border:transparent;</string>
    </property>
   </widget>
  </widget>

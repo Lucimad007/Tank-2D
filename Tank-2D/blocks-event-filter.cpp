@@ -57,6 +57,10 @@ bool BlocksEventFilter::eventFilter(QObject* obj, QEvent* event){
                 QCursor cursor(spriteLoader.getStone());
                 app->setOverrideCursor(cursor);
                 construction->setCurrentObject(GameObject(STONE,spriteLoader.getStone()));
+            } else if(view->objectName() == "crossView"){
+                QCursor cursor(spriteLoader.getCross());
+                app->setOverrideCursor(cursor);
+                construction->setCurrentObject(GameObject(CROSS ,spriteLoader.getCross()));
             }
         }
     }

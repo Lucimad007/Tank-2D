@@ -70,6 +70,12 @@ public:
 
     const QPixmap &getHeart() const;
 
+    const QPixmap &getCross() const;
+    void setCross(const QPixmap &newCross);
+
+    const QPixmap &getBlack() const;
+    void setBlack(const QPixmap &newBlack);
+
 private:
     QPixmap yellow_tank_up, yellow_tank_down, yellow_tank_left, yellow_tank_right;
     QPixmap common_tank_up, common_tank_down, common_tank_left, common_tank_right;
@@ -81,6 +87,8 @@ private:
     QPixmap brick, stone, water;
     QPixmap missile_up, missile_down, missile_left, missile_right;
     QPixmap heart;
+    QPixmap cross;
+    QPixmap black;
 };
 
 #endif // SPRITELOADER_H

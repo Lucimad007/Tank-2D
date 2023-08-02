@@ -46,6 +46,7 @@ Construction::Construction(QWidget *parent) :
     ui->brickView->installEventFilter(eventFilter);
     ui->waterView->installEventFilter(eventFilter);
     ui->stoneView->installEventFilter(eventFilter);
+    ui->crossView->installEventFilter(eventFilter);
 
     //setting sidebar images
     QPixmap pixmap = spriteLoader->getYellow_tank_up();
@@ -128,6 +129,15 @@ Construction::Construction(QWidget *parent) :
     ui->stoneView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->stoneView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->stoneView->setScene(tempScene);
+
+    pixmap = spriteLoader->getCross();
+    pixmap = pixmap.scaled(ui->crossView->width(), ui->crossView->height());
+    item = new QGraphicsPixmapItem(pixmap);
+    tempScene = new QGraphicsScene();
+    tempScene->addItem(item);
+    ui->crossView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->crossView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->crossView->setScene(tempScene);
 }
 
 void Construction::loadIcon(){
@@ -247,7 +257,12 @@ Construction::~Construction()
 }
 
 void Construction::mousePressEvent(QMouseEvent* event){
-    if(event->button() == Qt::MouseButton::LeftButton){
+    if(event->button() == Qt::MouseButton::RightButton){
+        currentObject = GameObject(NONE_GAME_OBJECT, spriteLoader->getBlack());
+        setDefaultCursor();
+        return;
+    }
+    else if(event->button() == Qt::MouseButton::LeftButton){
         int x = event->position().x();
         int y = event->position().y();
         if(x < 0 || x > WIDTH )
@@ -276,17 +291,29 @@ void Construction::mousePressEvent(QMouseEvent* event){
             blocks[x/cellSize][y/cellSize] = "W";
         } else if(currentObject.getType() == STONE){
             blocks[x/cellSize][y/cellSize] = "M";
+        } else if(currentObject.getType() == CROSS){
+            blocks[x/cellSize][y/cellSize] = "X";
         } else {
             return;
         }
 
-        QPixmap pixmap = currentObject.getSprite();
-        pixmap = pixmap.scaled(cellSize, cellSize);
-        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
-        item->setPos(x/cellSize * cellSize, y/cellSize * cellSize);
-        scene->addItem(item);
-        scene->update();
-        backgroundView->update();
+        if(currentObject.getType() == CROSS){
+            QPixmap pixmap = spriteLoader->getBlack();
+            pixmap = pixmap.scaled(cellSize, cellSize);
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(x/cellSize * cellSize, y/cellSize * cellSize);
+            scene->addItem(item);
+            scene->update();
+            backgroundView->update();
+        } else {
+            QPixmap pixmap = currentObject.getSprite();
+            pixmap = pixmap.scaled(cellSize, cellSize);
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(x/cellSize * cellSize, y/cellSize * cellSize);
+            scene->addItem(item);
+            scene->update();
+            backgroundView->update();
+        }
     }
 }
 
