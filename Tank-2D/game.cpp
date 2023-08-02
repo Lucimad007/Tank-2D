@@ -69,6 +69,7 @@ Game::Game(QString levelName,QWidget *parent) :
     ui(new Ui::Game)
 {
     levelState = CUSTOM_LEVEL;
+    customLevelName = levelName;
     //loading original ui for later
     QUiLoader loader;
     QFileInfo info = QFileInfo(QDir::currentPath());
@@ -1262,7 +1263,7 @@ void Game::on_restartButton_clicked()
     } else if(levelState == CUSTOM_LEVEL){
         timer->stop();
         clearGameObjects();
-        loadLevel("test");
+        loadLevel(customLevelName);
         timer->start();
     }
 }

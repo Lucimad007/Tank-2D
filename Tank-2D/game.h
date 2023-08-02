@@ -100,6 +100,7 @@ private:
     bool hasTanki = true;
     bool hasStar = true;
     bool hasClock = true;
+    QString customLevelName = "";
 };
 
 #endif // GAME_H
