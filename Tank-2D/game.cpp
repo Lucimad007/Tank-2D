@@ -462,43 +462,43 @@ void Game::deleteDeadObjects(){
             {
                 score += 100;
             }
-            GameObject tempTank = GameObject(*it);
-            tanks.erase(it);
             numberOfTanks--;
 
-            if((!hasClock) && (!hasStar) && (!hasTanki))
-                continue;
+            if(!((!hasClock) && (!hasStar) && (!hasTanki))){
 
-            if((tempTank.getType() == ARMORED_RANDOM_TANK) || (tempTank.getType() == RANDOM_TANK))
-            {
-                int rnd = rand();
-                GameObject reward;
-                if(rnd%3 == 0){
-                    if(hasStar)
-                        reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
-                    else if(hasTanki)
-                        reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
-                    else if(hasClock)
-                        reward = GameObject(CLOCK, spriteLoader->getClock(), tempTank.getX(), tempTank.getY());
-                }
-                else if(rnd%3 == 1){
-                    if(hasTanki)
-                        reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
-                    else if(hasClock)
-                        reward = GameObject(CLOCK, spriteLoader->getClock(), tempTank.getX(), tempTank.getY());
-                    else if(hasStar)
-                        reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
-                }
-                else if(rnd%3 == 2){
-                    if(hasClock)
-                        reward = GameObject(CLOCK, spriteLoader->getClock(), tempTank.getX(), tempTank.getY());
-                    else if(hasStar)
-                        reward = GameObject(STAR, spriteLoader->getStar(), tempTank.getX(), tempTank.getY());
-                    else if(hasTanki)
-                        reward = GameObject(TANKI, spriteLoader->getTanki(), tempTank.getX(), tempTank.getY());
-                }
-                reward.counter = this->FPS * 4;     //for 4 seconds lifespan
-                bonus.push_back(reward);
+                if((it->getType() == ARMORED_RANDOM_TANK) || (it->getType() == RANDOM_TANK))
+                {
+                    int rnd = rand();
+                    GameObject reward;
+                    if(rnd%3 == 0){
+                        if(hasStar)
+                            reward = GameObject(STAR, spriteLoader->getStar(), it->getX(), it->getY());
+                        else if(hasTanki)
+                            reward = GameObject(TANKI, spriteLoader->getTanki(), it->getX(), it->getY());
+                        else if(hasClock)
+                            reward = GameObject(CLOCK, spriteLoader->getClock(), it->getX(), it->getY());
+                    }
+                    else if(rnd%3 == 1){
+                        if(hasTanki)
+                            reward = GameObject(TANKI, spriteLoader->getTanki(), it->getX(), it->getY());
+                        else if(hasClock)
+                            reward = GameObject(CLOCK, spriteLoader->getClock(), it->getX(), it->getY());
+                        else if(hasStar)
+                            reward = GameObject(STAR, spriteLoader->getStar(), it->getX(), it->getY());
+                    }
+                    else if(rnd%3 == 2){
+                        if(hasClock)
+                            reward = GameObject(CLOCK, spriteLoader->getClock(), it->getX(), it->getY());
+                        else if(hasStar)
+                            reward = GameObject(STAR, spriteLoader->getStar(), it->getX(), it->getY());
+                        else if(hasTanki)
+                            reward = GameObject(TANKI, spriteLoader->getTanki(), it->getX(), it->getY());
+                    }
+                    reward.counter = this->FPS * 4;     //for 4 seconds lifespan
+                    bonus.push_back(reward);
+            }
+
+                tanks.erase(it);
             }
 
         }
