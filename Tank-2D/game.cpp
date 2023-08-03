@@ -568,6 +568,9 @@ void Game::detectMissileCollision()
                 //delete objects (not hitboxes only)
                 //do sth cool
                 it->setHealth(it->getHealth() - player.getDamage());
+                if(it->getType() == BRICK){
+                    it->setSprite(spriteLoader->getBrokenBrick());
+                }
                 missiles.erase(itm);
             }
         }

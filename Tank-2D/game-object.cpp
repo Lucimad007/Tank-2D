@@ -60,7 +60,7 @@ GameObject::GameObject(const Type& type, const QPixmap& sprite, const int& x, co
         speed = 2;
     } else if(type == BRICK)
     {
-        this->health = 1;
+        this->health = 2;
         this->damage = 0;
         speed = 0;
     } else if(type == STONE)

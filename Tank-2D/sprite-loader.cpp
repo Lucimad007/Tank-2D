@@ -164,6 +164,11 @@ SpriteLoader::SpriteLoader()
     sprite = QImage(path + "explosion5.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion5 = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "broken-brick.png");
+    pixmap = QPixmap::fromImage(sprite);
+    brokenBrick = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
 }
 
 QPixmap SpriteLoader::getYellow_tank_up() const
@@ -395,3 +400,14 @@ void SpriteLoader::setExplosion5(const QPixmap &newExplosion5)
 {
     explosion5 = newExplosion5;
 }
+
+const QPixmap &SpriteLoader::getBrokenBrick() const
+{
+    return brokenBrick;
+}
+
+void SpriteLoader::setBrokenBrick(const QPixmap &newBrokenBrick)
+{
+    brokenBrick = newBrokenBrick;
+}
+

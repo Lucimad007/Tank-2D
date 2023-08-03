@@ -91,6 +91,9 @@ public:
     const QPixmap &getExplosion5() const;
     void setExplosion5(const QPixmap &newExplosion5);
 
+    const QPixmap &getBrokenBrick() const;
+    void setBrokenBrick(const QPixmap &newBrokenBrick);
+
 private:
     QPixmap yellow_tank_up, yellow_tank_down, yellow_tank_left, yellow_tank_right;
     QPixmap common_tank_up, common_tank_down, common_tank_left, common_tank_right;
@@ -99,7 +102,7 @@ private:
     QPixmap armored_random_tank_up, armored_random_tank_down, armored_random_tank_left, armored_random_tank_right;
     QPixmap tanki, star, clock;
     QPixmap flag;
-    QPixmap brick, stone, water;
+    QPixmap brick, brokenBrick, stone, water;
     QPixmap missile_up, missile_down, missile_left, missile_right;
     QPixmap heart;
     QPixmap cross;
