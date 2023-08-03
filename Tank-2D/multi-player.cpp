@@ -216,6 +216,48 @@ void MultiPlayer::render(){
     flagItemP2->setPos(player2.getX(), player2.getY());
     scene->addItem(flagItemP2);
 
+    //rendering explosions
+    for(auto it = explosions.begin(); it != explosions.end(); ++it)
+    {
+        if(it->counter <= 50 && it->counter > 40)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 40 && it->counter > 30){
+            QPixmap pixmap(spriteLoader->getExplosion2());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 30 && it->counter > 20)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion3());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 20 && it->counter > 10)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion4());
+            pixmap = pixmap.scaled(QSize(it->getWIDTH(), it->getHEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+
+        } else if(it->counter <= 10 && it->counter > 0)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion5());
+            pixmap = pixmap.scaled(QSize(it->getWIDTH(), it->getHEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        }
+        it->counter--;
+    }
+
     scene->update();
 
     //rendering players' states
@@ -588,22 +630,28 @@ void MultiPlayer::detectMissileCollision()
     {
         if(player2.getHitbox().intersects(it->getHitbox()))
         {
-            player1Missiles.erase(it);
             player2.setHealth(player2.getHealth() - it->getDamage());
             player2.setX(player2.getRespawnX());
             player2.setY(player2.getRespawnY());
             player2.setDamage(1);    //resetting to default damage
+            GameObject explosion(EXPLOSION, spriteLoader->getExplosion(), it->getX(), it->getY());
+            explosion.counter = 50;
+            explosions.push_back(explosion);
+            player1Missiles.erase(it);
         }
     }
     for(auto it = player2Missiles.begin(); it != player2Missiles.end(); ++it)
     {
         if(player1.getHitbox().intersects(it->getHitbox()))
         {
-            player2Missiles.erase(it);
             player1.setHealth(player1.getHealth() - it->getDamage());
             player1.setX(player1.getRespawnX());
             player1.setY(player1.getRespawnY());
             player1.setDamage(1);    //resetting to default damage
+            GameObject explosion(EXPLOSION, spriteLoader->getExplosion(), it->getX(), it->getY());
+            explosion.counter = 50;
+            explosions.push_back(explosion);
+            player2Missiles.erase(it);
         }
     }
 
@@ -667,6 +715,7 @@ void MultiPlayer::clearGameObjects(){
     walls.clear();
     player1Missiles.clear();
     player2Missiles.clear();
+    explosions.clear();
 }
 
 void MultiPlayer::player1Winner(){

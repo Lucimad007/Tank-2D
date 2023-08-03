@@ -76,6 +76,21 @@ public:
     const QPixmap &getBlack() const;
     void setBlack(const QPixmap &newBlack);
 
+    const QPixmap &getExplosion() const;
+    void setExplosion(const QPixmap &newExplosion);
+
+    const QPixmap &getExplosion2() const;
+    void setExplosion2(const QPixmap &newExplosion2);
+
+    const QPixmap &getExplosion3() const;
+    void setExplosion3(const QPixmap &newExplosion3);
+
+    const QPixmap &getExplosion4() const;
+    void setExplosion4(const QPixmap &newExplosion4);
+
+    const QPixmap &getExplosion5() const;
+    void setExplosion5(const QPixmap &newExplosion5);
+
 private:
     QPixmap yellow_tank_up, yellow_tank_down, yellow_tank_left, yellow_tank_right;
     QPixmap common_tank_up, common_tank_down, common_tank_left, common_tank_right;
@@ -89,6 +104,7 @@ private:
     QPixmap heart;
     QPixmap cross;
     QPixmap black;
+    QPixmap explosion, explosion2, explosion3, explosion4 , explosion5;
 };
 
 #endif // SPRITELOADER_H

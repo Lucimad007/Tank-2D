@@ -92,6 +92,7 @@ private:
     std::list<GameObject> bonus;
     std::list<GameObject> missiles;     //QList has a bug when we are erasing the last element
     std::list<GameObject> enemyMissiles;
+    std::list<GameObject> explosions;
     std::list<QRect> spawnPoints;
     User user;
     int score = 0;

@@ -144,6 +144,26 @@ SpriteLoader::SpriteLoader()
     sprite = QImage(path + "black.png");
     pixmap = QPixmap::fromImage(sprite);
     black = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "explosion.png");
+    pixmap = QPixmap::fromImage(sprite);
+    explosion = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
+
+    sprite = QImage(path + "explosion2.png");
+    pixmap = QPixmap::fromImage(sprite);
+    explosion2 = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
+
+    sprite = QImage(path + "explosion3.png");
+    pixmap = QPixmap::fromImage(sprite);
+    explosion3 = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
+
+    sprite = QImage(path + "explosion4.png");
+    pixmap = QPixmap::fromImage(sprite);
+    explosion4 = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
+
+    sprite = QImage(path + "explosion5.png");
+    pixmap = QPixmap::fromImage(sprite);
+    explosion5 = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 }
 
 QPixmap SpriteLoader::getYellow_tank_up() const
@@ -324,4 +344,54 @@ const QPixmap &SpriteLoader::getBlack() const
 void SpriteLoader::setBlack(const QPixmap &newBlack)
 {
     black = newBlack;
+}
+
+const QPixmap &SpriteLoader::getExplosion() const
+{
+    return explosion;
+}
+
+void SpriteLoader::setExplosion(const QPixmap &newExplosion)
+{
+    explosion = newExplosion;
+}
+
+const QPixmap &SpriteLoader::getExplosion2() const
+{
+    return explosion2;
+}
+
+void SpriteLoader::setExplosion2(const QPixmap &newExplosion2)
+{
+    explosion2 = newExplosion2;
+}
+
+const QPixmap &SpriteLoader::getExplosion3() const
+{
+    return explosion3;
+}
+
+void SpriteLoader::setExplosion3(const QPixmap &newExplosion3)
+{
+    explosion3 = newExplosion3;
+}
+
+const QPixmap &SpriteLoader::getExplosion4() const
+{
+    return explosion4;
+}
+
+void SpriteLoader::setExplosion4(const QPixmap &newExplosion4)
+{
+    explosion4 = newExplosion4;
+}
+
+const QPixmap &SpriteLoader::getExplosion5() const
+{
+    return explosion5;
+}
+
+void SpriteLoader::setExplosion5(const QPixmap &newExplosion5)
+{
+    explosion5 = newExplosion5;
 }

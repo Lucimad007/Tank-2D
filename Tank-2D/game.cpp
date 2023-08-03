@@ -451,6 +451,13 @@ void Game::deleteJunkMissiles(){
 }
 
 void Game::deleteDeadObjects(){
+    //explosions
+    for(auto it = explosions.begin(); it != explosions.end(); ++it)
+    {
+        if(!it->counter)
+            explosions.erase(it);
+    }
+
     //tanks
     for(auto it = tanks.begin(); it != tanks.end(); ++it)
     {
@@ -499,6 +506,9 @@ void Game::deleteDeadObjects(){
                     bonus.push_back(reward);
             }
 
+                GameObject explosion(EXPLOSION, spriteLoader->getExplosion(), it->getX(), it->getY());
+                explosion.counter = 50;
+                explosions.push_back(explosion);
                 tanks.erase(it);
             }
 
@@ -581,11 +591,14 @@ void Game::detectMissileCollision()
     {
         if(player.getHitbox().intersects(it->getHitbox()))
         {
-            missiles.erase(it);
             player.setHealth(player.getHealth() - 1);
             player.setX(player.getRespawnX());
             player.setY(player.getRespawnY());
             player.setDamage(1);    //resetting to default damage
+            GameObject explosion(EXPLOSION, spriteLoader->getExplosion(), it->getX(), it->getY());
+            explosion.counter = 50;
+            explosions.push_back(explosion);
+            missiles.erase(it);
         }
     }
 
@@ -636,6 +649,7 @@ void Game::detectBonusCollision(){
 }
 
 void Game::render(){
+
     //rendering player
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(player.getSprite());
     item->setPos(player.getX(), player.getY());
@@ -692,6 +706,48 @@ void Game::render(){
     QGraphicsPixmapItem* flagItem = new QGraphicsPixmapItem(sprite);
     flagItem->setPos(flag.getX(), flag.getY());
     scene->addItem(flagItem);
+
+    //rendering explosions
+    for(auto it = explosions.begin(); it != explosions.end(); ++it)
+    {
+        if(it->counter <= 50 && it->counter > 40)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 40 && it->counter > 30){
+            QPixmap pixmap(spriteLoader->getExplosion2());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 30 && it->counter > 20)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion3());
+            pixmap = pixmap.scaled(QSize(it->getSMALL_WIDTH(), it->getSMALL_HEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        } else if(it->counter <= 20 && it->counter > 10)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion4());
+            pixmap = pixmap.scaled(QSize(it->getWIDTH(), it->getHEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+
+        } else if(it->counter <= 10 && it->counter > 0)
+        {
+            QPixmap pixmap(spriteLoader->getExplosion5());
+            pixmap = pixmap.scaled(QSize(it->getWIDTH(), it->getHEIGHT()));
+            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(pixmap);
+            item->setPos(it->getX(), it->getY());
+            scene->addItem(item);
+        }
+        it->counter--;
+    }
 
     scene->update();
 
@@ -1176,6 +1232,7 @@ void Game::clearGameObjects(){
     missiles.clear();
     enemyMissiles.clear();
     spawnPoints.clear();
+    explosions.clear();
 }
 
 void Game::on_continueButton_clicked(){

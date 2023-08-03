@@ -61,6 +61,7 @@ private:
     std::list<GameObject> walls;
     std::list<GameObject> player1Missiles;     //QList has a bug when we are erasing the last element
     std::list<GameObject> player2Missiles;
+    std::list<GameObject> explosions;
     PlayerMovementDirection player1Direction = NONE;
     PlayerMovementDirection player2Direction = NONE;
 };
