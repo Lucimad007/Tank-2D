@@ -486,10 +486,7 @@ Register::~Register()
 void Register::on_loginButton_clicked()
 {
     ui->warningLabel->setText("");
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/Database/registered-users.txt";
-    QFile file(path);
+    QFile file("registered-users.txt");
     if(file.exists())
     {
         if(!file.open(QIODevice::OpenModeFlag::ReadOnly))
@@ -534,10 +531,7 @@ void Register::on_loginButton_clicked()
 void Register::on_registerButton_clicked()
 {
     ui->warningLabel->setText("");
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/Database/registered-users.txt";
-    QFile file(path);
+    QFile file("registered-users.txt");
     if(file.exists())
     {
         if(!file.open(QIODevice::OpenModeFlag::ReadOnly))
@@ -580,7 +574,10 @@ void Register::on_registerButton_clicked()
 
     } else
     {
-        qDebug() << "File not found.";
+        file.open(QIODevice::WriteOnly);
+        file.write("");
+        file.close();
+        on_registerButton_clicked();
     }
 }
 
@@ -626,10 +623,7 @@ void Register::loadCustomLevelPrototypes(){
     customLevelsSplitter = new QSplitter(Qt::Vertical);
 
     //loading new prototypes
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels";
-    QDir directory(path);
+    QDir directory("custom-levels");
     QStringList filters;
     filters << "*.txt";     //to match only txt files
 
@@ -814,18 +808,15 @@ void Register::on_newButton_clicked(){
 }
 
 void Register::on_deleteAllButton_clicked(){
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels";
-    QDir directory(path);
+    QDir directory("custom-levels");
     QStringList filters;
     filters << "*.txt";     //to match only txt files
+    filters << "*.json";
 
     directory.setFilter(QDir::Files | QDir::NoSymLinks);
     directory.setNameFilters(filters);
 
     QFileInfoList fileList = directory.entryInfoList();
-
     foreach(QFileInfo fileInfo, fileList){
         QString filePath = fileInfo.absoluteFilePath();
         QFile::remove(filePath);
@@ -838,12 +829,10 @@ void Register::on_deleteAllButton_clicked(){
 }
 
 void Register::on_randomButton_clicked(){
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels";
-    QDir directory(path);
+    QDir directory("custom-levels");
     QStringList filters;
     filters << "*.txt";     //to match only txt files
+    filters << "*.json";
 
     directory.setFilter(QDir::Files | QDir::NoSymLinks);
     directory.setNameFilters(filters);
@@ -878,12 +867,11 @@ void Register::on_randomButton_clicked(){
 void Register::on_deleteButtonCustomLevel_clicked(QWidget* parent){
     QLabel* nameLabel = parent->findChild<QLabel*>("nameLabel", Qt::FindChildrenRecursively);
     QString name = nameLabel->text();
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/" + name + ".txt";
-    QFile file(path);
+    QFile file("custom-levels/" + name + ".txt");
+    QFile file2("custom-levels/" + name + ".json");
     if(file.exists()){
         file.remove();
+        file2.remove();
         loadCustomLevelPrototypes();
     } else {
         qDebug() << "File Does Not Exist";
@@ -904,10 +892,7 @@ void Register::on_playButtonCustomLevel_clicked(QWidget* parent){
     game = new Game(name);
 
     //loading json file
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/";
-    QFile jsonFile(path + name + ".json");
+    QFile jsonFile("custom-levels/" + name + ".json");
     if(jsonFile.exists()){
         jsonFile.open(QIODevice::OpenModeFlag::ReadOnly);
         QByteArray data = jsonFile.readAll();

@@ -7,165 +7,163 @@
 
 SpriteLoader::SpriteLoader()
 {
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path() + "/Tank-2D/Arts/";
-    QImage sprite(path + "yellow-tank-up.png");
+    QImage sprite(":/Arts/yellow-tank-up.png");
     QPixmap pixmap = QPixmap::fromImage(sprite);
     yellow_tank_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "yellow-tank-down.png");
+    sprite = QImage(":/Arts/yellow-tank-down.png");
     pixmap = QPixmap::fromImage(sprite);
     yellow_tank_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "yellow-tank-left.png");
+    sprite = QImage(":/Arts/yellow-tank-left.png");
     pixmap = QPixmap::fromImage(sprite);
     yellow_tank_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "yellow-tank-right.png");
+    sprite = QImage(":/Arts/yellow-tank-right.png");
     pixmap = QPixmap::fromImage(sprite);
     yellow_tank_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "common-tank-up.png");
+    sprite = QImage(":/Arts/common-tank-up.png");
     pixmap = QPixmap::fromImage(sprite);
     common_tank_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "common-tank-down.png");
+    sprite = QImage(":/Arts/common-tank-down.png");
     pixmap = QPixmap::fromImage(sprite);
     common_tank_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "common-tank-left.png");
+    sprite = QImage(":/Arts/common-tank-left.png");
     pixmap = QPixmap::fromImage(sprite);
     common_tank_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "common-tank-right.png");
+    sprite = QImage(":/Arts/common-tank-right.png");
     pixmap = QPixmap::fromImage(sprite);
     common_tank_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-tank-up.png");
+    sprite = QImage(":/Arts/armored-tank-up.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_tank_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-tank-down.png");
+    sprite = QImage(":/Arts/armored-tank-down.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_tank_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-tank-left.png");
+    sprite = QImage(":/Arts/armored-tank-left.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_tank_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-tank-right.png");
+    sprite = QImage(":/Arts/armored-tank-right.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_tank_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "random-tank-up.png");
+    sprite = QImage(":/Arts/random-tank-up.png");
     pixmap = QPixmap::fromImage(sprite);
     random_tank_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "random-tank-down.png");
+    sprite = QImage(":/Arts/random-tank-down.png");
     pixmap = QPixmap::fromImage(sprite);
     random_tank_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "random-tank-left.png");
+    sprite = QImage(":/Arts/random-tank-left.png");
     pixmap = QPixmap::fromImage(sprite);
     random_tank_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "random-tank-right.png");
+    sprite = QImage(":/Arts/random-tank-right.png");
     pixmap = QPixmap::fromImage(sprite);
     random_tank_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-random-tank-up.png");
+    sprite = QImage(":/Arts/armored-random-tank-up.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_random_tank_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-random-tank-down.png");
+    sprite = QImage(":/Arts/armored-random-tank-down.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_random_tank_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-random-tank-left.png");
+    sprite = QImage(":/Arts/armored-random-tank-left.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_random_tank_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "armored-random-tank-right.png");
+    sprite = QImage(":/Arts/armored-random-tank-right.png");
     pixmap = QPixmap::fromImage(sprite);
     armored_random_tank_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "Tanki.png");
+    sprite = QImage(":/Arts/Tanki.png");
     pixmap = QPixmap::fromImage(sprite);
     tanki = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "Star.png");
+    sprite = QImage(":/Arts/Star.png");
     pixmap = QPixmap::fromImage(sprite);
     star = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "Clock.png");
+    sprite = QImage(":/Arts/Clock.png");
     pixmap = QPixmap::fromImage(sprite);
     clock = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "flag.png");
+    sprite = QImage(":/Arts/flag.png");
     pixmap = QPixmap::fromImage(sprite);
     flag = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "brick.png");
+    sprite = QImage(":/Arts/brick.png");
     pixmap = QPixmap::fromImage(sprite);
     brick = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "Stone.png");
+    sprite = QImage(":/Arts/Stone.png");
     pixmap = QPixmap::fromImage(sprite);
     stone = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "water.png");
+    sprite = QImage(":/Arts/water.png");
     pixmap = QPixmap::fromImage(sprite);
     water = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "missile-up.gif");
+    sprite = QImage(":/Arts/missile-up.gif");
     pixmap = QPixmap::fromImage(sprite);
     missile_up = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "missile-down.gif");
+    sprite = QImage(":/Arts/missile-down.gif");
     pixmap = QPixmap::fromImage(sprite);
     missile_down = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "missile-left.gif");
+    sprite = QImage(":/Arts/missile-left.gif");
     pixmap = QPixmap::fromImage(sprite);
     missile_left = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "missile-right.gif");
+    sprite = QImage(":/Arts/missile-right.gif");
     pixmap = QPixmap::fromImage(sprite);
     missile_right = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "heart.png");
+    sprite = QImage(":/Arts/heart.png");
     pixmap = QPixmap::fromImage(sprite);
     heart = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "cross.png");
+    sprite = QImage(":/Arts/cross.png");
     pixmap = QPixmap::fromImage(sprite);
     cross = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "black.png");
+    sprite = QImage(":/Arts/black.png");
     pixmap = QPixmap::fromImage(sprite);
     black = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "explosion.png");
+    sprite = QImage(":/Arts/explosion.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
 
-    sprite = QImage(path + "explosion2.png");
+    sprite = QImage(":/Arts/explosion2.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion2 = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
 
-    sprite = QImage(path + "explosion3.png");
+    sprite = QImage(":/Arts/explosion3.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion3 = pixmap.scaled(GameObject::getSMALL_WIDTH(), GameObject::getSMALL_HEIGHT());
 
-    sprite = QImage(path + "explosion4.png");
+    sprite = QImage(":/Arts/explosion4.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion4 = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "explosion5.png");
+    sprite = QImage(":/Arts/explosion5.png");
     pixmap = QPixmap::fromImage(sprite);
     explosion5 = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 
-    sprite = QImage(path + "broken-brick.png");
+    sprite = QImage(":/Arts/broken-brick.png");
     pixmap = QPixmap::fromImage(sprite);
     brokenBrick = pixmap.scaled(GameObject::getWIDTH(), GameObject::getHEIGHT());
 

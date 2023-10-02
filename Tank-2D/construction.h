@@ -60,7 +60,7 @@ private:
     QGraphicsScene* scene = nullptr;
     QGraphicsView* backgroundView = nullptr;
     User user;
-    QString blocks[25][20];
+    char blocks[25][20];
     GameObject currentObject;
     bool hasClock = false;
     bool hasStar = false;

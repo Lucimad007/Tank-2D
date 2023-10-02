@@ -156,13 +156,13 @@ void Construction::loadIcon(){
 
 void Construction::loadMap(QString name){
     currentObject = GameObject(NONE_GAME_OBJECT, spriteLoader->getYellow_tank_up());
-    QString positions[25][20];
+    char positions[25][20];
     //loading file
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/";
-    QFile file(path + name + ".txt");
-    QFile jsonFile(path + name + ".json");
+    QDir directory;
+    if(!directory.exists("custom-levels"))
+        directory.mkdir("custom-levels");
+    QFile file("custom-levels/" + name + ".txt");
+    QFile jsonFile("custom-levels/" + name + ".json");
     //loading json file
     if(jsonFile.exists()){
         jsonFile.open(QIODevice::OpenModeFlag::ReadOnly);
@@ -193,7 +193,8 @@ void Construction::loadMap(QString name){
         for(int i = 0; i < 20; i++)
             for(int j = 0; j < 25; j++)
             {
-                positions[j][i] = data.at(25 * i + j);
+                QChar ch = data.at(25 * i + j);
+                positions[j][i] = ch.unicode();
             }
     } else
     {
@@ -274,25 +275,25 @@ void Construction::mousePressEvent(QMouseEvent* event){
             return;
 
         if(currentObject.getType() == PLAYER){
-            blocks[x/cellSize][y/cellSize] = "P";
+            blocks[x/cellSize][y/cellSize] = 'P';
         } else if(currentObject.getType() == COMMON_TANK){
-            blocks[x/cellSize][y/cellSize] = "o";
+            blocks[x/cellSize][y/cellSize] = 'o';
         } else if(currentObject.getType() == ARMORED_TANK){
-            blocks[x/cellSize][y/cellSize] = "O";
+            blocks[x/cellSize][y/cellSize] = 'O';
         } else if(currentObject.getType() == RANDOM_TANK){
-            blocks[x/cellSize][y/cellSize] = "c";
+            blocks[x/cellSize][y/cellSize] = 'c';
         } else if(currentObject.getType() == ARMORED_RANDOM_TANK){
-            blocks[x/cellSize][y/cellSize] = "O";
+            blocks[x/cellSize][y/cellSize] = 'C';
         } else if(currentObject.getType() == FLAG){
-            blocks[x/cellSize][y/cellSize] = "F";
+            blocks[x/cellSize][y/cellSize] = 'F';
         } else if(currentObject.getType() == BRICK){
-            blocks[x/cellSize][y/cellSize] = "B";
+            blocks[x/cellSize][y/cellSize] = 'B';
         } else if(currentObject.getType() == WATER){
-            blocks[x/cellSize][y/cellSize] = "W";
+            blocks[x/cellSize][y/cellSize] = 'W';
         } else if(currentObject.getType() == STONE){
-            blocks[x/cellSize][y/cellSize] = "M";
+            blocks[x/cellSize][y/cellSize] = 'M';
         } else if(currentObject.getType() == CROSS){
-            blocks[x/cellSize][y/cellSize] = "X";
+            blocks[x/cellSize][y/cellSize] = 'X';
         } else {
             return;
         }
@@ -318,12 +319,12 @@ void Construction::mousePressEvent(QMouseEvent* event){
 }
 
 void Construction::saveToFile(QString name){
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/";
-    QFile file(path + name + ".txt");
+    QDir directory;
+    if(!directory.exists("custom-levels"))
+        directory.mkdir("custom-levels");
+    QFile file(directory.absolutePath() + "/custom-levels/" + name + ".txt");
     QJsonObject json;
-    QFile jsonFile(path + name + ".json");
+    QFile jsonFile(directory.absolutePath() + "/custom-levels/" + name + ".json");
     json["hasTanki"] = hasTanki;
     json["hasStar"] = hasStar;
     json["hasClock"] = hasClock;
@@ -336,8 +337,8 @@ void Construction::saveToFile(QString name){
     for(int i = 0; i < 20; i++){
         for(int j = 0; j < 25; j++)
         {
-            const char* ch = blocks[j][i].toStdString().c_str();
-            file.write(ch);
+            char* ch = &blocks[j][i];
+            file.write(ch, 1);
         }
 
         file.write("\n");

@@ -122,9 +122,7 @@ void Game::loadLevel(int level){
     QString number = QString::number(level);
     QString positions[25][20];
     //loading file
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/levels/level" + number  + ".txt";
+    QString path = ":/levels/level" + number  + ".txt";
     QFile file(path);
     if(file.exists())
     {
@@ -225,13 +223,11 @@ void Game::loadLevel(int level){
 
 void Game::loadLevel(QString name){
     numberOfTanks = 0;
-    remainingTanks = 2 + 2 * 4;     //default (for now
-    QString positions[25][20];
+    remainingTanks = 2 + 2 * 4;     //default for now
+    char positions[25][20];
     //loading file
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D/custom-levels/" + name  + ".txt";
-    QFile file(path);
+    QDir directory;
+    QFile file(directory.absolutePath() + "/custom-levels/" + name  + ".txt");
     if(file.exists())
     {
         QString data;
@@ -249,7 +245,8 @@ void Game::loadLevel(QString name){
         for(int i = 0; i < 20; i++)
             for(int j = 0; j < 25; j++)
             {
-                positions[j][i] = data.at(25 * i + j);
+                positions[j][i] = data.at(25 * i + j).unicode();
+               qDebug() << positions[j][i];
             }
     } else
     {
