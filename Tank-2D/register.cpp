@@ -185,11 +185,8 @@ std::map<int, User> Register::loadAllUsers(){
 }
 
 void Register::setMenuUI(){
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D";
     QUiLoader loader;
-    QFile file(path + "/menu.ui");
+    QFile file(":/menu.ui");
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         QWidget* widget = loader.load(&file);
@@ -233,28 +230,28 @@ void Register::setMenuUI(){
         constructionView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
         //loading pictures
-        QIcon logo(path + "/Arts/beforeStart.png");
+        QIcon logo(":/Arts/beforeStart.png");
         QPixmap pixmapLogo = logo.pixmap(logoView->width(), logoView->height());
         QGraphicsPixmapItem* pixItemLogo = new QGraphicsPixmapItem(pixmapLogo);
         QGraphicsScene* sceneLogo = new QGraphicsScene();
         sceneLogo->addItem(pixItemLogo);
         logoView->setScene(sceneLogo);
 
-        QIcon player1(path + "/Arts/1-player.png");     //player1 is intended for 1 player (we can not declare 1player identifier)
+        QIcon player1(":/Arts/1-player.png");     //player1 is intended for 1 player (we can not declare 1player identifier)
         QPixmap pixmapPlayer1 = player1.pixmap(player1View->width(), player1View->height());
         QGraphicsPixmapItem* pixItemPlayer1 = new QGraphicsPixmapItem(pixmapPlayer1);
         QGraphicsScene* scenePlayer1 = new QGraphicsScene();
         scenePlayer1->addItem(pixItemPlayer1);
         player1View->setScene(scenePlayer1);
 
-        QIcon player2(path + "/Arts/2-players.png");    //player2 is intended for 2 players (we can not declare 2players identifier)
+        QIcon player2(":/Arts/2-players.png");    //player2 is intended for 2 players (we can not declare 2players identifier)
         QPixmap pixmapPlayer2 = player2.pixmap(player2View->width(), player2View->height());
         QGraphicsPixmapItem* pixItemPlayer2 = new QGraphicsPixmapItem(pixmapPlayer2);
         QGraphicsScene* scenePlayer2 = new QGraphicsScene();
         scenePlayer2->addItem(pixItemPlayer2);
         player2View->setScene(scenePlayer2);
 
-        QIcon construction(path + "/Arts/construction.png");
+        QIcon construction(":/Arts/construction.png");
         QPixmap pixmapConstruction = construction.pixmap(constructionView->width(), constructionView->height());
         QGraphicsPixmapItem* pixItemConstruction = new QGraphicsPixmapItem(pixmapConstruction);
         QGraphicsScene* sceneConstruction = new QGraphicsScene();
@@ -271,11 +268,8 @@ void Register::setMenuUI(){
 void Register::setSelectLevelUI(){
     //loading ui file
     QWidget* widget;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D";
     QUiLoader loader;
-    QFile file(path + "/select-level.ui");
+    QFile file(":/select-level.ui");
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
@@ -298,9 +292,7 @@ void Register::setSelectLevelUI(){
     }
 
     //loading background
-    path = info.dir().path();
-    path += "/Tank-2D/Arts/selectLevelBack.png";
-    QIcon background(path);
+    QIcon background(":/Arts/selectLevelBack.png");
     if(!background.isNull())
     {
         QGraphicsView* backgroundView = widget->findChild<QGraphicsView*>("backgroundView",Qt::FindChildrenRecursively);
@@ -342,11 +334,8 @@ void Register::setSelectLevelUI(){
 void Register::setScoreBoardUI(){
     //loading ui file
     QWidget* widget;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D";
     QUiLoader loader;
-    QFile file(path + "/score-board.ui");
+    QFile file(":/score-board.ui");
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
@@ -443,11 +432,8 @@ void Register::setScoreBoardUI(){
 void Register::setConstructUI(){
     //loading ui file
     QWidget* widget;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D";
     QUiLoader loader;
-    QFile file(path + "/construct.ui");
+    QFile file(":/construct.ui");
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         widget = loader.load(&file);
@@ -586,11 +572,8 @@ void Register::on_scoreBoardButton_clicked(){
 }
 
 void Register::addCustomLevelPrototype(QString name){
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString path = info.dir().path();
-    path += "/Tank-2D";
     QUiLoader loader;
-    QFile file(path + "/custom-level.ui");
+    QFile file(":/custom-level.ui");
     if(file.open(QIODevice::OpenModeFlag::ReadOnly))
     {
         QWidget* widget = loader.load(&file);

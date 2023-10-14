@@ -50,4 +50,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Arts.qrc \
+    UIs.qrc \
     levels.qrc

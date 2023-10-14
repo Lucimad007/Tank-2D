@@ -24,10 +24,7 @@ Game::Game(int currentLevel, QWidget *parent) :
     levelState = SINGLE_PLAYER_LEVEL;
     //loading original ui for later
     QUiLoader loader;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString uiPath = info.dir().path();
-    uiPath += "/Tank-2D/game.ui";
-    QFile file(uiPath);
+    QFile file(":/game.ui");
     if(file.exists()){
         file.open(QIODevice::OpenModeFlag::ReadOnly);
         originalUI = loader.load(&file);
@@ -72,10 +69,7 @@ Game::Game(QString levelName,QWidget *parent) :
     customLevelName = levelName;
     //loading original ui for later
     QUiLoader loader;
-    QFileInfo info = QFileInfo(QDir::currentPath());
-    QString uiPath = info.dir().path();
-    uiPath += "/Tank-2D/game.ui";
-    QFile file(uiPath);
+    QFile file(":/game.ui");
     if(file.exists()){
         file.open(QIODevice::OpenModeFlag::ReadOnly);
         originalUI = loader.load(&file);
@@ -1166,10 +1160,7 @@ void Game::winner(){
         backgroundView->repaint();
         backgroundView->deleteLater();
         QUiLoader loader;
-        QFileInfo info = QFileInfo(QDir::currentPath());
-        QString path = info.dir().path();
-        path += "/Tank-2D/winner.ui";
-        QFile file(path);
+        QFile file(":/winner.ui");
         if(file.exists())
         {
             file.open(QIODevice::OpenModeFlag::ReadOnly);
