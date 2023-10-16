@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(0, 0, 0);</string>
+  </property>
+  <widget class="QGraphicsView" name="logoView">
+   <property name="geometry">
+    <rect>
+     <x>88</x>
+     <y>50</y>
+     <width>304</width>
+     <height>126</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: transparent;</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="player1View">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>230</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: transparent;</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="player2View">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>300</y>
+     <width>200</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: transparent;</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="constructionView">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>370</y>
+     <width>280</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: transparent;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="scoreBoardButton">
+   <property name="geometry">
+    <rect>
+     <x>145</x>
+     <y>430</y>
+     <width>190</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 30);
+font: 600 22pt &quot;Teko SemiBold&quot;;
+background: transparent;</string>
+   </property>
+   <property name="text">
+    <string>SCORE BOARD</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
