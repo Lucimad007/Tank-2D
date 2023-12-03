@@ -1,5 +1,3 @@
-Sure, here's a sample readme file you can use for your Tank game:
-
 # Tank(battle city) game using Qt
 
 This is a classic arcade-style game called Tank, also known as Battle City, created using the Qt framework. The game allows users to control a tank and fight against enemy tanks while avoiding obstacles and collecting power-ups.
